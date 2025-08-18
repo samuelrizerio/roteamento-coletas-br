@@ -1,0 +1,126 @@
+# CONFIGURAÇÃO DA APLICAÇÃO SPRING BOOT
+# Este arquivo contém todas as configurações da aplicação
+
+# Configurações do servidor
+server:
+  port: 8081
+  servlet:
+    context-path: /api/v1
+
+# Configurações do Spring
+spring:
+  # Configurações da aplicação
+  application:
+    name: sistema-roteamento-programado-coletas
+  
+  # Configurações do banco de dados H2 (temporário)
+  datasource:
+    # URL de conexão com o H2 (banco em memória)
+    url: jdbc:h2:mem:roteamento_coletas
+    # Nome do usuário do banco de dados
+    username: sa
+    # Senha do banco de dados
+    password: 
+    # Driver JDBC do H2
+    driver-class-name: org.h2.Driver
+    
+  # Configurações do H2 Console
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+    
+  # Configurações do JPA/Hibernate
+  jpa:
+    # Hibernate como implementação do JPA
+    hibernate:
+      # Estratégia de criação das tabelas
+      # create: recria as tabelas a cada execução (desenvolvimento)
+      # update: atualiza as tabelas existentes (produção)
+      # validate: apenas valida se as tabelas existem
+      ddl-auto: update
+    # Mostra as queries SQL no console (útil para desenvolvimento)
+    show-sql: true
+    # Formata as queries SQL para melhor legibilidade
+    format-sql: true
+    # Configurações específicas do Hibernate
+    properties:
+      hibernate:
+        # Dialeto SQL do H2 (banco em memória)
+        dialect: org.hibernate.dialect.H2Dialect
+        # Configurações de performance
+        jdbc:
+          batch_size: 20
+        # Configurações de cache
+        cache:
+          use_second_level_cache: false
+          
+  # Configurações de segurança
+  security:
+    # Configurações do JWT
+    jwt:
+      # Chave secreta para assinar os tokens JWT
+      secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      # Tempo de expiração do token (24 horas em milissegundos)
+      expiration: 86400000
+      
+# Configurações do SpringDoc OpenAPI (Swagger)
+springdoc:
+  # Configurações da API
+  api-docs:
+    # Caminho da documentação JSON
+    path: /api-docs
+  # Configurações da interface Swagger UI
+  swagger-ui:
+    # Caminho da interface Swagger
+    path: /swagger-ui.html
+    # Configurações de operações
+    operations-sorter: method
+    # Configurações de tags
+    tags-sorter: alpha
+
+# Configurações de logging
+logging:
+  # Nível de log da aplicação
+  level:
+    # Nível geral da aplicação
+    root: INFO
+    # Nível específico para o pacote da aplicação
+    br.com.roteamento: DEBUG
+    # Nível para queries SQL
+    org.hibernate.SQL: DEBUG
+    # Nível para parâmetros das queries
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  # Padrão de formatação dos logs
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+# Configurações de gerenciamento da aplicação
+management:
+  # Endpoints de monitoramento
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  # Configurações de métricas
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Configurações customizadas da aplicação
+app:
+  # Configurações de roteamento
+  routing:
+    # Raio máximo de busca para coletas (em metros)
+    max-search-radius: 5000
+    # Tempo máximo de espera para cálculo de rota (em segundos)
+    max-routing-time: 30
+  # Configurações de notificação
+  notification:
+    # Tempo de expiração de notificações (em minutos)
+    expiration-time: 30
+    # Máximo de tentativas de envio
+    max-retry-attempts: 3 

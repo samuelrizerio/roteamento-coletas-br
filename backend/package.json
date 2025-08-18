@@ -1,0 +1,23 @@
+{
+    "name": "roteamento-coletas-backend",
+    "version": "1.0.0",
+    "description": "Backend serverless para sistema de roteamento de coletas",
+    "main": "src/index.js",
+    "type": "module",
+    "scripts": {
+        "dev": "wrangler dev",
+        "deploy": "wrangler deploy",
+        "deploy:staging": "wrangler deploy --env staging",
+        "deploy:production": "wrangler deploy --env production"
+    },
+    "dependencies": {
+        "itty-router": "^3.0.12",
+        "cors": "^2.8.5"
+    },
+    "devDependencies": {
+        "wrangler": "^3.0.0"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}

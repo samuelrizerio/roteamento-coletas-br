@@ -1,0 +1,14 @@
+name = "roteamento-coletas-frontend"
+compatibility_date = "2024-01-01"
+
+[site]
+bucket = "./build"
+entry-point = "."
+
+[env.production]
+name = "roteamento-coletas-frontend-prod"
+route = "app.samuelchaves.com/*"
+
+[env.staging]
+name = "roteamento-coletas-frontend-staging"
+route = "staging.samuelchaves.com/*"
