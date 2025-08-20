@@ -77,7 +77,7 @@ src/main/java/br/com/roteamento/
     └── MaterialRepository.java    # Persistência materiais
 ```
 
-**✅ Vantagens da arquitetura Java:**
+**Vantagens da arquitetura Java:**
 - **100% gratuito** (OpenJDK + Spring Boot)
 - **Banco H2 em memória** (não precisa instalar PostgreSQL)
 - **Deploy simples** (JAR executável)

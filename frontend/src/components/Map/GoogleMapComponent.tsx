@@ -45,30 +45,30 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
         try {
             setIsLoading(true);
             setError(null);
-            console.log('🔄 Iniciando carregamento do Google Maps...');
+            console.log('Iniciando carregamento do Google Maps...');
 
             if (window.google && window.google.maps) {
-                console.log('✅ Google Maps já carregado');
+                console.log('Google Maps já carregado');
                 return;
             }
 
-            console.log('📦 Criando loader do Google Maps...');
+            console.log('Criando loader do Google Maps...');
             const loader = new Loader(GOOGLE_MAPS_CONFIG);
 
-            console.log('⏳ Aguardando carregamento...');
+            console.log('Aguardando carregamento...');
             await loader.load();
 
             // Aguardar um pouco para garantir que tudo foi carregado
             await new Promise(resolve => setTimeout(resolve, 100));
 
-            console.log('✅ Google Maps carregado com sucesso');
-            console.log('🔍 Verificando disponibilidade:', {
+            console.log('Google Maps carregado com sucesso');
+            console.log('Verificando disponibilidade:', {
                 google: !!window.google,
                 maps: !!window.google?.maps,
                 MapTypeId: !!window.google?.maps?.MapTypeId
             });
         } catch (err: any) {
-            console.error('❌ Erro ao carregar Google Maps:', err);
+            console.error('Erro ao carregar Google Maps:', err);
             setError('Erro ao carregar Google Maps: ' + err.message);
         } finally {
             setIsLoading(false);
@@ -77,28 +77,28 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
 
     // Inicializar mapa
     const initializeMap = useCallback(() => {
-        console.log('🔍 Tentando inicializar mapa...');
-        console.log('🔍 mapRef.current:', !!mapRef.current);
-        console.log('🔍 window.google:', !!window.google);
-        console.log('🔍 window.google.maps:', !!window.google?.maps);
+        console.log('Tentando inicializar mapa...');
+        console.log('mapRef.current:', !!mapRef.current);
+        console.log('window.google:', !!window.google);
+        console.log('window.google.maps:', !!window.google?.maps);
 
         if (!mapRef.current) {
-            console.log('❌ mapRef.current não está disponível');
+            console.log('mapRef.current não está disponível');
             return;
         }
 
         if (!window.google) {
-            console.log('❌ window.google não está disponível');
+            console.log('window.google não está disponível');
             return;
         }
 
         if (!window.google.maps) {
-            console.log('❌ window.google.maps não está disponível');
+            console.log('window.google.maps não está disponível');
             return;
         }
 
         if (!window.google.maps.MapTypeId) {
-            console.log('❌ window.google.maps.MapTypeId não está disponível');
+            console.log('window.google.maps.MapTypeId não está disponível');
             return;
         }
 
@@ -118,9 +118,9 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
             });
 
             setMap(newMap);
-            console.log('✅ Mapa inicializado com sucesso');
+            console.log('Mapa inicializado com sucesso');
         } catch (error: any) {
-            console.error('❌ Erro ao inicializar mapa:', error);
+            console.error('Erro ao inicializar mapa:', error);
             setError('Erro ao inicializar mapa: ' + error.message);
         }
     }, []);
@@ -236,25 +236,25 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
 
     // Efeitos
     useEffect(() => {
-        console.log('🚀 useEffect: Carregando Google Maps...');
+        console.log('useEffect: Carregando Google Maps...');
         loadGoogleMaps();
     }, [loadGoogleMaps]);
 
     useEffect(() => {
-        console.log('🔍 useEffect: Verificando condições para inicializar mapa...');
+        console.log('useEffect: Verificando condições para inicializar mapa...');
         console.log('   - isLoading:', isLoading);
         console.log('   - error:', error);
         console.log('   - window.google:', !!window.google);
         console.log('   - window.google.maps:', !!window.google?.maps);
 
         if (!isLoading && !error && window.google?.maps) {
-            console.log('✅ Condições atendidas, inicializando mapa...');
+            console.log('Condições atendidas, inicializando mapa...');
             // Aguardar um pouco mais para garantir que tudo foi carregado
             setTimeout(() => {
                 initializeMap();
             }, 200);
         } else {
-            console.log('❌ Condições não atendidas para inicializar mapa');
+            console.log('Condições não atendidas para inicializar mapa');
         }
     }, [isLoading, error, initializeMap]);
 

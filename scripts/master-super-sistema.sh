@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 🚀 MASTER SUPER SISTEMA - Script Consolidado e Superalimentado
+# MASTER SUPER SISTEMA - Script Consolidado e Superalimentado
 # ==============================================================
 # Este script consolida TODAS as funcionalidades dos outros scripts
 # e superalimenta o sistema com múltiplos processos simultâneos
@@ -59,7 +59,7 @@ check_process() {
 
 # Função para iniciar backend
 start_backend() {
-    log_info "🚀 Iniciando Backend Spring Boot..."
+    log_info "Iniciando Backend Spring Boot..."
     
     if ! check_process $BACKEND_PORT "Backend"; then
         cd /home/samuel/roteamento-coletas-br
@@ -93,7 +93,7 @@ start_backend() {
 
 # Função para iniciar frontend
 start_frontend() {
-    log_info "🌐 Iniciando Frontend React..."
+    log_info "Iniciando Frontend React..."
     
     if ! check_process $FRONTEND_PORT "Frontend"; then
         cd /home/samuel/roteamento-coletas-br/frontend
@@ -124,7 +124,7 @@ start_frontend() {
 
 # Função para criar dados de teste massivos
 create_massive_test_data() {
-    log_info "📊 Criando dados de teste massivos..."
+    log_info "Criando dados de teste massivos..."
     
     cd /home/samuel/roteamento-coletas-br
     
@@ -191,7 +191,7 @@ create_massive_test_data() {
 
 # Função para executar testes de carga
 run_load_tests() {
-    log_info "🔥 Executando testes de carga..."
+    log_info "Executando testes de carga..."
     
     # Teste de dashboard em paralelo
     log_info "Testando dashboard com 100 requisições simultâneas..."
@@ -222,7 +222,7 @@ run_load_tests() {
 
 # Função para executar algoritmos avançados em paralelo
 run_advanced_algorithms() {
-    log_info "🧮 Executando algoritmos avançados em paralelo..."
+    log_info "Executando algoritmos avançados em paralelo..."
     
     # Roteamento automático em loop
     for i in {1..20}; do
@@ -262,7 +262,7 @@ run_advanced_algorithms() {
 
 # Função para monitorar sistema
 monitor_system() {
-    log_info "📊 Monitorando sistema..."
+    log_info "Monitorando sistema..."
     
     (
         while true; do
@@ -291,7 +291,7 @@ monitor_system() {
 
 # Função para limpar dados de produção
 clean_production_data() {
-    log_info "🧹 Limpando dados de produção..."
+    log_info "Limpando dados de produção..."
     
     cd /home/samuel/roteamento-coletas-br
     
@@ -306,7 +306,7 @@ clean_production_data() {
 
 # Função para verificar dados
 verify_data() {
-    log_info "🔍 Verificando dados do sistema..."
+    log_info "Verificando dados do sistema..."
     
     echo "=== VERIFICAÇÃO DE DADOS ==="
     
@@ -330,7 +330,7 @@ verify_data() {
 
 # Função para executar simulação completa
 run_complete_simulation() {
-    log_info "🎯 Executando simulação completa..."
+    log_info "Executando simulação completa..."
     
     cd /home/samuel/roteamento-coletas-br
     
@@ -342,7 +342,7 @@ run_complete_simulation() {
 
 # Função para testar API
 test_api() {
-    log_info "🧪 Testando API..."
+    log_info "Testando API..."
     
     local endpoints=(
         "/api/v1/coletas"
@@ -356,19 +356,19 @@ test_api() {
     
     for endpoint in "${endpoints[@]}"; do
         if curl -s "http://localhost:$BACKEND_PORT$endpoint" > /dev/null 2>&1; then
-            log_success "✅ $endpoint funcionando"
+            log_success "$endpoint funcionando"
         else
-            log_error "❌ $endpoint com problema"
+            log_error "$endpoint com problema"
         fi
     done
 }
 
 # Função para testar frontend
 test_frontend() {
-    log_info "🌐 Testando frontend..."
+    log_info "Testando frontend..."
     
     if curl -s "http://localhost:$FRONTEND_PORT" > /dev/null 2>&1; then
-        log_success "✅ Frontend funcionando"
+        log_success "Frontend funcionando"
         
         # Testar páginas específicas
         local pages=(
@@ -383,19 +383,19 @@ test_frontend() {
         
         for page in "${pages[@]}"; do
             if curl -s "http://localhost:$FRONTEND_PORT$page" > /dev/null 2>&1; then
-                log_success "✅ Página $page funcionando"
+                log_success "Página $page funcionando"
             else
-                log_warning "⚠️ Página $page com problema"
+                log_warning "Página $page com problema"
             fi
         done
     else
-        log_error "❌ Frontend com problema"
+        log_error "Frontend com problema"
     fi
 }
 
 # Função para superalimentar o sistema
 supercharge_system() {
-    log_info "⚡ SUPERALIMENTANDO O SISTEMA..."
+    log_info "SUPERALIMENTANDO O SISTEMA..."
     
     # Criar múltiplos processos de teste
     for i in {1..$MAX_PROCESSES}; do
@@ -422,7 +422,7 @@ supercharge_system() {
 # Função principal
 main() {
     echo -e "${PURPLE}"
-    echo "🚀 MASTER SUPER SISTEMA - Script Consolidado e Superalimentado"
+    echo "MASTER SUPER SISTEMA - Script Consolidado e Superalimentado"
     echo "============================================================="
     echo "Este script consolida TODAS as funcionalidades e superalimenta o sistema"
     echo -e "${NC}"
@@ -464,16 +464,16 @@ main() {
     supercharge_system
     
     # Status final
-    log_success "🎉 SISTEMA SUPERALIMENTADO E FUNCIONANDO!"
+    log_success "SISTEMA SUPERALIMENTADO E FUNCIONANDO!"
     echo ""
-    echo "📊 STATUS FINAL:"
-    echo "   - Backend: ✅ Rodando na porta $BACKEND_PORT"
-    echo "   - Frontend: ✅ Rodando na porta $FRONTEND_PORT"
-    echo "   - Processos: ✅ $MAX_PROCESSES processos ativos"
-    echo "   - Monitoramento: ✅ Ativo em background"
-    echo "   - Superalimentação: ✅ Sistema sobrecarregado"
+    echo "STATUS FINAL:"
+    echo "   - Backend: Rodando na porta $BACKEND_PORT"
+    echo "   - Frontend: Rodando na porta $FRONTEND_PORT"
+    echo "   - Processos: $MAX_PROCESSES processos ativos"
+    echo "   - Monitoramento: Ativo em background"
+    echo "   - Superalimentação: Sistema sobrecarregado"
     echo ""
-    echo "🌐 URLs de Acesso:"
+    echo "URLs de Acesso:"
     echo "   - Frontend: http://localhost:$FRONTEND_PORT"
     echo "   - Backend: http://localhost:$BACKEND_PORT"
     echo "   - Swagger: http://localhost:$BACKEND_PORT/swagger-ui.html"
@@ -484,7 +484,7 @@ main() {
     echo "   - simulacao-completa.log: Log da simulação"
     echo "   - monitoramento-sistema.log: Log de monitoramento"
     echo ""
-    echo "🚀 O sistema está rodando com MÁXIMA CAPACIDADE!"
+    echo "O sistema está rodando com MÁXIMA CAPACIDADE!"
     echo "Pressione Ctrl+C para parar o monitoramento"
     
     # Manter script rodando para monitoramento

@@ -12,7 +12,7 @@ Write-Host "[1/3] Verificando Java..." -ForegroundColor Blue
 try {
     $javaVersion = java -version 2>&1
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "✅ Java encontrado!" -ForegroundColor Green
+        Write-Host "Java encontrado!" -ForegroundColor Green
         Write-Host $javaVersion[0] -ForegroundColor Gray
     } else {
         throw "Java não encontrado"
@@ -29,7 +29,7 @@ Write-Host "[2/3] Verificando Maven..." -ForegroundColor Blue
 try {
     $mavenVersion = mvn -version 2>&1
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "✅ Maven encontrado!" -ForegroundColor Green
+        Write-Host "Maven encontrado!" -ForegroundColor Green
         Write-Host $mavenVersion[0] -ForegroundColor Gray
     } else {
         throw "Maven não encontrado"

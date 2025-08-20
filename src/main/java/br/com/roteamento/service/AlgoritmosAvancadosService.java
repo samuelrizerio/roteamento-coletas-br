@@ -45,7 +45,7 @@ public class AlgoritmosAvancadosService {
      * @return rota otimizada usando algoritmo genético
      */
     public List<Coleta> otimizarRotaComAlgoritmoGenetico(List<Coleta> coletas) {
-        log.info("🧬 Iniciando otimização com algoritmo genético para {} coletas", coletas.size());
+        log.info("Iniciando otimização com algoritmo genético para {} coletas", coletas.size());
 
         if (coletas.size() <= 2) {
             return new ArrayList<>(coletas);
@@ -84,7 +84,7 @@ public class AlgoritmosAvancadosService {
                 .map(Map.Entry::getKey)
                 .orElse(coletas);
 
-        log.info("✅ Algoritmo genético concluído. Distância otimizada: {} km", 
+        log.info("Algoritmo genético concluído. Distância otimizada: {} km", 
                 calcularDistanciaTotal(melhorRota));
         
         return melhorRota;
@@ -103,7 +103,7 @@ public class AlgoritmosAvancadosService {
      * @return rota otimizada usando simulated annealing
      */
     public List<Coleta> otimizarRotaComSimulatedAnnealing(List<Coleta> coletas) {
-        log.info("🔥 Iniciando otimização com simulated annealing para {} coletas", coletas.size());
+        log.info("Iniciando otimização com simulated annealing para {} coletas", coletas.size());
 
         if (coletas.size() <= 2) {
             return new ArrayList<>(coletas);
@@ -139,7 +139,7 @@ public class AlgoritmosAvancadosService {
             temperatura *= COOLING_RATE;
         }
 
-        log.info("✅ Simulated annealing concluído. Distância otimizada: {} km", melhorDistancia);
+        log.info("Simulated annealing concluído. Distância otimizada: {} km", melhorDistancia);
         return melhorSolucao;
     }
 
@@ -157,7 +157,7 @@ public class AlgoritmosAvancadosService {
      * @return grupos de coletas otimizados
      */
     public List<List<Coleta>> clusteringKMeans(List<Coleta> coletas, int k) {
-        log.info("🎯 Iniciando clustering K-means para {} coletas em {} grupos", coletas.size(), k);
+        log.info("Iniciando clustering K-means para {} coletas em {} grupos", coletas.size(), k);
 
         if (coletas.size() <= k) {
             return coletas.stream().map(Arrays::asList).collect(Collectors.toList());
@@ -193,7 +193,7 @@ public class AlgoritmosAvancadosService {
             iteracoes++;
         }
 
-        log.info("✅ K-means concluído em {} iterações. {} clusters criados", iteracoes, clusters.size());
+        log.info("K-means concluído em {} iterações. {} clusters criados", iteracoes, clusters.size());
         return clusters.stream().filter(cluster -> !cluster.isEmpty()).collect(Collectors.toList());
     }
 
@@ -213,7 +213,7 @@ public class AlgoritmosAvancadosService {
     public Map<Usuario, List<Coleta>> balancearCargaInteligente(
             List<Usuario> coletores, List<List<Coleta>> gruposColetas) {
         
-        log.info("⚖️ Iniciando balanceamento de carga para {} coletores e {} grupos", 
+        log.info("Iniciando balanceamento de carga para {} coletores e {} grupos", 
                 coletores.size(), gruposColetas.size());
 
         Map<Usuario, List<Coleta>> distribuicao = new HashMap<>();
@@ -233,7 +233,7 @@ public class AlgoritmosAvancadosService {
             distribuicao.get(coletorEscolhido).addAll(grupo);
         }
 
-        log.info("✅ Balanceamento de carga concluído");
+        log.info("Balanceamento de carga concluído");
         return distribuicao;
     }
 
@@ -251,7 +251,7 @@ public class AlgoritmosAvancadosService {
      * @return previsão de demanda
      */
     public Map<String, Object> preverDemanda(List<Coleta> coletasHistorico, int diasPrevisao) {
-        log.info("🔮 Iniciando previsão de demanda para {} dias", diasPrevisao);
+        log.info("Iniciando previsão de demanda para {} dias", diasPrevisao);
 
         // Análise de padrões temporais
         Map<String, Double> demandaPorDia = analisarPadraoTemporal(coletasHistorico);
@@ -283,7 +283,7 @@ public class AlgoritmosAvancadosService {
         resultado.put("regioesAtivas", demandaPorRegiao.keySet());
         resultado.put("materiaisPopulares", demandaPorMaterial.keySet());
 
-        log.info("✅ Previsão de demanda concluída");
+        log.info("Previsão de demanda concluída");
         return resultado;
     }
 

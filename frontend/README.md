@@ -2,7 +2,7 @@
 
 Interface web moderna para gerenciamento do sistema de roteamento programado de coletas.
 
-## 🚀 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **React 18** - Biblioteca para interfaces de usuário
 - **TypeScript** - Tipagem estática para JavaScript
@@ -15,16 +15,16 @@ Interface web moderna para gerenciamento do sistema de roteamento programado de 
 - **Notistack** - Notificações toast
 - **Framer Motion** - Animações
 
-## 🎨 Características
+## Características
 
-### ✨ Interface Moderna
+### Interface Moderna
 
 - **Modo Escuro** por padrão com opção de alternar
 - **Design Responsivo** para desktop e mobile
 - **Tema Personalizado** com cores do sistema
 - **Animações Suaves** para melhor UX
 
-### 🗺️ Funcionalidades de Mapa
+### Funcionalidades de Mapa
 
 - **Mapa Interativo** com Leaflet
 - **Marcadores Dinâmicos** para usuários, coletas e rotas
@@ -32,21 +32,21 @@ Interface web moderna para gerenciamento do sistema de roteamento programado de 
 - **Popups Informativos** com detalhes dos pontos
 - **Linhas de Rota** conectando pontos
 
-### 📊 Dashboard Completo
+### Dashboard Completo
 
 - **Cards de Estatísticas** em tempo real
 - **Gráficos Interativos** com Recharts
 - **Métricas de Performance** do sistema
 - **Listas de Atividades** recentes
 
-### 🔧 Gerenciamento Completo
+### Gerenciamento Completo
 
 - **CRUD Completo** para todas as entidades
 - **Tabelas Avançadas** com DataGrid
 - **Formulários Intuitivos** com validação
 - **Filtros e Busca** em tempo real
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 frontend/
@@ -78,7 +78,7 @@ frontend/
 └── README.md
 ```
 
-## 🛠️ Instalação e Execução
+## Instalação e Execução
 
 ### Pré-requisitos
 
@@ -115,65 +115,65 @@ npm test
 npm run eject
 ```
 
-## 🌐 Acesso
+## Acesso
 
 Após a instalação, a aplicação estará disponível em:
 
 - **URL:** <http://localhost:3000>
 - **Backend:** <http://localhost:8081/api/v1>
 
-## 📱 Funcionalidades por Página
+## Funcionalidades por Página
 
-### 🏠 Dashboard
+### Dashboard
 
 - Visão geral do sistema
 - Estatísticas em tempo real
 - Gráficos de materiais e coletas
 - Lista de atividades recentes
 
-### 👥 Usuários
+### Usuários
 
 - Listagem com filtros
 - Criação e edição de usuários
 - Diferentes tipos (Residencial, Comercial, Coletor)
 - Gerenciamento de status
 
-### ♻️ Materiais
+### Materiais
 
 - Catálogo de materiais recicláveis
 - Categorização por tipo
 - Configuração de valores
 - Controle de aceitação para coleta
 
-### 🚛 Coletas
+### Coletas
 
 - Solicitações de coleta
 - Acompanhamento de status
 - Atribuição de coletores
 - Cálculo de valores estimados
 
-### 🛣️ Rotas
+### Rotas
 
 - Criação de rotas otimizadas
 - Atribuição de coletores
 - Acompanhamento de execução
 - Cálculo de distâncias e tempos
 
-### 🗺️ Mapa
+### Mapa
 
 - Visualização geográfica
 - Marcadores de pontos
 - Linhas de rota
 - Controles de camadas
 
-### ⚙️ Configurações
+### Configurações
 
 - Configurações do sistema
 - Parâmetros de roteamento
 - Configurações de segurança
 - Configurações de cache e logging
 
-## 🎨 Tema e Design
+## Tema e Design
 
 ### Cores Principais
 
@@ -192,7 +192,7 @@ O sistema utiliza um tema escuro otimizado para melhor experiência do usuário:
 - **Cards:** #2a2a2a
 - **Text:** #ffffff
 
-## 🔌 Integração com Backend
+## Integração com Backend
 
 ### Endpoints Utilizados
 
@@ -206,7 +206,7 @@ O sistema utiliza um tema escuro otimizado para melhor experiência do usuário:
 
 O frontend está configurado para fazer proxy das requisições para o backend na porta 8081.
 
-## 🚀 Deploy
+## Deploy
 
 ### Build para Produção
 
@@ -224,7 +224,7 @@ npm install -g serve
 serve -s build -l 3000
 ```
 
-## 📈 Performance
+## Performance
 
 ### Otimizações Implementadas
 
@@ -240,7 +240,7 @@ serve -s build -l 3000
 - **Largest Contentful Paint:** < 3s
 - **Time to Interactive:** < 4s
 
-## 🔧 Desenvolvimento
+## Desenvolvimento
 
 ### Estrutura de Componentes
 
@@ -256,7 +256,7 @@ serve -s build -l 3000
 - **Conventional Commits** para commits
 - **Component Storybook** (futuro)
 
-## 🧪 Testes
+## Testes
 
 ### Estrutura de Testes
 
@@ -271,7 +271,7 @@ npm test -- --coverage
 npm test -- --watch
 ```
 
-## 📝 Contribuição
+## Contribuição
 
 1. Fork o projeto
 2. Crie uma branch para sua feature
@@ -279,11 +279,11 @@ npm test -- --watch
 4. Push para a branch
 5. Abra um Pull Request
 
-## 📄 Licença
+## Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
 
-## 🤝 Suporte
+## Suporte
 
 Para suporte e dúvidas:
 

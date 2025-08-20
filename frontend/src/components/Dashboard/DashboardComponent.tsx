@@ -39,13 +39,13 @@ const DashboardComponent: React.FC = () => {
     const [rotasAtivas, setRotasAtivas] = useState<Rota[]>([]);
     const [loading, setLoading] = useState(true);
 
-    console.log('🏗️ Componente Dashboard renderizado, estado inicial:', { loading, stats, coletasRecentes, rotasAtivas });
+    console.log('Componente Dashboard renderizado, estado inicial:', { loading, stats, coletasRecentes, rotasAtivas });
 
     useEffect(() => {
         const loadDashboardData = async () => {
             try {
                 setLoading(true);
-                console.log('🔄 Iniciando carregamento do dashboard...');
+                console.log('Iniciando carregamento do dashboard...');
 
                 // Carregar dados em paralelo
                 const [statsData, coletasData, rotasData] = await Promise.all([
@@ -54,15 +54,15 @@ const DashboardComponent: React.FC = () => {
                     dashboardApi.obterRotasAtivas(),
                 ]);
 
-                console.log('📊 Dados carregados:', { statsData, coletasData, rotasData });
+                console.log('Dados carregados:', { statsData, coletasData, rotasData });
 
                 setStats(statsData);
                 setColetasRecentes(coletasData);
                 setRotasAtivas(rotasData);
 
-                console.log('✅ Dashboard carregado com sucesso');
+                console.log('Dashboard carregado com sucesso');
             } catch (error: any) {
-                console.error('❌ Erro ao carregar dados do dashboard:', error);
+                console.error('Erro ao carregar dados do dashboard:', error);
                 console.error('Detalhes do erro:', {
                     message: error.message,
                     response: error.response?.data,
@@ -118,10 +118,10 @@ const DashboardComponent: React.FC = () => {
         );
     }
 
-    console.log('🔍 Estado atual:', { loading, stats, coletasRecentes, rotasAtivas });
+    console.log('Estado atual:', { loading, stats, coletasRecentes, rotasAtivas });
 
     if (!stats) {
-        console.log('❌ Stats é null/undefined, mostrando erro');
+        console.log('Stats é null/undefined, mostrando erro');
         return (
             <Box sx={{ p: 3 }}>
                 <Typography variant="h6" color="error">

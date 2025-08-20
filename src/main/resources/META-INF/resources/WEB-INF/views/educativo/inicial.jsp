@@ -52,12 +52,12 @@
             <div class="col-12">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
                     <div class="container-fluid">
-                        <span class="navbar-brand fw-bold">🚀 Navegação Educativa:</span>
+                        <span class="navbar-brand fw-bold">Navegação Educativa:</span>
                         <div class="navbar-nav ms-auto">
                             <a class="nav-link active" href="/educativo">🏠 Início</a>
                             <a class="nav-link" href="/educativo/jsp">🟡 JSP</a>
                             <a class="nav-link" href="/educativo/jsf">🟢 JSF</a>
-                            <a class="nav-link" href="/educativo/comparacao">📊 Comparação</a>
+                            <a class="nav-link" href="/educativo/comparacao">Comparação</a>
                             <a class="nav-link" href="/educativo/integracao">🔗 Integração</a>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
         <!-- CONCEITO DIDÁTICO - Cards das tecnologias -->
         <div class="row mb-5">
             <div class="col-12">
-                <h2 class="text-center mb-4">🛠️ Tecnologias Demonstradas</h2>
+                <h2 class="text-center mb-4">Tecnologias Demonstradas</h2>
                 <p class="text-center text-muted mb-5">Clique em cada tecnologia para explorar seus conceitos</p>
             </div>
         </div>
@@ -140,7 +140,7 @@
             <div class="col-12">
                 <div class="card border-primary">
                     <div class="card-header bg-primary text-white">
-                        <h4>🎯 Objetivos Educativos</h4>
+                        <h4>Objetivos Educativos</h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -154,7 +154,7 @@
                                 </ul>
                             </div>
                             <div class="col-md-6">
-                                <h6>🔍 Habilidades Desenvolvidas:</h6>
+                                <h6>Habilidades Desenvolvidas:</h6>
                                 <ul>
                                     <li>Comparação entre tecnologias</li>
                                     <li>Análise de casos de uso</li>
@@ -241,7 +241,7 @@
                                 </ul>
                             </div>
                             <div class="col-md-4">
-                                <h6>💻 Projetos Práticos:</h6>
+                                <h6>Projetos Práticos:</h6>
                                 <ul>
                                     <li>Sistema de Blog</li>
                                     <li>E-commerce Básico</li>

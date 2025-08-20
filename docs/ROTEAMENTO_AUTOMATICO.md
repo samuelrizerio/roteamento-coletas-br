@@ -1,6 +1,6 @@
-# 🚀 Roteamento Automático Inteligente
+# Roteamento Automático Inteligente
 
-## 📋 **Visão Geral**
+## **Visão Geral**
 
 O sistema de **Roteamento Automático Inteligente** foi implementado para eliminar a necessidade de cadastro manual de rotas. Agora o sistema:
 
@@ -10,7 +10,7 @@ O sistema de **Roteamento Automático Inteligente** foi implementado para elimin
 4. **Otimiza rotas** usando algoritmos avançados
 5. **Considera capacidades** e restrições
 
-## 🧮 **Como Funciona**
+## **Como Funciona**
 
 ### **1. Detecção Automática**
 
@@ -64,7 +64,7 @@ private Usuario selecionarColetorParaGrupo(List<Usuario> coletores, GrupoColetas
 }
 ```
 
-## 📊 **Parâmetros Configuráveis**
+## **Parâmetros Configuráveis**
 
 | Parâmetro | Valor Padrão | Descrição |
 |-----------|---------------|-----------|
@@ -74,7 +74,7 @@ private Usuario selecionarColetorParaGrupo(List<Usuario> coletores, GrupoColetas
 | `TEMPO_POR_COLETA` | 5 min | Tempo estimado por coleta |
 | `VELOCIDADE_MEDIA` | 30 km/h | Velocidade média do veículo |
 
-## 🌐 **Endpoints Disponíveis**
+## **Endpoints Disponíveis**
 
 ### **Roteamento Automático**
 
@@ -97,15 +97,9 @@ GET /api/v1/roteamento-automatico/estatisticas
 ```bash
 # Otimizar rotas automaticamente
 POST /api/v1/roteamento/otimizar
-
-# Calcular rota ótima
-POST /api/v1/roteamento/calcular-rota
-
-# Obter estatísticas
-GET /api/v1/roteamento/estatisticas
 ```
 
-## 🧪 **Como Testar**
+## **Como Testar**
 
 ### **1. Executar Teste Automático**
 
@@ -136,33 +130,33 @@ curl -s "http://localhost:8081/api/v1/roteamento-automatico/status"
 curl -s "http://localhost:8081/api/v1/roteamento-automatico/estatisticas"
 ```
 
-## 📈 **Benefícios do Sistema**
+## **Benefícios do Sistema**
 
-### **✅ Automatização Completa**
+### **Automatização Completa**
 
 - Não precisa cadastrar rotas manualmente
 - Sistema detecta coletas pendentes automaticamente
 - Cria rotas otimizadas sem intervenção
 
-### **✅ Otimização Inteligente**
+### **Otimização Inteligente**
 
 - Usa dados de GPS para agrupamento
 - Aplica algoritmo TSP para minimizar distâncias
 - Considera capacidades e restrições
 
-### **✅ Balanceamento de Carga**
+### **Balanceamento de Carga**
 
 - Distribui coletas entre coletores automaticamente
 - Seleciona coletores com menos rotas ativas
 - Evita sobrecarga de coletores
 
-### **✅ Configuração Flexível**
+### **Configuração Flexível**
 
 - Parâmetros ajustáveis via API
 - Configurações específicas por região
 - Adaptação a diferentes tipos de veículos
 
-## 🔧 **Configuração Avançada**
+## **Configuração Avançada**
 
 ### **Ajustar Parâmetros**
 
@@ -185,7 +179,7 @@ curl -s "http://localhost:8081/api/v1/roteamento-automatico/estatisticas"
 @Scheduled(cron = "0 */30 * * * *") // A cada 30 minutos
 ```
 
-## 📊 **Métricas de Performance**
+## **Métricas de Performance**
 
 ### **Estatísticas Disponíveis**
 
@@ -206,7 +200,7 @@ tail -f logs/application.log | grep "roteamento"
 tail -f logs/application.log | grep "@Scheduled"
 ```
 
-## 🚀 **Próximos Passos**
+## **Próximos Passos**
 
 ### **1. Implementações Futuras**
 
@@ -222,11 +216,11 @@ tail -f logs/application.log | grep "@Scheduled"
 - [ ] Alertas de performance
 - [ ] Relatórios detalhados
 
-## 🎯 **Conclusão**
+## **Conclusão**
 
 O sistema de **Roteamento Automático Inteligente** transforma completamente a operação:
 
 - **Antes**: Cadastro manual de rotas, processo demorado e propenso a erros
 - **Agora**: Sistema automático que otimiza rotas usando dados de GPS e algoritmos avançados
 
-O sistema está **pronto para produção** e pode ser usado imediatamente para otimizar a operação de coleta de materiais recicláveis! 🎉
+O sistema está **pronto para produção** e pode ser usado imediatamente para otimizar a operação de coleta de materiais recicláveis!

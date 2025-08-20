@@ -1,95 +1,303 @@
-# 🚀 Como Rodar o Projeto Apenas com Java (GRATUITO)
+# Instruções de Execução - Sistema de Roteamento de Coletas
 
-## ✅ O que foi simplificado
+## Visão Geral
 
-- ❌ **Removido**: Backend Node.js (Cloudflare Workers)
-- ❌ **Removido**: Dependências desnecessárias
-- ✅ **Mantido**: Backend Java (Spring Boot) - **100% GRATUITO**
-- ✅ **Mantido**: Frontend React
-- ✅ **Mantido**: Banco H2 em memória (não precisa instalar nada)
+Este guia fornece instruções completas para executar o sistema de roteamento programado de coletas, incluindo backend Java e frontend React.
 
-## 🛠️ Pré-requisitos (GRATUITOS)
+## Pré-requisitos
 
-1. **Java 17** (OpenJDK - gratuito)
-   - Download: https://adoptium.net/
-   - Ou: `winget install EclipseAdoptium.Temurin.17.JDK`
+### Obrigatórios
 
-2. **Maven** (gratuito)
-   - Download: https://maven.apache.org/download.cgi
-   - Ou: `winget install Apache.Maven`
+- **Java 17** ou superior
+- **Maven 3.6** ou superior
+- **Node.js 18** ou superior
+- **npm** ou **yarn**
 
-3. **Node.js** (apenas para o frontend - gratuito)
-   - Download: https://nodejs.org/
-
-## 🚀 Como executar
-
-### 1. Backend Java (Spring Boot)
+### Verificação de Versões
 
 ```bash
-# Na pasta raiz do projeto
-cd src/main/java/br/com/roteamento
+# Verificar Java
+java -version
+
+# Verificar Maven
+mvn -version
+
+# Verificar Node.js
+node -version
+
+# Verificar npm
+npm -version
+```
+
+## Execução do Backend (Spring Boot)
+
+### Método 1: Maven Wrapper (Recomendado)
+
+```bash
+# Na raiz do projeto
+./mvnw spring-boot:run
+```
+
+### Método 2: Maven Direto
+
+```bash
+# Na raiz do projeto
 mvn spring-boot:run
 ```
 
-**OU**
+### Método 3: JAR Compilado
 
 ```bash
-# Na pasta raiz do projeto
-mvn clean install
-mvn spring-boot:run
+# Compilar
+./mvnw clean package -DskipTests
+
+# Executar
+java -jar target/roteamento-coletas-br-1.0.0.jar
 ```
 
-O backend Java rodará em: **http://localhost:8081**
+### Verificação do Backend
 
-### 2. Frontend React
+- **URL**: <http://localhost:8081>
+- **API Base**: <http://localhost:8081/api/v1>
+- **Swagger UI**: <http://localhost:8081/api/v1/swagger-ui.html>
+- **H2 Console**: <http://localhost:8081/api/v1/h2-console>
+
+## Execução do Frontend (React)
+
+### Instalação de Dependências
 
 ```bash
-# Em outro terminal, na pasta frontend
 cd frontend
 npm install
+```
+
+### Execução em Desenvolvimento
+
+```bash
 npm start
 ```
 
-O frontend rodará em: **http://localhost:3000**
+### Build para Produção
 
-## 🗄️ Banco de Dados
+```bash
+# Gerar build otimizado
+npm run build
 
-- **H2 Database** (em memória - não precisa instalar)
-- **Console H2**: http://localhost:8081/h2-console
-- **JDBC URL**: `jdbc:h2:mem:roteamento_coletas`
-- **Usuário**: `sa`
-- **Senha**: (deixe em branco)
+# Servir build (opcional)
+npx serve -s build -l 3000
+```
 
-## 📚 Documentação da API
+### Verificação do Frontend
 
-- **Swagger UI**: http://localhost:8081/api/v1/swagger-ui.html
-- **OpenAPI JSON**: http://localhost:8081/api/v1/api-docs
+- **URL**: <http://localhost:3000>
+- **Interface**: Totalmente funcional
+- **Google Maps**: Integrado com fallback
 
-## 💰 Por que é GRATUITO?
+## Configuração de Ambiente
 
-1. **Java OpenJDK**: 100% gratuito
-2. **Spring Boot**: Framework open-source gratuito
-3. **H2 Database**: Banco em memória gratuito
-4. **Maven**: Build tool gratuito
-5. **Node.js**: Runtime gratuito
-6. **React**: Framework gratuito
+### Variáveis de Ambiente (Backend)
 
-## 🔧 Configurações
+```properties
+# application.properties (opcional)
+server.port=8081
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.jpa.hibernate.ddl-auto=create-drop
+```
 
-O projeto está configurado para:
-- **Porta do Java**: 8081
-- **Porta do React**: 3000
-- **Banco**: H2 em memória
-- **JWT**: Configurado e funcionando
-- **CORS**: Configurado para desenvolvimento
+### Variáveis de Ambiente (Frontend)
 
-## 🚫 O que foi removido
+```bash
+# .env (opcional)
+REACT_APP_API_BASE_URL=http://localhost:8081/api/v1
+REACT_APP_GOOGLE_MAPS_API_KEY=sua_chave_aqui
+```
 
-- ❌ Cloudflare Workers (Node.js)
-- ❌ Wrangler (deployment Cloudflare)
-- ❌ Scripts de deploy desnecessários
-- ❌ Dependências Node.js do backend
+## Execução Completa do Sistema
 
-## ✅ Resultado
+### Script de Execução (Linux/Mac)
 
-Agora você tem um sistema **100% Java** que roda **100% gratuito** localmente, sem necessidade de serviços externos ou pagamentos.
+```bash
+#!/bin/bash
+echo "Iniciando Backend..."
+./mvnw spring-boot:run &
+BACKEND_PID=$!
+
+echo "Aguardando backend inicializar..."
+sleep 30
+
+echo "Iniciando Frontend..."
+cd frontend
+npm start &
+FRONTEND_PID=$!
+
+echo "Sistema iniciado!"
+echo "Backend: http://localhost:8081"
+echo "Frontend: http://localhost:3000"
+
+# Para parar os processos
+# kill $BACKEND_PID $FRONTEND_PID
+```
+
+### Script de Execução (Windows)
+
+```batch
+@echo off
+echo Iniciando Backend...
+start cmd /k "mvnw spring-boot:run"
+
+echo Aguardando backend inicializar...
+timeout /t 30
+
+echo Iniciando Frontend...
+cd frontend
+start cmd /k "npm start"
+
+echo Sistema iniciado!
+echo Backend: http://localhost:8081
+echo Frontend: http://localhost:3000
+```
+
+## Banco de Dados H2
+
+### Acesso ao Console
+
+- **URL**: <http://localhost:8081/api/v1/h2-console>
+- **JDBC URL**: `jdbc:h2:mem:testdb`
+- **Username**: `sa`
+- **Password**: (vazio)
+
+### Dados Pré-carregados
+
+O sistema carrega automaticamente:
+
+- 5 usuários de exemplo
+- 5 materiais recicláveis
+- 5 coletas de teste
+- 10 rotas otimizadas
+
+## Funcionalidades Disponíveis
+
+### Backend (APIs REST)
+
+- **CRUD completo** para usuários, materiais, coletas e rotas
+- **Roteamento automático** com algoritmos avançados
+- **Dashboard** com estatísticas em tempo real
+- **Busca e filtros** avançados
+- **Documentação Swagger** interativa
+
+### Frontend (Interface Web)
+
+- **Dashboard** com métricas visuais
+- **Mapa interativo** com Google Maps
+- **Gestão de coletas** intuitiva
+- **Visualização de rotas** otimizadas
+- **Interface responsiva**
+
+## Solução de Problemas
+
+### Backend não Inicia
+
+```bash
+# Verificar porta em uso
+netstat -an | grep 8081
+
+# Matar processo na porta
+kill -9 $(lsof -ti:8081)
+
+# Limpar cache Maven
+./mvnw clean
+
+# Reinstalar dependências
+./mvnw dependency:resolve
+```
+
+### Frontend não Inicia
+
+```bash
+# Limpar cache npm
+npm cache clean --force
+
+# Remover node_modules
+rm -rf node_modules package-lock.json
+
+# Reinstalar dependências
+npm install
+
+# Verificar porta em uso
+netstat -an | grep 3000
+```
+
+### Problemas com Google Maps
+
+- Verifique se a chave da API está configurada
+- Confirme se a API está ativada no Google Cloud Console
+- Use o fallback automático quando necessário
+
+## Logs e Debug
+
+### Backend
+
+```bash
+# Logs detalhados
+./mvnw spring-boot:run -Dlogging.level.br.com.roteamento=DEBUG
+
+# Profile específico
+./mvnw spring-boot:run -Dspring.profiles.active=dev
+```
+
+### Frontend
+
+```bash
+# Debug mode
+npm start
+
+# Build com source maps
+GENERATE_SOURCEMAP=true npm run build
+```
+
+## Testes
+
+### Backend
+
+```bash
+# Executar todos os testes
+./mvnw test
+
+# Testes específicos
+./mvnw test -Dtest=UsuarioServiceTest
+```
+
+### Frontend
+
+```bash
+# Executar testes
+npm test
+
+# Coverage report
+npm run test:coverage
+```
+
+## Performance
+
+### Otimizações Implementadas
+
+- **Cache inteligente** para consultas frequentes
+- **Lazy loading** de componentes React
+- **Compressão** de assets estáticos
+- **Queries otimizadas** no banco H2
+
+### Monitoramento
+
+- **Actuator endpoints** para métricas
+- **Health checks** automáticos
+- **Logs estruturados** para debugging
+
+## Conclusão
+
+O sistema está completamente funcional e otimizado para desenvolvimento e produção. Siga as instruções acima para executar todas as funcionalidades do sistema de roteamento programado de coletas.
+
+Para dúvidas específicas, consulte:
+
+- **[STATUS_TESTES.md](STATUS_TESTES.md)** - Status atual do sistema
+- **[RESUMO_REST_APIS.md](RESUMO_REST_APIS.md)** - Documentação das APIs
+- **[CONCEITOS_IMPLEMENTADOS.md](CONCEITOS_IMPLEMENTADOS.md)** - Arquitetura técnica

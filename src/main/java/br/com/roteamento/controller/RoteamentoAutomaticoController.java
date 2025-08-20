@@ -37,7 +37,7 @@ public class RoteamentoAutomaticoController {
      */
     @PostMapping("/executar")
     public ResponseEntity<Map<String, Object>> executarRoteamentoManual() {
-        log.info("🎯 Recebida requisição para executar roteamento manual");
+        log.info("Recebida requisição para executar roteamento manual");
 
         try {
             Map<String, Object> resultado = roteamentoAutomaticoService.executarRoteamentoManual();
@@ -63,7 +63,7 @@ public class RoteamentoAutomaticoController {
      */
     @GetMapping("/status")
     public ResponseEntity<Map<String, Object>> obterStatusRoteamentoAutomatico() {
-        log.info("📊 Verificando status do roteamento automático");
+        log.info("Verificando status do roteamento automático");
 
         try {
             Map<String, Object> status = Map.of(
@@ -101,7 +101,7 @@ public class RoteamentoAutomaticoController {
      */
     @PostMapping("/configurar")
     public ResponseEntity<Map<String, Object>> configurarRoteamento(@RequestBody Map<String, Object> config) {
-        log.info("⚙️ Configurando parâmetros do roteamento automático: {}", config);
+        log.info("Configurando parâmetros do roteamento automático: {}", config);
 
         try {
             // Aqui você pode implementar a lógica para salvar as configurações
@@ -132,7 +132,7 @@ public class RoteamentoAutomaticoController {
      */
     @GetMapping("/estatisticas")
     public ResponseEntity<Map<String, Object>> obterEstatisticasRoteamentoAutomatico() {
-        log.info("📈 Obtendo estatísticas do roteamento automático");
+        log.info("Obtendo estatísticas do roteamento automático");
 
         try {
             Map<String, Object> estatisticas = Map.of(

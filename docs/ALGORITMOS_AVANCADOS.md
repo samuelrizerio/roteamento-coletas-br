@@ -1,10 +1,10 @@
-# 🧬 Algoritmos Avançados de Otimização
+# Algoritmos Avançados de Otimização
 
-## 📋 Visão Geral
+## Visão Geral
 
 O sistema de roteamento implementa algoritmos avançados de otimização para maximizar a eficiência das operações de coleta. Estes algoritmos trabalham em conjunto para criar rotas otimizadas, distribuir carga de forma inteligente e prever demandas futuras.
 
-## 🧬 Algoritmo Genético
+## Algoritmo Genético
 
 ### Conceito
 
@@ -30,10 +30,10 @@ CROSSOVER_RATE = 0.8;       // Taxa de crossover
 
 ### Vantagens
 
-- ✅ Encontra soluções próximas do ótimo global
-- ✅ Escapa de mínimos locais
-- ✅ Adaptável a diferentes cenários
-- ✅ Balanceamento entre exploração e exploração
+- Encontra soluções próximas do ótimo global
+- Escapa de mínimos locais
+- Adaptável a diferentes cenários
+- Balanceamento entre exploração e exploração
 
 ### Exemplo de Uso
 
@@ -44,7 +44,7 @@ Content-Type: application/json
 [1, 2, 3, 4, 5]  # IDs das coletas
 ```
 
-## 🔥 Simulated Annealing
+## Simulated Annealing
 
 ### Conceito
 
@@ -67,10 +67,10 @@ COOLING_RATE = 0.95;           // Taxa de resfriamento
 
 ### Vantagens
 
-- ✅ Escape eficiente de mínimos locais
-- ✅ Convergência garantida
-- ✅ Simplicidade de implementação
-- ✅ Controle de parâmetros
+- Escape eficiente de mínimos locais
+- Convergência garantida
+- Simplicidade de implementação
+- Controle de parâmetros
 
 ### Exemplo de Uso
 
@@ -81,7 +81,7 @@ Content-Type: application/json
 [1, 2, 3, 4, 5]  # IDs das coletas
 ```
 
-## 🎯 K-means Clustering
+## K-means Clustering
 
 ### Conceito
 
@@ -99,10 +99,10 @@ O **K-means Clustering** agrupa coletas geograficamente próximas em clusters, o
 
 ### Vantagens
 
-- ✅ Agrupamento automático por proximidade
-- ✅ Redução de sobreposição de rotas
-- ✅ Otimização de recursos
-- ✅ Escalabilidade
+- Agrupamento automático por proximidade
+- Redução de sobreposição de rotas
+- Otimização de recursos
+- Escalabilidade
 
 ### Exemplo de Uso
 
@@ -110,7 +110,7 @@ O **K-means Clustering** agrupa coletas geograficamente próximas em clusters, o
 POST /api/v1/algoritmos-avancados/clustering-kmeans?k=5
 ```
 
-## ⚖️ Balanceamento Inteligente de Carga
+## Balanceamento Inteligente de Carga
 
 ### Conceito
 
@@ -135,10 +135,10 @@ O **Balanceamento Inteligente de Carga** distribui trabalho entre coletores cons
 
 ### Vantagens
 
-- ✅ Prevenção de sobrecarga
-- ✅ Distribuição equilibrada
-- ✅ Consideração de capacidades individuais
-- ✅ Otimização de recursos
+- Prevenção de sobrecarga
+- Distribuição equilibrada
+- Consideração de capacidades individuais
+- Otimização de recursos
 
 ### Exemplo de Uso
 
@@ -146,7 +146,7 @@ O **Balanceamento Inteligente de Carga** distribui trabalho entre coletores cons
 POST /api/v1/algoritmos-avancados/balancear-carga
 ```
 
-## 🔮 Previsão de Demanda
+## Previsão de Demanda
 
 ### Conceito
 
@@ -171,10 +171,10 @@ A **Previsão de Demanda** utiliza machine learning simplificado para prever vol
 
 ### Vantagens
 
-- ✅ Planejamento antecipado
-- ✅ Otimização de recursos
-- ✅ Redução de custos
-- ✅ Melhoria na eficiência
+- Planejamento antecipado
+- Otimização de recursos
+- Redução de custos
+- Melhoria na eficiência
 
 ### Exemplo de Uso
 
@@ -182,7 +182,7 @@ A **Previsão de Demanda** utiliza machine learning simplificado para prever vol
 GET /api/v1/algoritmos-avancados/prever-demanda?dias=7
 ```
 
-## 📊 Comparação de Algoritmos
+## Comparação de Algoritmos
 
 ### Métricas de Comparação
 
@@ -220,7 +220,7 @@ Content-Type: application/json
 }
 ```
 
-## 🚀 Integração com Roteamento Automático
+## Integração com Roteamento Automático
 
 ### Fluxo Integrado
 
@@ -251,7 +251,7 @@ app:
       capacidade-base: 1000.0
 ```
 
-## 📈 Métricas de Performance
+## Métricas de Performance
 
 ### Indicadores de Eficiência
 
@@ -270,7 +270,7 @@ app:
 - Taxa de sucesso das otimizações
 ```
 
-## 🔧 Configuração e Uso
+## Configuração e Uso
 
 ### Endpoints Disponíveis
 
@@ -295,7 +295,7 @@ curl -X POST http://localhost:8081/api/v1/algoritmos-avancados/otimizar-genetico
   -d "[1,2,3,4,5]"
 ```
 
-## 🎯 Casos de Uso
+## Casos de Uso
 
 ### Cenário 1: Otimização de Rotas
 
@@ -315,7 +315,7 @@ curl -X POST http://localhost:8081/api/v1/algoritmos-avancados/otimizar-genetico
 - **Solução**: Previsão de demanda
 - **Resultado**: 90% de precisão na previsão
 
-## 🔮 Próximos Passos
+## Próximos Passos
 
 ### Melhorias Planejadas
 
@@ -332,7 +332,7 @@ curl -X POST http://localhost:8081/api/v1/algoritmos-avancados/otimizar-genetico
 - [ ] Algoritmo de Recristalização Simulada
 - [ ] Otimização por Busca Tabu
 
-## 📚 Referências Técnicas
+## Referências Técnicas
 
 ### Artigos Científicos
 
@@ -350,4 +350,4 @@ curl -X POST http://localhost:8081/api/v1/algoritmos-avancados/otimizar-genetico
 
 ---
 
-**🎉 Sistema de Algoritmos Avançados - Implementação Completa e Funcional!**
+**Sistema de Algoritmos Avançados - Implementação Completa e Funcional!**

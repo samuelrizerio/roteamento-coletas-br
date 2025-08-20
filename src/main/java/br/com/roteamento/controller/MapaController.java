@@ -58,7 +58,7 @@ public class MapaController {
      */
     @GetMapping("/dados")
     public ResponseEntity<Map<String, Object>> obterDadosMapa() {
-        log.info("🗺️ Recebida requisição para obter dados do mapa");
+        log.info("Recebida requisição para obter dados do mapa");
 
         try {
             // Buscar coletas e rotas
@@ -132,7 +132,7 @@ public class MapaController {
      */
     @PostMapping("/calcular-rota")
     public ResponseEntity<Map<String, Object>> calcularRota(@RequestBody List<Map<String, Double>> pontos) {
-        log.info("🛣️ Calculando rota para {} pontos", pontos.size());
+        log.info("Calculando rota para {} pontos", pontos.size());
 
         try {
             Map<String, Object> rotaCalculada = roteamentoAutomaticoService.calcularRotaEntrePontos(pontos);
@@ -158,7 +158,7 @@ public class MapaController {
      */
     @GetMapping("/estatisticas")
     public ResponseEntity<Map<String, Object>> obterEstatisticasGeograficas() {
-        log.info("📊 Obtendo estatísticas geográficas");
+        log.info("Obtendo estatísticas geográficas");
 
         try {
             Map<String, Object> estatisticas = Map.of(
@@ -198,7 +198,7 @@ public class MapaController {
             @RequestParam("longitude") Double longitude,
             @RequestParam(value = "raioKm", defaultValue = "10.0") Double raioKm) {
         
-        log.info("🗺️ Buscando rotas na região: lat={}, lng={}, raio={}km", latitude, longitude, raioKm);
+        log.info("Buscando rotas na região: lat={}, lng={}, raio={}km", latitude, longitude, raioKm);
 
         try {
             List<RotaDTO> rotas = rotaService.buscarRotasPorRegiao(latitude, longitude, raioKm);

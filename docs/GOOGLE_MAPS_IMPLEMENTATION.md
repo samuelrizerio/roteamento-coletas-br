@@ -1,206 +1,370 @@
-# Implementação do Google Maps
+# Implementação do Google Maps - Sistema de Roteamento
 
-## 🗺️ Visão Geral
+## Visão Geral
 
-O sistema agora utiliza o **Google Maps API** ao invés do OpenStreetMap, oferecendo melhor qualidade de tiles, mais funcionalidades e melhor performance.
+Este documento detalha a implementação completa do Google Maps no sistema de roteamento programado de coletas, incluindo configuração, funcionalidades e vantagens da integração.
 
-## ✨ Funcionalidades Implementadas
+## Contexto da Implementação
 
-### **1. Mapa Interativo**
+A implementação do Google Maps foi motivada pela necessidade de:
 
-- **Tiles de alta qualidade** do Google Maps
-- **Controles nativos** (zoom, street view, fullscreen)
-- **Estilos personalizados** para melhor visualização
-- **Responsivo** em diferentes dispositivos
+- **Qualidade superior** de mapas e dados geográficos
+- **Performance otimizada** para melhor experiência do usuário
+- **Funcionalidades avançadas** como Street View e geocoding
+- **Integração oficial** com suporte e documentação completos
 
-### **2. Marcadores Personalizados**
+## Arquitetura da Implementação
 
-- **Ícones SVG customizados** para cada tipo de ponto
-- **Cores diferenciadas** por categoria:
-  - 🔵 **Azul**: Usuários
-  - 🟠 **Laranja**: Coletas
-  - 🟢 **Verde**: Rotas
-  - 🟣 **Roxo**: Coletores
+A implementação segue uma arquitetura modular e escalável:
 
-### **3. InfoWindows Informativos**
-
-- **Dados detalhados** de cada ponto
-- **Status coloridos** com cores semânticas
-- **Informações contextuais** baseadas no tipo
-
-### **4. Controles de Camadas**
-
-- **Toggle de visibilidade** para cada tipo de ponto
-- **Controles intuitivos** no canto superior direito
-- **Feedback visual** do estado ativo/inativo
-
-### **5. Linhas de Rota**
-
-- **Polylines coloridas** conectando pontos de rota
-- **Geodesia ativa** para rotas precisas
-- **Estilo personalizado** com opacidade e peso
-
-## 🔧 Configuração
-
-### **Arquivo de Configuração**
+### Componente Principal
 
 ```typescript
-// src/config/maps.ts
+// GoogleMapComponent.tsx
+export const GoogleMapComponent: React.FC<GoogleMapProps> = ({
+    center,
+    zoom,
+    markers,
+    onMarkerClick,
+    onMapClick
+}) => {
+    const mapRef = useRef<HTMLDivElement>(null);
+    const [map, setMap] = useState<google.maps.Map | null>(null);
+    
+    // Lógica de inicialização e gerenciamento do mapa
+};
+```
+
+### Configuração da API
+
+```typescript
+// config/maps.ts
 export const GOOGLE_MAPS_CONFIG = {
-    API_KEY: 'sua-chave-api-aqui',
-    LIBRARIES: ['places', 'geometry'],
+    API_KEY: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    LIBRARIES: ['places', 'geometry', 'drawing'],
     VERSION: 'weekly',
+    LANGUAGE: 'pt-BR',
+    REGION: 'BR'
 };
 ```
 
-### **Estilos do Mapa**
+### Carregamento Dinâmico
 
 ```typescript
-export const MAP_STYLES = [
-    {
-        featureType: 'poi',
-        elementType: 'labels',
-        stylers: [{ visibility: 'off' }]
-    }
-];
-```
-
-### **Ícones Personalizados**
-
-```typescript
-export const CUSTOM_ICONS = {
-    USUARIO: { color: '#2196f3', label: 'U' },
-    COLETA: { color: '#ff9800', label: 'C' },
-    ROTA: { color: '#4caf50', label: 'R' },
-    COLETOR: { color: '#9c27b0', label: 'T' }
+// hooks/useGoogleMaps.ts
+export const useGoogleMaps = () => {
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [loadError, setLoadError] = useState<Error | null>(null);
+    
+    useEffect(() => {
+        const loadGoogleMaps = async () => {
+            try {
+                await loadScript({
+                    googleMapsApiKey: GOOGLE_MAPS_CONFIG.API_KEY!,
+                    libraries: GOOGLE_MAPS_CONFIG.LIBRARIES
+                });
+                setIsLoaded(true);
+            } catch (error) {
+                setLoadError(error as Error);
+            }
+        };
+        
+        loadGoogleMaps();
+    }, []);
+    
+    return { isLoaded, loadError };
 };
 ```
 
-## 📦 Dependências
+## Configuração
 
-### **Instaladas**
+A configuração do Google Maps envolve múltiplas etapas:
+
+### 1. Obtenção da Chave da API
+
+- Acesse o [Google Cloud Console](https://console.cloud.google.com/)
+- Crie um novo projeto ou selecione um existente
+- Ative a **Maps JavaScript API**
+- Crie uma chave de API com restrições apropriadas
+
+### 2. Configuração de Variáveis de Ambiente
+
+```bash
+# .env
+REACT_APP_GOOGLE_MAPS_API_KEY=sua_chave_api_aqui
+REACT_APP_GOOGLE_MAPS_LIBRARIES=places,geometry,drawing
+REACT_APP_GOOGLE_MAPS_VERSION=weekly
+```
+
+### 3. Instalação de Dependências
 
 ```bash
 npm install @googlemaps/js-api-loader
 npm install --save-dev @types/google.maps
 ```
 
-### **Removidas**
+### 4. Configuração de Restrições
 
-```bash
-# Leaflet (não mais necessário)
-npm uninstall leaflet react-leaflet
-```
+- **Domínios autorizados**: localhost, seu-dominio.com
+- **APIs ativadas**: Maps JavaScript API, Places API, Geocoding API
+- **Quotas**: Configure limites apropriados para seu uso
 
-## 🎯 Como Usar
+## Funcionalidades Implementadas
 
-### **1. Acessar o Mapa**
+O sistema oferece funcionalidades avançadas de mapeamento:
 
-- Navegue para <http://localhost:3000/mapa>
-- O mapa carregará automaticamente com os dados
-
-### **2. Interagir com Pontos**
-
-- **Clique nos marcadores** para ver detalhes
-- **InfoWindows** aparecerão com informações completas
-- **Painel lateral** mostrará detalhes do ponto selecionado
-
-### **3. Controlar Camadas**
-
-- Use os **botões de toggle** no canto superior direito
-- **Mostrar/ocultar** usuários, coletas e rotas
-- **Feedback visual** indica camadas ativas
-
-### **4. Navegar no Mapa**
-
-- **Zoom**: Use scroll ou controles
-- **Street View**: Clique no ícone do boneco
-- **Fullscreen**: Clique no ícone de tela cheia
-- **Tipos de mapa**: Use o controle de tipo de mapa
-
-## 🔑 Configuração da API Key
-
-### **Para Desenvolvimento**
+### Marcadores Personalizados
 
 ```typescript
-// Use a chave de exemplo (limitada)
-API_KEY: 'AIzaSyB41DRUbKWJHPxaFjMAwRzS2vLDKdPJmGc'
+const createCustomMarker = (coleta: Coleta): google.maps.Marker => {
+    return new google.maps.Marker({
+        position: { lat: coleta.latitude, lng: coleta.longitude },
+        map: map,
+        title: coleta.endereco,
+        icon: {
+            url: getMarkerIcon(coleta.status),
+            scaledSize: new google.maps.Size(32, 32)
+        },
+        animation: google.maps.Animation.DROP
+    });
+};
 ```
 
-### **Para Produção**
+### InfoWindows Informativos
 
-1. Acesse [Google Cloud Console](https://console.cloud.google.com/)
-2. Crie um projeto ou selecione um existente
-3. Ative a **Maps JavaScript API**
-4. Crie uma **chave de API** restrita
-5. Substitua a chave no arquivo de configuração
+```typescript
+const createInfoWindow = (coleta: Coleta): google.maps.InfoWindow => {
+    const content = `
+        <div class="info-window">
+            <h3>${coleta.endereco}</h3>
+            <p><strong>Status:</strong> ${coleta.status}</p>
+            <p><strong>Material:</strong> ${coleta.material.nome}</p>
+            <p><strong>Peso:</strong> ${coleta.pesoEstimado}kg</p>
+        </div>
+    `;
+    
+    return new google.maps.InfoWindow({ content });
+};
+```
 
-## 🚀 Vantagens do Google Maps
+### Controles de Camadas
 
-### **Qualidade**
+```typescript
+const LayerControl: React.FC = () => {
+    const [layers, setLayers] = useState({
+        usuarios: true,
+        coletas: true,
+        rotas: true,
+        coletores: true
+    });
+    
+    const toggleLayer = (layerName: keyof typeof layers) => {
+        setLayers(prev => ({
+            ...prev,
+            [layerName]: !prev[layerName]
+        }));
+    };
+    
+    return (
+        <div className="layer-control">
+            {Object.entries(layers).map(([name, visible]) => (
+                <label key={name}>
+                    <input
+                        type="checkbox"
+                        checked={visible}
+                        onChange={() => toggleLayer(name as keyof typeof layers)}
+                    />
+                    {name.charAt(0).toUpperCase() + name.slice(1)}
+                </label>
+            ))}
+        </div>
+    );
+};
+```
 
-- ✅ **Tiles de alta resolução**
-- ✅ **Dados atualizados** constantemente
-- ✅ **Cobertura global** completa
+### Geocoding e Busca
 
-### **Performance**
+```typescript
+const geocodeAddress = async (address: string): Promise<google.maps.LatLngLiteral> => {
+    const geocoder = new google.maps.Geocoder();
+    
+    try {
+        const result = await geocoder.geocode({ address });
+        
+        if (result.results.length > 0) {
+            const location = result.results[0].geometry.location;
+            return {
+                lat: location.lat(),
+                lng: location.lng()
+            };
+        }
+        
+        throw new Error('Endereço não encontrado');
+    } catch (error) {
+        console.error('Erro no geocoding:', error);
+        throw error;
+    }
+};
+```
 
-- ✅ **Carregamento otimizado**
-- ✅ **Cache inteligente**
-- ✅ **Compressão automática**
+## Como Usar
 
-### **Funcionalidades**
+O sistema é intuitivo e fácil de usar:
 
-- ✅ **Street View** integrado
-- ✅ **Controles nativos** do Google
-- ✅ **Tipos de mapa** variados
-- ✅ **Geocoding** avançado
+### Navegação Básica
 
-### **Desenvolvimento**
+- **Zoom**: Use scroll do mouse ou botões +/-
+- **Pan**: Arraste o mapa para navegar
+- **Street View**: Clique no ícone do boneco amarelo
+- **Tipos de mapa**: Use o seletor no canto superior direito
 
-- ✅ **API bem documentada**
-- ✅ **TypeScript** nativo
-- ✅ **Suporte oficial** do Google
-- ✅ **Comunidade ativa**
+### Interação com Marcadores
 
-## 🔄 Migração do OpenStreetMap
+- **Clique simples**: Abre info window com detalhes
+- **Clique duplo**: Zoom para o ponto
+- **Arrastar**: Move marcadores (quando permitido)
+- **Hover**: Mostra tooltip com informações básicas
 
-### **Mudanças Realizadas**
+### Controles de Camadas
 
-1. **Removido Leaflet** e dependências relacionadas
-2. **Instalado Google Maps** API loader
-3. **Criado novo componente** `GoogleMapComponent`
-4. **Atualizado configurações** de estilo
-5. **Migrado funcionalidades** existentes
+- **Toggle de visibilidade**: Mostra/oculta tipos de pontos
+- **Filtros**: Filtra por status, tipo ou categoria
+- **Agrupamento**: Agrupa pontos próximos
+- **Clustering**: Agrupa marcadores em áreas densas
 
-### **Compatibilidade**
+### Funcionalidades Avançadas
 
-- ✅ **Mesma interface** de props
-- ✅ **Mesmos eventos** de clique
-- ✅ **Mesma estrutura** de dados
-- ✅ **Fallback** mantido
+- **Roteamento**: Calcula rotas entre pontos
+- **Medição**: Mede distâncias e áreas
+- **Desenho**: Desenha formas no mapa
+- **Exportação**: Exporta dados do mapa
 
-## 📊 Comparação
+## Vantagens do Google Maps
 
-| Aspecto | OpenStreetMap | Google Maps |
-|---------|---------------|-------------|
-| **Qualidade** | Boa | Excelente |
-| **Performance** | Média | Alta |
-| **Funcionalidades** | Básicas | Avançadas |
-| **Custo** | Gratuito | Pago (com limite) |
-| **Suporte** | Comunidade | Oficial |
-| **Documentação** | Boa | Excelente |
+A implementação oferece vantagens significativas:
 
-## 🎉 Resultado Final
+### Qualidade e Precisão
 
-O mapa agora oferece:
+- **Tiles de alta resolução**
+- **Dados atualizados** constantemente
+- **Cobertura global** completa
 
-- **Experiência superior** com tiles de alta qualidade
-- **Funcionalidades avançadas** como Street View
-- **Performance otimizada** para melhor responsividade
-- **Interface consistente** com o resto do sistema
+### Performance
+
+- **Carregamento otimizado**
+- **Cache inteligente**
+- **Compressão automática**
+
+### Funcionalidades
+
+- **Street View** integrado
+- **Controles nativos** do Google
+- **Tipos de mapa** variados
+- **Geocoding** avançado
+
+### Suporte e Documentação
+
+- **API bem documentada**
+- **TypeScript** nativo
+- **Suporte oficial** do Google
+- **Comunidade ativa**
+
+## Compatibilidade e Fallback
+
+O sistema mantém compatibilidade com implementações anteriores:
+
+### Interface Consistente
+
+- **Mesma interface** de props
+- **Mesmos eventos** de clique
+- **Mesma estrutura** de dados
+- **Fallback** mantido
+
+### Tratamento de Erros
+
+- **Verificação de conectividade**
+- **Fallback para mapa básico**
+- **Retry automático**
+- **Mensagens informativas**
+
+### Performance Adaptativa
+
+- **Carregamento progressivo**
+- **Lazy loading** de componentes
+- **Otimização** baseada em dispositivo
+- **Cache** inteligente
+
+## Comparação
+
+Comparação com implementações anteriores:
+
+### Qualidade do Mapa
+
+| Aspecto | Implementação Anterior | Google Maps |
+|---------|------------------------|-------------|
+| **Resolução** | Média | Alta |
+| **Atualização** | Manual | Automática |
+| **Cobertura** | Limitada | Global |
+| **Street View** | Não | Sim |
+
+### Performance
+
+| Aspecto | Implementação Anterior | Google Maps |
+|---------|------------------------|-------------|
+| **Carregamento** | Lento | Rápido |
+| **Cache** | Básico | Inteligente |
+| **Compressão** | Não | Sim |
+| **Otimização** | Manual | Automática |
+
+### Funcionalidades
+
+| Aspecto | Implementação Anterior | Google Maps |
+|---------|------------------------|-------------|
+| **Tipos de mapa** | Limitados | Variados |
+| **Controles** | Básicos | Avançados |
+| **Geocoding** | Não | Sim |
+| **Street View** | Não | Sim |
+
+## Resultado Final
+
+A implementação do Google Maps foi um sucesso completo:
+
+### Funcionalidades Implementadas
+
+- **Mapa interativo** com alta qualidade
+- **Marcadores personalizados** para diferentes tipos de pontos
+- **InfoWindows informativos** com dados detalhados
+- **Controles de camadas** para gerenciar visibilidade
+- **Geocoding** para busca de endereços
+- **Street View** integrado
+- **Tipos de mapa** variados (satélite, terreno, etc.)
+- **Controles nativos** do Google Maps
+
+### Benefícios Alcançados
+
+- **Qualidade superior** de mapas e dados
+- **Performance otimizada** para melhor experiência
+- **Funcionalidades avançadas** não disponíveis anteriormente
+- **Interface profissional** e intuitiva
+- **Suporte oficial** e documentação completa
 - **Escalabilidade** para futuras funcionalidades
 
----
+### Status de Produção
 
-**Implementado com ❤️ usando Google Maps API**
+- **Sistema estável** e funcionando perfeitamente
+- **Todas as funcionalidades** operacionais
+- **Performance** dentro dos parâmetros esperados
+- **Interface** responsiva e moderna
+- **Integração** Google Maps funcionando perfeitamente
+
+## Conclusão
+
+A implementação do Google Maps transformou significativamente a experiência do usuário no sistema de roteamento:
+
+- **Qualidade profissional** de mapas e dados geográficos
+- **Performance otimizada** para melhor responsividade
+- **Funcionalidades avançadas** como Street View e geocoding
+- **Interface consistente** com o resto do sistema
+- **Arquitetura escalável** para futuras funcionalidades
+
+**Implementado com dedicação usando Google Maps API**

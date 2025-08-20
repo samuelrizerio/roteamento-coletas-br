@@ -1,195 +1,163 @@
-# 🚀 Deploy no Cloudflare - Sistema de Roteamento de Coletas BR
+# Deploy no Cloudflare - Sistema de Roteamento de Coletas BR
 
-Este guia te mostrará como publicar seu projeto **completamente gratuito** usando Cloudflare!
+## **O que você vai conseguir:**
 
-## 📋 **O que você vai conseguir:**
+- **Frontend**: `https://app.samuelchaves.com` (Cloudflare Pages)
+- **Backend**: `https://api.samuelchaves.com` (Cloudflare Workers)
+- **Banco de Dados**: D1 (SQLite serverless)
+- **Custo**: **ZERO**
+- **Performance**: Global CDN + Edge Computing
 
-- ✅ **Frontend**: `https://app.samuelchaves.com` (Cloudflare Pages)
-- ✅ **Backend**: `https://api.samuelchaves.com` (Cloudflare Workers)
-- ✅ **Banco de Dados**: D1 (SQLite serverless)
-- ✅ **Custo**: **ZERO** 💰
-- ✅ **Performance**: Global CDN + Edge Computing
-
-## 🛠️ **Pré-requisitos:**
+## **Pré-requisitos:**
 
 1. **Conta Cloudflare** (gratuita)
-2. **Domínio** `samuelchaves.com` configurado no Cloudflare
-3. **Node.js** 18+ instalado
-4. **Git** configurado
+2. **GitHub** com o projeto
+3. **Node.js 18+** instalado
+4. **Wrangler CLI** instalado
 
-## 📥 **Instalação das Ferramentas:**
+### **Instalar Wrangler:**
 
 ```bash
-# Instalar Wrangler CLI
 npm install -g wrangler
-
-# Fazer login no Cloudflare
-wrangler login
 ```
 
-## 🚀 **Deploy Automático (Recomendado):**
+### **Configurar Cloudflare:**
 
 ```bash
-# Dar permissão de execução
-chmod +x deploy-cloudflare.sh
+# Login no Cloudflare
+wrangler login
 
-# Executar script de deploy
-./deploy-cloudflare.sh
+# Configurar projeto
+wrangler init roteamento-coletas-backend
 ```
 
-## 🔧 **Deploy Manual (Passo a Passo):**
+## **Deploy Automático (Recomendado):**
 
-### **1. Configurar Banco de Dados D1:**
+O projeto já está configurado com GitHub Actions para deploy automático:
+
+1. **Fork** o projeto para sua conta GitHub
+2. **Configure secrets** no GitHub:
+   - `CLOUDFLARE_API_TOKEN`
+   - `CLOUDFLARE_ACCOUNT_ID`
+3. **Push** para branch `main` - deploy automático!
+
+## **Deploy Manual (Passo a Passo):**
+
+### **1. Configurar Frontend (Cloudflare Pages):**
+
+```bash
+# Build do frontend
+cd frontend
+npm install
+npm run build
+
+# Deploy para Cloudflare Pages
+# Via dashboard: https://dash.cloudflare.com/pages
+# Upload da pasta build/
+```
+
+### **2. Configurar Backend (Cloudflare Workers):**
+
+```bash
+# Configurar wrangler.toml
+cd backend
+# Editar wrangler.toml com suas configurações
+
+# Deploy
+wrangler deploy
+```
+
+### **3. Configurar Banco D1:**
 
 ```bash
 # Criar banco D1
 wrangler d1 create roteamento-coletas-db
 
-# Anotar o ID retornado e atualizar backend-wrangler.toml
-# Substituir "your-database-id-here" pelo ID real
-
 # Executar schema
-wrangler d1 execute roteamento-coletas-db --file=./backend/schema.sql
+wrangler d1 execute roteamento-coletas-db --file=./schema.sql
 ```
 
-### **2. Deploy do Backend:**
+## **Limites Gratuitos Cloudflare:**
 
-```bash
-cd backend
-npm install
-wrangler deploy --env production
-cd ..
-```
+| **Serviço** | **Limite** | **Status** |
+|--------------|------------|------------|
+| **Pages** | 100 builds/mês | Suficiente |
+| **Workers** | 100.000 requests/dia | Suficiente |
+| **D1** | 100.000 requests/dia | Suficiente |
+| **CDN** | Ilimitado | Ilimitado |
 
-### **3. Deploy do Frontend:**
-
-```bash
-cd frontend
-npm install
-npm run build
-wrangler pages deploy build --project-name="roteamento-coletas-frontend"
-cd ..
-```
-
-## 🌐 **Configurar Domínios no Cloudflare:**
-
-### **Painel Cloudflare → DNS:**
-
-1. **Frontend**: `app.samuelchaves.com` → Cloudflare Pages
-2. **Backend**: `api.samuelchaves.com` → Cloudflare Workers
-
-### **Painel Cloudflare → Workers & Pages:**
-
-1. **Frontend**: Configurar domínio customizado
-2. **Backend**: Configurar rota customizada
-
-## 📊 **Limites Gratuitos Cloudflare:**
-
-| Serviço | Limite Gratuito | Seu Uso Estimado |
-|---------|----------------|------------------|
-| **Pages** | 100 builds/mês | ✅ Suficiente |
-| **Workers** | 100.000 requests/dia | ✅ Suficiente |
-| **D1** | 100.000 requests/dia | ✅ Suficiente |
-| **CDN** | Ilimitado | ✅ Ilimitado |
-
-## 🔍 **Verificar Deploy:**
+## **Verificar Deploy:**
 
 ### **Frontend:**
 
 ```bash
-curl https://app.samuelchaves.com
+curl -I https://app.samuelchaves.com
+# Deve retornar HTTP 200
 ```
 
 ### **Backend:**
 
 ```bash
-curl https://api.samuelchaves.com/health
+curl -I https://api.samuelchaves.com/health
+# Deve retornar HTTP 200
 ```
 
-### **Banco de Dados:**
+### **Banco D1:**
 
 ```bash
-wrangler d1 execute roteamento-coletas-db --command="SELECT COUNT(*) FROM usuarios;"
+# Via dashboard Cloudflare
+# Workers > Seu Worker > D1 > Ver dados
 ```
 
-## 🚨 **Troubleshooting:**
+## **URLs Finais:**
 
-### **Erro: "Worker not found"**
+- **Frontend**: <https://app.samuelchaves.com>
+- **Backend API**: <https://api.samuelchaves.com>
+- **Swagger UI**: <https://api.samuelchaves.com/swagger-ui.html>
+- **Health Check**: <https://api.samuelchaves.com/health>
+
+## **Próximos Passos:**
+
+1. Deploy inicial
+2. Configuração de domínio personalizado
+3. Monitoramento
+4. Otimizações
+
+## **Monitoramento:**
+
+### **Cloudflare Analytics:**
+
+- Requests por minuto
+- Latência global
+- Erros e status codes
+- Uso de recursos
+
+### **Logs:**
 
 ```bash
-# Verificar se está logado
-wrangler whoami
-
-# Verificar configuração
-wrangler config list
+# Ver logs em tempo real
+wrangler tail roteamento-coletas-backend
 ```
 
-### **Erro: "Database not found"**
+## **Troubleshooting:**
 
-```bash
-# Listar bancos D1
-wrangler d1 list
+### **Erro 500:**
 
-# Criar se não existir
-wrangler d1 create roteamento-coletas-db
-```
+- Verificar logs do Worker
+- Validar schema do banco D1
+- Testar endpoints individualmente
 
-### **Erro: "Domain not configured"**
+### **CORS:**
 
-- Verificar DNS no painel Cloudflare
-- Aguardar propagação (pode levar até 24h)
+- Configurar headers no Worker
+- Verificar configurações do frontend
 
-## 📱 **URLs Finais:**
+### **Banco D1:**
 
-- **Frontend**: `https://app.samuelchaves.com`
-- **Backend**: `https://api.samuelchaves.com`
-- **Admin**: `https://app.samuelchaves.com` (login: <admin@samuelchaves.com>)
+- Verificar permissões
+- Validar schema SQL
+- Testar queries
 
-## 🔄 **Deploy Contínuo:**
+## **Conclusão:**
 
-### **GitHub Actions (Opcional):**
-
-```yaml
-# .github/workflows/deploy.yml
-name: Deploy to Cloudflare
-on:
-  push:
-    branches: [main]
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - run: npm ci
-      - run: npm run build
-      - uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-```
-
-## 💡 **Dicas de Performance:**
-
-1. **Cache**: Usar Cloudflare Cache Rules
-2. **Minificação**: Ativar Auto Minify
-3. **Compressão**: Ativar Brotli
-4. **Imagens**: Usar Cloudflare Images (gratuito)
-
-## 🎯 **Próximos Passos:**
-
-1. ✅ Deploy inicial
-2. 🔄 Configurar CI/CD
-3. 📊 Monitoramento
-4. 🚀 Otimizações
-
-## 📞 **Suporte:**
-
-- **Cloudflare Docs**: <https://developers.cloudflare.com/>
-- **Wrangler Docs**: <https://developers.cloudflare.com/workers/wrangler/>
-- **D1 Docs**: <https://developers.cloudflare.com/d1/>
-
----
-
-**🎉 Parabéns! Seu sistema está rodando gratuitamente no Cloudflare!**
+**Parabéns! Seu sistema está rodando gratuitamente no Cloudflare!**

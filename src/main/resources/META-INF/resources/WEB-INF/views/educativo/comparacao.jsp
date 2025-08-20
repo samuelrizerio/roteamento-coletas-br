@@ -107,7 +107,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5>📊 Comparação Detalhada</h5>
+                        <h5>Comparação Detalhada</h5>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -312,7 +312,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5>🏗️ Análise de Arquitetura</h5>
+                        <h5>Análise de Arquitetura</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -347,7 +347,7 @@
             <div class="col-12">
                 <div class="card border-primary">
                     <div class="card-header bg-primary text-white">
-                        <h5>💡 Recomendações por Cenário</h5>
+                        <h5>Recomendações por Cenário</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">

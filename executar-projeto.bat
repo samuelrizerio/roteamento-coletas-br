@@ -17,7 +17,7 @@ if %errorlevel% neq 0 (
     pause
     exit /b 1
 )
-echo ✅ Java encontrado!
+echo Java encontrado!
 
 echo.
 echo [2/3] Verificando Maven...
@@ -28,7 +28,7 @@ if %errorlevel% neq 0 (
     pause
     exit /b 1
 )
-echo ✅ Maven encontrado!
+echo Maven encontrado!
 
 echo.
 echo [3/3] Iniciando o Backend Java...

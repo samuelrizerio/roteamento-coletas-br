@@ -48,7 +48,7 @@ public class AlgoritmosAvancadosController {
      */
     @PostMapping("/otimizar-genetico")
     public ResponseEntity<Map<String, Object>> otimizarComAlgoritmoGenetico(@RequestBody List<Long> coletaIds) {
-        log.info("🧬 Recebida requisição para otimização com algoritmo genético para {} coletas", coletaIds.size());
+        log.info("Recebida requisição para otimização com algoritmo genético para {} coletas", coletaIds.size());
 
         try {
             // Buscar coletas
@@ -100,7 +100,7 @@ public class AlgoritmosAvancadosController {
      */
     @PostMapping("/otimizar-simulated-annealing")
     public ResponseEntity<Map<String, Object>> otimizarComSimulatedAnnealing(@RequestBody List<Long> coletaIds) {
-        log.info("🔥 Recebida requisição para otimização com simulated annealing para {} coletas", coletaIds.size());
+        log.info("Recebida requisição para otimização com simulated annealing para {} coletas", coletaIds.size());
 
         try {
             // Buscar coletas
@@ -152,7 +152,7 @@ public class AlgoritmosAvancadosController {
      */
     @PostMapping("/clustering-kmeans")
     public ResponseEntity<Map<String, Object>> clusteringKMeans(@RequestParam("k") Integer k) {
-        log.info("🎯 Recebida requisição para clustering K-means com {} clusters", k);
+        log.info("Recebida requisição para clustering K-means com {} clusters", k);
 
         try {
             // Buscar todas as coletas pendentes
@@ -209,7 +209,7 @@ public class AlgoritmosAvancadosController {
      */
     @PostMapping("/balancear-carga")
     public ResponseEntity<Map<String, Object>> balancearCargaInteligente() {
-        log.info("⚖️ Recebida requisição para balanceamento de carga inteligente");
+        log.info("Recebida requisição para balanceamento de carga inteligente");
 
         try {
             // Buscar coletores ativos
@@ -291,7 +291,7 @@ public class AlgoritmosAvancadosController {
      */
     @GetMapping("/prever-demanda")
     public ResponseEntity<Map<String, Object>> preverDemanda(@RequestParam("dias") Integer diasPrevisao) {
-        log.info("🔮 Recebida requisição para previsão de demanda para {} dias", diasPrevisao);
+        log.info("Recebida requisição para previsão de demanda para {} dias", diasPrevisao);
 
         try {
             // Buscar histórico de coletas (últimos 30 dias)
@@ -332,7 +332,7 @@ public class AlgoritmosAvancadosController {
      */
     @PostMapping("/comparar-algoritmos")
     public ResponseEntity<Map<String, Object>> compararAlgoritmos(@RequestBody List<Long> coletaIds) {
-        log.info("📊 Recebida requisição para comparar algoritmos para {} coletas", coletaIds.size());
+        log.info("Recebida requisição para comparar algoritmos para {} coletas", coletaIds.size());
 
         try {
             // Buscar coletas

@@ -56,14 +56,14 @@ public class RoteamentoAutomaticoService {
     @Scheduled(fixedRate = 1800000) // 30 minutos
     @Transactional
     public void executarRoteamentoAutomatico() {
-        log.info("🚀 Iniciando roteamento automático...");
+        log.info("Iniciando roteamento automático...");
 
         try {
             // 1. Buscar coletas pendentes
             List<Coleta> coletasPendentes = buscarColetasPendentes();
             
             if (coletasPendentes.isEmpty()) {
-                log.info("✅ Nenhuma coleta pendente encontrada");
+                log.info("Nenhuma coleta pendente encontrada");
                 return;
             }
 
@@ -71,7 +71,7 @@ public class RoteamentoAutomaticoService {
             List<Usuario> coletoresDisponiveis = buscarColetoresDisponiveis();
             
             if (coletoresDisponiveis.isEmpty()) {
-                log.warn("⚠️ Nenhum coletor disponível encontrado");
+                log.warn("Nenhum coletor disponível encontrado");
                 return;
             }
 
@@ -96,11 +96,11 @@ public class RoteamentoAutomaticoService {
                     Rota rota = criarRotaOtimizada(coletor, coletasOtimizadas);
                     rotaRepository.save(rota);
                     rotasCriadas++;
-                    log.info("🧬 Rota otimizada criada para coletor {} com {} coletas", coletor.getNome(), coletasOtimizadas.size());
+                    log.info("Rota otimizada criada para coletor {} com {} coletas", coletor.getNome(), coletasOtimizadas.size());
                 }
             }
 
-            log.info("✅ Roteamento automático concluído. {} rotas criadas", rotasCriadas);
+            log.info("Roteamento automático concluído. {} rotas criadas", rotasCriadas);
 
         } catch (Exception e) {
             log.error("❌ Erro no roteamento automático", e);
@@ -114,7 +114,7 @@ public class RoteamentoAutomaticoService {
      */
     @Transactional
     public Map<String, Object> executarRoteamentoManual() {
-        log.info("🎯 Executando roteamento manual agrupando por material...");
+        log.info("Executando roteamento manual agrupando por material...");
 
         Map<String, Object> resultado = new HashMap<>();
         List<Coleta> coletasPendentes = buscarColetasPendentes();
@@ -265,7 +265,7 @@ public class RoteamentoAutomaticoService {
             grupos.add(grupo);
         }
 
-        log.info("📍 Criados {} grupos de coletas por proximidade", grupos.size());
+        log.info("Criados {} grupos de coletas por proximidade", grupos.size());
         return grupos;
     }
 
@@ -345,14 +345,14 @@ public class RoteamentoAutomaticoService {
         double distanciaTotal = calcularDistanciaTotal(coletasOtimizadas);
         int tempoEstimado = calcularTempoEstimado(coletasOtimizadas);
 
-        log.info("📏 Distância total calculada: {} km", distanciaTotal);
-        log.info("⏱️ Tempo estimado calculado: {} minutos", tempoEstimado);
+        log.info("Distância total calculada: {} km", distanciaTotal);
+        log.info("Tempo estimado calculado: {} minutos", tempoEstimado);
 
         rota.setCapacidadeUtilizada(pesoTotal);
         rota.setDistanciaTotal(distanciaTotal > 0 ? (int) distanciaTotal : 1);
         rota.setTempoEstimado(tempoEstimado > 0 ? tempoEstimado : 1);
 
-        log.info("✅ Rota configurada - Distância: {}, Tempo: {}", rota.getDistanciaTotal(), rota.getTempoEstimado());
+        log.info("Rota configurada - Distância: {}, Tempo: {}", rota.getDistanciaTotal(), rota.getTempoEstimado());
 
         return rota;
     }
@@ -482,7 +482,7 @@ public class RoteamentoAutomaticoService {
      * @return Map com rota calculada
      */
     public Map<String, Object> calcularRotaEntrePontos(List<Map<String, Double>> pontos) {
-        log.info("🛣️ Calculando rota para {} pontos", pontos.size());
+        log.info("Calculando rota para {} pontos", pontos.size());
 
         if (pontos.size() < 2) {
             return Map.of(
