@@ -45,11 +45,9 @@ Sistema completo de roteamento programado e inteligente para coletas seletivas, 
 
 ## Arquitetura do Sistema
 
-### Backend (Spring Boot + Cloudflare Workers)
+### Backend (Spring Boot - Java)
 
-O sistema possui uma arquitetura híbrida com duas implementações:
-
-#### 1. Spring Boot (Java)
+O sistema usa uma arquitetura **100% Java** com Spring Boot:
 
 ```
 src/main/java/br/com/roteamento/
@@ -79,15 +77,12 @@ src/main/java/br/com/roteamento/
     └── MaterialRepository.java    # Persistência materiais
 ```
 
-#### 2. Cloudflare Workers (Node.js)
-
-```
-backend/
-├── src/
-│   └── index.js                  # Servidor serverless
-├── package.json                   # Dependências Node.js
-└── wrangler.toml                 # Configuração Cloudflare
-```
+**✅ Vantagens da arquitetura Java:**
+- **100% gratuito** (OpenJDK + Spring Boot)
+- **Banco H2 em memória** (não precisa instalar PostgreSQL)
+- **Deploy simples** (JAR executável)
+- **Performance otimizada** para algoritmos de roteamento
+- **Segurança robusta** com Spring Security
 
 ### Frontend (React + TypeScript)
 
@@ -119,15 +114,15 @@ frontend/src/
 
 ### Pré-requisitos
 
-- **Java 17+** (para Spring Boot)
-- **Node.js 18+** (para Cloudflare Workers e Frontend)
-- **Maven 3.6+** (para Spring Boot)
-- **PostgreSQL** (opcional, usa H2 por padrão)
+- **Java 17+** (OpenJDK - gratuito)
+- **Maven 3.6+** (gratuito)
+- **Node.js 18+** (apenas para frontend - gratuito)
+- **Banco H2** (em memória - não precisa instalar)
 
-### 1. Backend Spring Boot
+### 1. Backend Java (Spring Boot)
 
 ```bash
-# Compilar e executar
+# Na pasta raiz do projeto
 mvn spring-boot:run
 
 # Ou compilar JAR
@@ -135,16 +130,9 @@ mvn clean package
 java -jar target/roteamento-coletas-br-1.0.0.jar
 ```
 
-### 2. Backend Cloudflare Workers
+**O backend Java rodará em: http://localhost:8081**
 
-```bash
-cd backend
-npm install
-npm run dev        # Desenvolvimento local
-npm run deploy     # Deploy para produção
-```
-
-### 3. Frontend
+### 2. Frontend React
 
 ```bash
 cd frontend
@@ -152,11 +140,20 @@ npm install
 npm start
 ```
 
-### 4. Acessar Sistema
+**O frontend rodará em: http://localhost:3000**
 
-- **Backend Spring Boot**: <http://localhost:8081/api/v1>
-- **Backend Cloudflare**: <https://api.samuelchaves.com>
+### 3. Acessar Sistema
+
+- **Backend Java**: <http://localhost:8081/api/v1>
+- **Console H2**: <http://localhost:8081/h2-console>
+- **Swagger UI**: <http://localhost:8081/api/v1/swagger-ui.html>
 - **Frontend**: <http://localhost:3000>
+
+### 4. Banco de Dados H2
+
+- **JDBC URL**: `jdbc:h2:mem:roteamento_coletas`
+- **Usuário**: `sa`
+- **Senha**: (deixe em branco)
 - **Swagger UI**: <http://localhost:8081/api/v1/swagger-ui.html>
 - **H2 Console**: <http://localhost:8081/api/v1/h2-console>
 
