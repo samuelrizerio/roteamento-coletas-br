@@ -1,0 +1,136 @@
+# CONFIGURAÇÃO PARA AMBIENTE DE PRODUÇÃO
+# =======================================
+# Este arquivo é carregado quando o perfil 'prod' está ativo
+# Configurações otimizadas para ambiente de produção
+
+spring:
+  # Configurações do banco de dados MySQL (produção)
+  datasource:
+    # URL de conexão com o MySQL
+    # Formato: jdbc:mysql://host:porta/nome_banco?parametros
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:srpc_prod}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8
+    # Nome do usuário do banco de dados (variável de ambiente)
+    username: ${DB_USERNAME:srpc_user}
+    # Senha do banco de dados (variável de ambiente)
+    password: ${DB_PASSWORD:srpc_password}
+    # Driver JDBC do MySQL
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    
+    # Configurações de pool de conexões para produção
+    hikari:
+      # Número máximo de conexões no pool
+      maximum-pool-size: ${DB_MAX_POOL_SIZE:20}
+      # Número mínimo de conexões no pool
+      minimum-idle: ${DB_MIN_POOL_SIZE:5}
+      # Tempo máximo de vida de uma conexão (em milissegundos)
+      max-lifetime: ${DB_MAX_LIFETIME:1800000}
+      # Tempo máximo de espera por uma conexão (em milissegundos)
+      connection-timeout: 30000
+      # Tempo de inatividade antes de fechar uma conexão (em milissegundos)
+      idle-timeout: 600000
+      # Teste de conexão antes de usar
+      connection-test-query: SELECT 1
+    
+  # Configurações do JPA/Hibernate para produção
+  jpa:
+    # Hibernate como implementação do JPA
+    hibernate:
+      # Estratégia de criação das tabelas para produção
+      # validate: apenas valida se as tabelas existem (SEGURO para produção)
+      # update: atualiza as tabelas existentes (cuidado em produção)
+      # create: NUNCA usar em produção (perde dados)
+      ddl-auto: validate
+    # NÃO mostrar queries SQL em produção (segurança e performance)
+    show-sql: false
+    # NÃO formatar queries SQL em produção
+    format-sql: false
+    # Configurações específicas do Hibernate para produção
+    properties:
+      hibernate:
+        # Dialeto SQL do MySQL
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        # Configurações de performance para produção
+        jdbc:
+          batch_size: ${HIBERNATE_JDBC_BATCH_SIZE:50}
+        # Configurações de cache para produção
+        cache:
+          use_second_level_cache: ${HIBERNATE_CACHE_ENABLED:true}
+          use_query_cache: true
+          region:
+            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+        # Configurações de estatísticas (apenas se necessário)
+        generate_statistics: false
+        # Configurações de sessão
+        session:
+          events:
+            log: false
+
+# Configurações de logging para produção
+logging:
+  level:
+    # Nível geral da aplicação (menos verboso em produção)
+    root: ${LOG_LEVEL:WARN}
+    # Nível específico para o pacote da aplicação
+    br.com.roteamento: ${SPRING_LOG_LEVEL:INFO}
+    # NÃO logar queries SQL em produção
+    org.hibernate.SQL: ${HIBERNATE_LOG_LEVEL:WARN}
+    # NÃO logar parâmetros das queries em produção
+    org.hibernate.type.descriptor.sql.BasicBinder: ${HIBERNATE_LOG_LEVEL:WARN}
+    # Log de transações apenas em caso de erro
+    org.springframework.transaction: WARN
+  # Padrão de formatação dos logs para produção (mais simples)
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    # Configuração para arquivo de log
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  # Configuração de arquivo de log para produção
+  file:
+    name: logs/srpc-application.log
+    max-size: 100MB
+    max-history: 30
+
+# Configurações específicas para produção
+app:
+  # Configurações de roteamento para produção
+  routing:
+    # Raio máximo de busca para coletas (em metros) - maior para produção
+    max-search-radius: ${ROUTING_MAX_SEARCH_RADIUS:10000}
+    # Tempo máximo de espera para cálculo de rota (em segundos) - maior para produção
+    max-routing-time: ${ROUTING_MAX_TIME:60}
+  # Configurações de notificação para produção
+  notification:
+    # Tempo de expiração de notificações (em minutos) - maior para produção
+    expiration-time: ${NOTIFICATION_EXPIRATION_TIME:60}
+    # Máximo de tentativas de envio - maior para produção
+    max-retry-attempts: ${NOTIFICATION_MAX_RETRY_ATTEMPTS:5}
+
+# Configurações de gerenciamento para produção
+management:
+  endpoints:
+    web:
+      exposure:
+        # Apenas endpoints essenciais em produção
+        include: ${MANAGEMENT_ENDPOINTS:health,info,metrics}
+        # Endpoints sensíveis NÃO expostos em produção
+        exclude: env,configprops,beans,shutdown
+  # Configurações de métricas para produção
+  metrics:
+    export:
+      prometheus:
+        enabled: ${PROMETHEUS_ENABLED:true}
+    # Configurações de coleta de métricas
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
+
+# Configurações de segurança para produção
+  security:
+    # Configurações do JWT para produção
+    jwt:
+      # Chave secreta para assinar os tokens JWT (OBRIGATÓRIO em produção)
+      # Deve ser uma variável de ambiente em produção
+      secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      # Tempo de expiração do token (24 horas em milissegundos)
+      expiration: ${JWT_EXPIRATION:86400000}

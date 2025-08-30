@@ -1,0 +1,119 @@
+# CONFIGURAÇÃO BASE DA APLICAÇÃO SPRING BOOT
+# ==========================================
+# Este arquivo contém configurações comuns a todos os ambientes
+# Para configurações específicas, use os perfis:
+# - application-dev.yml (desenvolvimento)
+# - application-homo.yml (homologação)
+# - application-prod.yml (produção)
+# - application-test.yml (testes)
+# - application-local.yml (desenvolvimento local)
+
+# Configurações do servidor
+server:
+  port: ${SERVER_PORT:8081}
+  servlet:
+    context-path: ${SERVER_CONTEXT_PATH:/}
+
+# Configurações do Spring
+spring:
+  # Configurações da aplicação
+  application:
+    name: sistema-roteamento-programado-coletas
+  
+  # PERFIL ATIVO - Define qual configuração específica será carregada
+  # Opções: local (desenvolvimento local), dev (desenvolvimento), homo (homologação), prod (produção), test (testes)
+  # Para ativar: --spring.profiles.active=local ou --spring.profiles.active=dev ou --spring.profiles.active=homo ou --spring.profiles.active=prod
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  
+  # Configurações comuns do JPA/Hibernate
+  jpa:
+    # Hibernate como implementação do JPA
+    hibernate:
+      # Estratégia de criação das tabelas (será sobrescrita pelos perfis)
+      ddl-auto: update
+    # Configurações comuns do Hibernate
+    properties:
+      hibernate:
+        # Configurações de performance comuns
+        jdbc:
+          batch_size: ${HIBERNATE_JDBC_BATCH_SIZE:20}
+        # Configurações de cache comuns
+        cache:
+          use_second_level_cache: ${HIBERNATE_CACHE_ENABLED:false}
+          
+  # Configurações de segurança
+  security:
+    # Configurações do JWT
+    jwt:
+      # Chave secreta para assinar os tokens JWT (OBRIGATÓRIO em produção)
+      # Deve ser uma variável de ambiente em produção
+      secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      # Tempo de expiração do token (24 horas em milissegundos)
+      expiration: ${JWT_EXPIRATION:86400000}
+      
+  # Configurações do Spring MVC para JSP
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+    static-path-pattern: /static/**
+
+# Configurações do SpringDoc OpenAPI (Swagger)
+springdoc:
+  # Configurações da API
+  api-docs:
+    # Caminho da documentação JSON
+    path: /api-docs
+  # Configurações da interface Swagger UI
+  swagger-ui:
+    # Caminho da interface Swagger
+    path: /swagger-ui.html
+    # Configurações de operações
+    operations-sorter: method
+    # Configurações de tags
+    tags-sorter: alpha
+
+# Configurações de logging
+logging:
+  # Nível de log da aplicação
+  level:
+    # Nível geral da aplicação
+    root: ${LOG_LEVEL:INFO}
+    # Nível específico para o pacote da aplicação
+    br.com.roteamento: ${SPRING_LOG_LEVEL:DEBUG}
+    # Nível para queries SQL
+    org.hibernate.SQL: ${HIBERNATE_LOG_LEVEL:DEBUG}
+    # Nível para parâmetros das queries
+    org.hibernate.type.descriptor.sql.BasicBinder: ${HIBERNATE_LOG_LEVEL:TRACE}
+  # Padrão de formatação dos logs
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+# Configurações de gerenciamento da aplicação
+management:
+  # Endpoints de monitoramento
+  endpoints:
+    web:
+      exposure:
+        include: ${MANAGEMENT_ENDPOINTS:health,info,metrics}
+  # Configurações de métricas
+  metrics:
+    export:
+      prometheus:
+        enabled: ${PROMETHEUS_ENABLED:true}
+
+# Configurações customizadas da aplicação
+app:
+  # Configurações de roteamento
+  routing:
+    # Raio máximo de busca para coletas (em metros)
+    max-search-radius: ${ROUTING_MAX_SEARCH_RADIUS:5000}
+    # Tempo máximo de espera para cálculo de rota (em segundos)
+    max-routing-time: ${ROUTING_MAX_TIME:30}
+  # Configurações de notificação
+  notification:
+    # Tempo de expiração de notificações (em minutos)
+    expiration-time: ${NOTIFICATION_EXPIRATION_TIME:30}
+    # Máximo de tentativas de envio
+    max-retry-attempts: ${NOTIFICATION_MAX_RETRY_ATTEMPTS:3} 

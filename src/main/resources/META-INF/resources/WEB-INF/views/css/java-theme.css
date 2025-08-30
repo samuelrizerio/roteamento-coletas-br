@@ -1,0 +1,307 @@
+/* Tema de Cores do Java - Tons Metálicos */
+:root {
+    /* Cores principais do Java */
+    --java-blue: #007396;
+    --java-orange: #ED8C00;
+    --java-dark-blue: #004D73;
+    --java-light-orange: #FF8C00;
+    
+    /* Tons metálicos */
+    --metallic-silver: #C0C0C0;
+    --metallic-gold: #D4AF37;
+    --metallic-bronze: #CD7F32;
+    --metallic-steel: #4682B4;
+    --metallic-chrome: #E8E8E8;
+    --metallic-gunmetal: #2C3539;
+    
+
+    
+    /* Cores de texto */
+    --text-primary: #2C3E50;
+    --text-secondary: #6C757D;
+    --text-light: #FFFFFF;
+    --text-dark: #1A1A1A;
+    
+    /* Cores de fundo */
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F8F9FA;
+    --bg-dark: #2C3539;
+    --bg-metallic: #E8E8E8;
+}
+
+/* Estilos base */
+body {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+/* Seção Hero */
+.hero-section {
+    background: var(--java-blue);
+    color: var(--text-light);
+    padding: 60px 0;
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 115, 150, 0.1);
+    z-index: 1;
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Cards e elementos */
+.feature-card, .stat-card, .concept-card, .algorithm-card, .stats-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border-left: 4px solid var(--java-orange);
+    height: 100%;
+    background: var(--bg-primary);
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.feature-card:hover, .stat-card:hover, .concept-card:hover, .algorithm-card:hover, .stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 115, 150, 0.2);
+    border-left-color: var(--java-blue);
+}
+
+/* Navegação */
+.navbar {
+    background: var(--metallic-silver) !important;
+    border: 1px solid var(--metallic-chrome);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+    color: var(--java-blue) !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--java-orange) !important;
+    transform: translateY(-1px);
+}
+
+.navbar-brand {
+    color: var(--java-dark-blue) !important;
+    font-weight: 700;
+}
+
+/* Botões */
+.btn-custom, .btn-primary {
+    background: var(--java-blue);
+    border: none;
+    color: var(--text-light);
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 115, 150, 0.3);
+}
+
+.btn-custom:hover, .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 115, 150, 0.4);
+    color: var(--text-light);
+    background: var(--java-orange);
+}
+
+.btn-secondary {
+    background: var(--metallic-silver);
+    border: 1px solid var(--metallic-chrome);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background: var(--metallic-chrome);
+    color: var(--text-primary);
+}
+
+/* Badges e elementos especiais */
+.tech-badge {
+    background: var(--java-orange);
+    color: var(--text-light);
+    padding: 10px 20px;
+    border-radius: 25px;
+    margin: 8px;
+    display: inline-block;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(237, 140, 0, 0.3);
+}
+
+.tech-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(237, 140, 0, 0.4);
+}
+
+/* Títulos e textos */
+.section-title {
+    color: var(--java-dark-blue);
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--java-orange);
+    border-radius: 2px;
+}
+
+.java-text {
+    color: var(--java-blue);
+    font-weight: 600;
+}
+
+/* Ícones */
+.icon-large {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: var(--java-blue);
+}
+
+.icon-large:hover {
+    color: var(--java-orange);
+    transform: scale(1.1);
+    transition: all 0.3s ease;
+}
+
+/* Alertas */
+.alert-info {
+    background: var(--java-blue);
+    color: var(--text-light);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 115, 150, 0.2);
+}
+
+.alert-warning {
+    background: var(--java-orange);
+    color: var(--text-light);
+    border: none;
+    box-shadow: 0 4px 15px rgba(237, 140, 0, 0.2);
+}
+
+.alert-success {
+    background: var(--java-blue) !important;
+    color: var(--text-light) !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(0, 115, 150, 0.2) !important;
+}
+
+/* Tabelas */
+.table {
+    background: var(--bg-primary);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.table thead th {
+    background: var(--java-blue);
+    color: var(--text-light);
+    border: none;
+    font-weight: 600;
+}
+
+.table tbody tr:hover {
+    background: var(--bg-metallic);
+}
+
+/* Formulários */
+.form-control:focus {
+    border-color: var(--java-orange);
+    box-shadow: 0 0 0 0.2rem rgba(237, 140, 0, 0.25);
+}
+
+.form-select:focus {
+    border-color: var(--java-orange);
+    box-shadow: 0 0 0 0.2rem rgba(237, 140, 0, 0.25);
+}
+
+/* Progress bars */
+.progress-bar-custom {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--java-orange);
+}
+
+.progress {
+    background: var(--metallic-chrome);
+    border-radius: 4px;
+}
+
+/* Cards especiais */
+.algorithm-card {
+    background: var(--java-orange);
+    border: 2px solid var(--java-orange);
+    color: var(--text-light);
+}
+
+.stats-card {
+    background: var(--java-blue);
+    border: 2px solid var(--java-blue);
+    color: var(--text-light);
+}
+
+.concept-card {
+    background: var(--metallic-silver);
+    border: 1px solid var(--metallic-chrome);
+}
+
+/* Efeitos metálicos */
+.metallic-effect {
+    background: var(--metallic-silver);
+    background-size: 200% 200%;
+    animation: metallic-shine 3s ease-in-out infinite;
+}
+
+@keyframes metallic-shine {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 40px 0;
+    }
+    
+    .btn-custom, .btn-primary {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .section-title::after {
+        width: 60px;
+    }
+}
+
+/* Modo escuro opcional */
+.dark-mode {
+    --bg-primary: #1A1A1A;
+    --bg-secondary: #2C3539;
+    --text-primary: #FFFFFF;
+    --text-secondary: #C0C0C0;
+}

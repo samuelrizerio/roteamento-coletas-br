@@ -1,0 +1,242 @@
+# GITIGNORE - Arquivos e diretórios ignorados pelo Git
+# 
+# CONCEITOS DIDÁTICOS:
+# 
+# 1. CONTROLE DE VERSÃO:
+#    - Git: Sistema de controle de versão distribuído
+#    - .gitignore: Arquivo que define o que não versionar
+#    - Arquivos temporários, compilados e sensíveis
+#    - Evita poluição do repositório
+# 
+# 2. TIPOS DE ARQUIVOS IGNORADOS:
+#    - Arquivos compilados (.class, .jar)
+#    - Arquivos de configuração local
+#    - Logs e arquivos temporários
+#    - Dependências baixadas
+#    - Arquivos de IDE
+
+# ========================================
+# ARQUIVOS COMPILADOS JAVA
+# ========================================
+
+# Arquivos .class compilados
+*.class
+
+# Arquivos JAR
+*.jar
+*.war
+*.ear
+
+# Arquivos de empacotamento
+*.nar
+*.zip
+*.tar.gz
+*.rar
+
+# ========================================
+# DIRETÓRIOS DE BUILD
+# ========================================
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ========================================
+# IDEs E EDITORES
+# ========================================
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+
+# ========================================
+# ARQUIVOS DE CONFIGURAÇÃO LOCAL
+# ========================================
+
+# Application properties/yml locais
+src/main/resources/application-local.yml
+src/main/resources/application-local.properties
+src/test/resources/application-test.yml
+src/test/resources/application-test.properties
+
+# Arquivos de configuração de ambiente
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ========================================
+# LOGS E ARQUIVOS TEMPORÁRIOS
+# ========================================
+
+# Logs
+logs/
+*.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Arquivos de sistema
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ========================================
+# BANCO DE DADOS
+# ========================================
+
+# Arquivos de banco local
+*.db
+*.sqlite
+*.sqlite3
+
+# Dumps de banco
+*.sql
+*.dump
+
+# ========================================
+# DOCKER
+# ========================================
+
+# Volumes Docker
+docker-volumes/
+postgres_data/
+
+# ========================================
+# DEPENDÊNCIAS
+# ========================================
+
+# Dependências Java
+target/
+*.jar
+*.war
+*.ear
+
+# ========================================
+# ARQUIVOS DE SEGURANÇA
+# ========================================
+
+# Chaves e certificados
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+
+# Arquivos de senha
+*.password
+passwords.txt
+
+# ========================================
+# ARQUIVOS DE BACKUP
+# ========================================
+
+# Backups automáticos
+*.backup
+*.bak
+*.old
+*.orig
+
+# ========================================
+# ARQUIVOS ESPECÍFICOS DO PROJETO
+# ========================================
+
+# Arquivos de configuração local
+application-local.yml
+application-local.properties
+
+# Arquivos de teste temporários
+test-results/
+coverage/
+
+# Arquivos de documentação gerados
+docs/generated/
+
+# Pasta de documentação completa
+docs/
+
+# ========================================
+# ARQUIVOS DE CI/CD
+# ========================================
+
+# Arquivos de build local
+build/
+dist/
+
+# Arquivos de deploy
+deploy/
+*.tar.gz
+
+# ========================================
+# OUTROS
+# ========================================
+
+# Arquivos de cache
+.cache/
+*.cache
+
+# Arquivos de lock
+*.lock
+
+# Arquivos de configuração de usuário
+.userprefs
+
+# Arquivos de sessão
+*.session
+
+# Arquivos de histórico
+.history/
+
+# Arquivos de configuração do sistema
+.settings/ 
