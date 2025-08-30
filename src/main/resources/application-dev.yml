@@ -1,0 +1,111 @@
+# CONFIGURAÇÃO PARA AMBIENTE DE DESENVOLVIMENTO
+# ================================================
+# Este arquivo é carregado quando o perfil 'dev' está ativo
+# Ideal para desenvolvimento local, testes e debugging
+
+# Configurações do servidor para desenvolvimento
+server:
+  port: ${SERVER_PORT:8081}
+  servlet:
+    context-path: /  # Sem prefixo em desenvolvimento para facilitar acesso JSP
+
+spring:
+  # Configurações do banco de dados PostgreSQL (desenvolvimento)
+  datasource:
+    # URL de conexão com o PostgreSQL
+    # Formato: jdbc:postgresql://host:porta/nome_banco
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:srpc_dev}
+    # Nome do usuário do banco de dados PostgreSQL
+    username: ${DB_USERNAME:postgres}
+    # Senha do banco de dados PostgreSQL
+    password: ${DB_PASSWORD:postgres}
+    # Driver JDBC do PostgreSQL
+    driver-class-name: org.postgresql.Driver
+    
+    # Configurações de pool de conexões para desenvolvimento
+    hikari:
+      # Número máximo de conexões no pool
+      maximum-pool-size: ${DB_MAX_POOL_SIZE:10}
+      # Número mínimo de conexões no pool
+      minimum-idle: ${DB_MIN_POOL_SIZE:2}
+      # Tempo máximo de vida de uma conexão (em milissegundos)
+      max-lifetime: ${DB_MAX_LIFETIME:1800000}
+      # Tempo máximo de espera por uma conexão (em milissegundos)
+      connection-timeout: 30000
+      # Teste de conexão antes de usar
+      connection-test-query: SELECT 1
+    
+  # Configurações do JPA/Hibernate para desenvolvimento
+  jpa:
+    # Hibernate como implementação do JPA
+    hibernate:
+      # Estratégia de criação das tabelas para desenvolvimento
+      # create: recria as tabelas a cada execução (útil para desenvolvimento)
+      # update: atualiza as tabelas existentes (mais seguro)
+      # validate: apenas valida se as tabelas existem (produção)
+      ddl-auto: create
+    # Mostra as queries SQL no console (útil para desenvolvimento)
+    show-sql: true
+    # Formata as queries SQL para melhor legibilidade
+    format-sql: true
+    # Configurações específicas do Hibernate para desenvolvimento
+    properties:
+      hibernate:
+        # Dialeto SQL do PostgreSQL
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        # Configurações de performance para desenvolvimento
+        jdbc:
+          batch_size: ${HIBERNATE_JDBC_BATCH_SIZE:10}
+        # Configurações de cache para desenvolvimento
+        cache:
+          use_second_level_cache: ${HIBERNATE_CACHE_ENABLED:false}
+        # Log de queries SQL com parâmetros (desenvolvimento)
+        type:
+          descriptor:
+            sql:
+              trace: true
+
+# Configurações de logging para desenvolvimento
+logging:
+  level:
+    # Nível geral da aplicação
+    root: ${LOG_LEVEL:INFO}
+    # Nível específico para o pacote da aplicação (mais detalhado em dev)
+    br.com.roteamento: ${SPRING_LOG_LEVEL:DEBUG}
+    # Nível para queries SQL (útil para desenvolvimento)
+    org.hibernate.SQL: ${HIBERNATE_LOG_LEVEL:DEBUG}
+    # Nível para parâmetros das queries (desenvolvimento)
+    org.hibernate.type.descriptor.sql.BasicBinder: ${HIBERNATE_LOG_LEVEL:TRACE}
+    # Log de transações (desenvolvimento)
+    org.springframework.transaction: DEBUG
+  # Padrão de formatação dos logs para desenvolvimento
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# Configurações específicas para desenvolvimento
+app:
+  # Configurações de roteamento para desenvolvimento
+  routing:
+    # Raio máximo de busca para coletas (em metros) - menor para desenvolvimento
+    max-search-radius: ${ROUTING_MAX_SEARCH_RADIUS:2000}
+    # Tempo máximo de espera para cálculo de rota (em segundos) - menor para desenvolvimento
+    max-routing-time: ${ROUTING_MAX_TIME:15}
+  # Configurações de notificação para desenvolvimento
+  notification:
+    # Tempo de expiração de notificações (em minutos) - menor para desenvolvimento
+    expiration-time: ${NOTIFICATION_EXPIRATION_TIME:15}
+    # Máximo de tentativas de envio - menor para desenvolvimento
+    max-retry-attempts: ${NOTIFICATION_MAX_RETRY_ATTEMPTS:2}
+
+# Configurações de gerenciamento para desenvolvimento
+management:
+  endpoints:
+    web:
+      exposure:
+        # Mais endpoints expostos em desenvolvimento para debugging
+        include: ${MANAGEMENT_ENDPOINTS:health,info,metrics,env,configprops,beans}
+  # Configurações de métricas para desenvolvimento
+  metrics:
+    export:
+      prometheus:
+        enabled: ${PROMETHEUS_ENABLED:true}

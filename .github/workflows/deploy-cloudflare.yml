@@ -1,0 +1,178 @@
+name: Deploy Automático Cloudflare
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # Deploy Frontend (Cloudflare Pages)
+  deploy-frontend:
+    name: Deploy Frontend
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+          
+      - name: Instalar Dependências Frontend
+        working-directory: ./frontend
+        run: npm ci
+        
+      - name: Build Frontend
+        working-directory: ./frontend
+        run: npm run build
+        
+      - name: Deploy para Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: sistema-roteamento-programado-coletas-frontend
+          directory: frontend/build
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  # Deploy Backend (Cloudflare Workers)
+  deploy-backend:
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+          
+      - name: Instalar Dependências Backend
+        working-directory: ./backend
+        run: npm ci
+        
+      - name: Deploy para Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --env production
+          workingDirectory: ./backend
+
+  # Setup Banco de Dados D1
+  setup-database:
+    name: Setup Banco D1
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: Instalar Wrangler
+        run: npm install -g wrangler
+        
+      - name: Executar Schema D1
+        run: |
+          echo "Executando schema do banco de dados..."
+          wrangler d1 execute sistema-roteamento-programado-coletas-db \
+            --file=./backend/schema.sql \
+            --api-token=${{ secrets.CLOUDFLARE_API_TOKEN }} \
+            --account-id=${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+  # Testes Frontend
+  test-frontend:
+    name: Testes Frontend
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+          
+      - name: Instalar Dependências
+        working-directory: ./frontend
+        run: npm ci
+        
+      - name: Executar Testes
+        working-directory: ./frontend
+        run: npm test -- --watchAll=false --coverage
+
+  # Lint e Formatação
+  lint:
+    name: Lint & Formatação
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+          
+      - name: Instalar Dependências
+        working-directory: ./frontend
+        run: npm ci
+        
+      - name: ESLint
+        working-directory: ./frontend
+        run: npm run lint
+        
+      - name: Prettier Check
+        working-directory: ./frontend
+        run: npx prettier --check "src/**/*.{js,jsx,ts,tsx}"
+
+  # Notificação de Deploy
+  notify:
+    name: Notificação
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [deploy-frontend, deploy-backend]
+    
+    steps:
+      - name: Status do Deploy
+        run: |
+          if [ "${{ needs.deploy-frontend.result }}" == "success" ] && [ "${{ needs.deploy-backend.result }}" == "success" ]; then
+            echo "Deploy completo realizado com sucesso!"
+            echo "Frontend: https://app.samuelchaves.com"
+            echo "Backend: https://api.samuelchaves.com"
+          else
+            echo "Deploy falhou!"
+            echo "Frontend: ${{ needs.deploy-frontend.result }}"
+            echo "Backend: ${{ needs.deploy-backend.result }}"
+          fi

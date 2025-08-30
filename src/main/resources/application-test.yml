@@ -1,0 +1,114 @@
+# CONFIGURAÇÃO PARA AMBIENTE DE TESTES
+# =====================================
+# Este arquivo é carregado quando o perfil 'test' está ativo
+# Configurações otimizadas para execução de testes
+
+spring:
+  # Configurações do banco de dados PostgreSQL (testes)
+  datasource:
+    # URL de conexão com o PostgreSQL para testes
+    # Usa um banco separado para isolamento
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:srpc_test}
+    # Nome do usuário do banco de dados PostgreSQL
+    username: ${DB_USERNAME:postgres}
+    # Senha do banco de dados PostgreSQL
+    password: ${DB_PASSWORD:postgres}
+    # Driver JDBC do PostgreSQL
+    driver-class-name: org.postgresql.Driver
+    
+    # Configurações de pool de conexões para testes
+    hikari:
+      # Número máximo de conexões no pool (menor para testes)
+      maximum-pool-size: ${DB_MAX_POOL_SIZE:5}
+      # Número mínimo de conexões no pool
+      minimum-idle: ${DB_MIN_POOL_SIZE:1}
+      # Tempo máximo de vida de uma conexão (em milissegundos)
+      max-lifetime: ${DB_MAX_LIFETIME:1800000}
+      # Tempo máximo de espera por uma conexão (em milissegundos)
+      connection-timeout: 10000
+      # Teste de conexão antes de usar
+      connection-test-query: SELECT 1
+    
+  # Configurações do JPA/Hibernate para testes
+  jpa:
+    # Hibernate como implementação do JPA
+    hibernate:
+      # Estratégia de criação das tabelas para testes
+      # create-drop: recria as tabelas a cada teste (isolamento completo)
+      ddl-auto: create-drop
+    # NÃO mostrar queries SQL em testes (polui o output)
+    show-sql: false
+    # NÃO formatar queries SQL em testes
+    format-sql: false
+    # Configurações específicas do Hibernate para testes
+    properties:
+      hibernate:
+        # Dialeto SQL do PostgreSQL
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        # Configurações de performance para testes
+        jdbc:
+          batch_size: ${HIBERNATE_JDBC_BATCH_SIZE:5}
+        # Configurações de cache para testes
+        cache:
+          use_second_level_cache: ${HIBERNATE_CACHE_ENABLED:false}
+          use_query_cache: false
+        # Configurações de sessão para testes
+        session:
+          events:
+            log: false
+
+# Configurações de logging para testes
+logging:
+  level:
+    # Nível geral da aplicação (menos verboso em testes)
+    root: ${LOG_LEVEL:WARN}
+    # Nível específico para o pacote da aplicação
+    br.com.roteamento: ${SPRING_LOG_LEVEL:INFO}
+    # NÃO logar queries SQL em testes
+    org.hibernate.SQL: ${HIBERNATE_LOG_LEVEL:WARN}
+    # NÃO logar parâmetros das queries em testes
+    org.hibernate.type.descriptor.sql.BasicBinder: ${HIBERNATE_LOG_LEVEL:WARN}
+    # Log de transações apenas em caso de erro
+    org.springframework.transaction: WARN
+  # Padrão de formatação dos logs para testes (simples)
+  pattern:
+    console: "%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Configurações específicas para testes
+app:
+  # Configurações de roteamento para testes
+  routing:
+    # Raio máximo de busca para coletas (em metros) - menor para testes
+    max-search-radius: ${ROUTING_MAX_SEARCH_RADIUS:1000}
+    # Tempo máximo de espera para cálculo de rota (em segundos) - menor para testes
+    max-routing-time: ${ROUTING_MAX_TIME:10}
+  # Configurações de notificação para testes
+  notification:
+    # Tempo de expiração de notificações (em minutos) - menor para testes
+    expiration-time: ${NOTIFICATION_EXPIRATION_TIME:5}
+    # Máximo de tentativas de envio - menor para testes
+    max-retry-attempts: ${NOTIFICATION_MAX_RETRY_ATTEMPTS:1}
+
+# Configurações de gerenciamento para testes
+management:
+  endpoints:
+    web:
+      exposure:
+        # Apenas endpoints essenciais em testes
+        include: ${MANAGEMENT_ENDPOINTS:health,info}
+        # Endpoints sensíveis NÃO expostos em testes
+        exclude: env,configprops,beans,shutdown,metrics
+  # Configurações de métricas para testes
+  metrics:
+    export:
+      prometheus:
+        enabled: ${PROMETHEUS_ENABLED:false}
+
+  # Configurações de segurança para testes
+  security:
+    # Configurações do JWT para testes
+    jwt:
+      # Chave secreta para assinar os tokens JWT (fixa para testes)
+      secret: ${JWT_SECRET:test-secret-key-for-testing-purposes-only}
+      # Tempo de expiração do token (5 minutos para testes)
+      expiration: ${JWT_EXPIRATION:300000}
