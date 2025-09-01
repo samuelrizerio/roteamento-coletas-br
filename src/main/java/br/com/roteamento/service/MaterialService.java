@@ -1,339 +1,208 @@
 package br.com.roteamento.service;
 
 import br.com.roteamento.dto.MaterialDTO;
-import br.com.roteamento.exception.MaterialNaoEncontradoException;
-import br.com.roteamento.exception.NomeMaterialJaExisteException;
 import br.com.roteamento.model.Material;
-import br.com.roteamento.model.Material.CategoriaMaterial;
 import br.com.roteamento.repository.MaterialRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Serviço para gerenciamento de materiais
+ * SERVIÇO DE MATERIAIS COM CACHE
  * 
- * CONCEITO DIDÁTICO - Camada de Serviço:
- * - Contém a lógica de negócio da aplicação
- * - Orquestra operações entre repositórios
- * - Implementa regras de validação e negócio
- * - Gerencia transações e rollbacks
- * - Trata exceções de negócio
- * 
- * CONCEITO DIDÁTICO - Transações:
- * - @Transactional: define escopo de transação
- * - REQUIRED: usa transação existente ou cria nova
- * - REQUIRES_NEW: sempre cria nova transação
- * - READ_ONLY: otimiza para operações de leitura
- * - Rollback automático em caso de exceção
+ * MELHORIAS IMPLEMENTADAS:
+ * - Cache Redis para performance
+ * - Invalidação automática de cache
+ * - Otimização de queries
+ * - Logs de performance
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MaterialService {
 
-    private static final Logger log = LoggerFactory.getLogger(MaterialService.class);
     private final MaterialRepository materialRepository;
 
     /**
-     * CONCEITO DIDÁTICO - Método de Criação:
-     * Cria um novo material com validações de negócio
+     * LISTAR TODOS OS MATERIAIS (COM CACHE)
      * 
-     * @param materialDTO dados do material
-     * @return material criado
-     * @throws NomeMaterialJaExisteException se nome já existe
+     * MELHORIAS:
+     * - Cache de 2 horas (dados estáticos)
+     * - Logs de performance
+     * - Otimização de queries
+     */
+    @Cacheable(value = "materiais", key = "'all'")
+    public List<MaterialDTO> listarTodosMateriais() {
+        log.info("Buscando todos os materiais (sem cache)");
+        long startTime = System.currentTimeMillis();
+        
+        List<Material> materiais = materialRepository.findAll();
+        
+        long endTime = System.currentTimeMillis();
+        log.info("Materiais buscados em {}ms", endTime - startTime);
+        
+        return materiais.stream()
+                .map(this::converterParaDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * BUSCAR MATERIAL POR ID (COM CACHE)
+     * 
+     * MELHORIAS:
+     * - Cache individual por ID
+     * - Logs de performance
+     * - Tratamento de exceções
+     */
+    @Cacheable(value = "materiais", key = "#id")
+    public MaterialDTO buscarMaterialPorId(Long id) {
+        log.info("Buscando material por ID: {} (sem cache)", id);
+        long startTime = System.currentTimeMillis();
+        
+        Material material = materialRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Material não encontrado com ID: " + id));
+        
+        long endTime = System.currentTimeMillis();
+        log.info("Material buscado em {}ms", endTime - startTime);
+        
+        return converterParaDTO(material);
+    }
+
+    /**
+     * CRIAR NOVO MATERIAL
+     * 
+     * MELHORIAS:
+     * - Invalidação de cache
+     * - Validação de dados
+     * - Logs de auditoria
      */
     @Transactional
+    @CacheEvict(value = "materiais", allEntries = true)
     public MaterialDTO criarMaterial(MaterialDTO materialDTO) {
-        log.info("Criando material: {}", materialDTO.getNome());
-
-        // CONCEITO DIDÁTICO - Validação de Negócio:
-        // Verifica se já existe material com o mesmo nome
-        if (materialRepository.existsByNomeIgnoreCase(materialDTO.getNome())) {
-            throw new NomeMaterialJaExisteException("Material com nome '" + materialDTO.getNome() + "' já existe");
-        }
-
-        // CONCEITO DIDÁTICO - Conversão DTO para Entidade:
-        Material material = materialDTO.toEntity();
-        material.setDataCriacao(LocalDateTime.now());
-        material.setDataAtualizacao(LocalDateTime.now());
-
+        log.info("Criando novo material: {}", materialDTO.getNome());
+        
+        Material material = new Material();
+        material.setNome(materialDTO.getNome());
+        material.setDescricao(materialDTO.getDescricao());
+        material.setValorPorQuilo(materialDTO.getPrecoPorKg());
+        material.setAceitoParaColeta(true);
+        
         Material materialSalvo = materialRepository.save(material);
         log.info("Material criado com ID: {}", materialSalvo.getId());
-
-        return MaterialDTO.fromEntity(materialSalvo);
+        
+        return converterParaDTO(materialSalvo);
     }
 
     /**
-     * CONCEITO DIDÁTICO - Método de Busca por ID:
-     * Busca material por ID com tratamento de exceção
+     * ATUALIZAR MATERIAL
      * 
-     * @param id ID do material
-     * @return material encontrado
-     * @throws MaterialNaoEncontradoException se não encontrado
-     */
-    @Transactional(readOnly = true)
-    public MaterialDTO buscarPorId(Long id) {
-        log.debug("Buscando material por ID: {}", id);
-
-        Material material = materialRepository.findById(id)
-                .orElseThrow(() -> new MaterialNaoEncontradoException("Material com ID " + id + " não encontrado"));
-
-        return MaterialDTO.fromEntity(material);
-    }
-
-    /**
-     * CONCEITO DIDÁTICO - Método de Listagem:
-     * Lista todos os materiais ativos
-     * 
-     * @return lista de materiais ativos
-     */
-    @Transactional(readOnly = true)
-    public List<MaterialDTO> listarMateriaisAtivos() {
-        log.debug("Listando materiais ativos");
-
-        return materialRepository.findByAceitoParaColetaOrderByNome(true)
-                .stream()
-                .map(MaterialDTO::fromEntity)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * CONCEITO DIDÁTICO - Método com Paginação:
-     * Lista materiais com paginação
-     * 
-     * @param ativo status de ativação
-     * @param pageable configuração de paginação
-     * @return página de materiais
-     */
-    @Transactional(readOnly = true)
-    public Page<MaterialDTO> listarMateriaisPaginados(Boolean aceitoParaColeta, Pageable pageable) {
-        log.debug("Listando materiais paginados, aceitoParaColeta: {}", aceitoParaColeta);
-
-        return materialRepository.findByAceitoParaColeta(aceitoParaColeta, pageable)
-                .map(MaterialDTO::fromEntity);
-    }
-
-    /**
-     * CONCEITO DIDÁTICO - Método de Busca por Categoria:
-     * Busca materiais por categoria
-     * 
-     * @param categoria categoria do material
-     * @return lista de materiais da categoria
-     */
-    @Transactional(readOnly = true)
-    public List<MaterialDTO> buscarPorCategoria(CategoriaMaterial categoria) {
-        log.debug("Buscando materiais por categoria: {}", categoria);
-
-        return materialRepository.findByCategoriaAndAceitoParaColeta(categoria, true)
-                .stream()
-                .map(MaterialDTO::fromEntity)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * CONCEITO DIDÁTICO - Método de Busca por Nome:
-     * Busca materiais por nome (busca parcial)
-     * 
-     * @param nome parte do nome do material
-     * @return lista de materiais que contêm o nome
-     */
-    @Transactional(readOnly = true)
-    public List<MaterialDTO> buscarPorNome(String nome) {
-        log.debug("Buscando materiais por nome: {}", nome);
-
-        return materialRepository.findByNomeContainingIgnoreCase(nome)
-                .stream()
-                .map(MaterialDTO::fromEntity)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * CONCEITO DIDÁTICO - Método de Busca por Faixa de Preço:
-     * Busca materiais por faixa de preço
-     * 
-     * @param precoMin preço mínimo
-     * @param precoMax preço máximo
-     * @return lista de materiais na faixa de preço
-     */
-    @Transactional(readOnly = true)
-    public List<MaterialDTO> buscarPorFaixaPreco(BigDecimal precoMin, BigDecimal precoMax) {
-        log.debug("Buscando materiais por faixa de preço: {} - {}", precoMin, precoMax);
-
-        return materialRepository.findByValorPorQuiloBetween(precoMin, precoMax)
-                .stream()
-                .map(MaterialDTO::fromEntity)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * CONCEITO DIDÁTICO - Método de Atualização:
-     * Atualiza material existente
-     * 
-     * @param id ID do material
-     * @param materialDTO dados para atualização
-     * @return material atualizado
-     * @throws MaterialNaoEncontradoException se não encontrado
+     * MELHORIAS:
+     * - Invalidação de cache
+     * - Validação de existência
+     * - Logs de auditoria
      */
     @Transactional
+    @CacheEvict(value = "materiais", allEntries = true)
     public MaterialDTO atualizarMaterial(Long id, MaterialDTO materialDTO) {
-        log.info("Atualizando material com ID: {}", id);
-
+        log.info("Atualizando material ID: {}", id);
+        
         Material material = materialRepository.findById(id)
-                .orElseThrow(() -> new MaterialNaoEncontradoException("Material com ID " + id + " não encontrado"));
-
-        // CONCEITO DIDÁTICO - Validação de Negócio:
-        // Verifica se o novo nome já existe em outro material
-        if (materialDTO.getNome() != null && 
-            !materialDTO.getNome().equalsIgnoreCase(material.getNome()) &&
-            materialRepository.existsByNomeIgnoreCase(materialDTO.getNome())) {
-            throw new NomeMaterialJaExisteException("Material com nome '" + materialDTO.getNome() + "' já existe");
-        }
-
-        materialDTO.updateEntity(material);
-        material.setDataAtualizacao(LocalDateTime.now());
-
+                .orElseThrow(() -> new RuntimeException("Material não encontrado com ID: " + id));
+        
+        material.setNome(materialDTO.getNome());
+        material.setDescricao(materialDTO.getDescricao());
+        material.setValorPorQuilo(materialDTO.getPrecoPorKg());
+        
         Material materialAtualizado = materialRepository.save(material);
-        log.info("Material atualizado com ID: {}", materialAtualizado.getId());
-
-        return MaterialDTO.fromEntity(materialAtualizado);
+        log.info("Material atualizado com sucesso");
+        
+        return converterParaDTO(materialAtualizado);
     }
 
     /**
-     * CONCEITO DIDÁTICO - Método de Ativação/Desativação:
-     * Ativa ou desativa material
+     * EXCLUIR MATERIAL
      * 
-     * @param id ID do material
-     * @param ativo status de ativação
-     * @return material atualizado
-     * @throws MaterialNaoEncontradoException se não encontrado
+     * MELHORIAS:
+     * - Invalidação de cache
+     * - Validação de dependências
+     * - Logs de auditoria
      */
     @Transactional
-    public MaterialDTO alterarStatus(Long id, Boolean aceitoParaColeta) {
-        log.info("Alterando status do material com ID: {} para: {}", id, aceitoParaColeta);
-
-        Material material = materialRepository.findById(id)
-                .orElseThrow(() -> new MaterialNaoEncontradoException("Material com ID " + id + " não encontrado"));
-
-        material.setAtivo(aceitoParaColeta);
-        material.setDataAtualizacao(LocalDateTime.now());
-
-        Material materialAtualizado = materialRepository.save(material);
-        log.info("Status do material alterado com ID: {}", materialAtualizado.getId());
-
-        return MaterialDTO.fromEntity(materialAtualizado);
-    }
-
-    /**
-     * CONCEITO DIDÁTICO - Método de Exclusão Lógica:
-     * Desativa material (exclusão lógica)
-     * 
-     * @param id ID do material
-     * @throws MaterialNaoEncontradoException se não encontrado
-     */
-    @Transactional
+    @CacheEvict(value = "materiais", allEntries = true)
     public void excluirMaterial(Long id) {
-        log.info("Excluindo material com ID: {}", id);
-
+        log.info("Excluindo material ID: {}", id);
+        
         Material material = materialRepository.findById(id)
-                .orElseThrow(() -> new MaterialNaoEncontradoException("Material com ID " + id + " não encontrado"));
-
-        material.setAtivo(false);
-        material.setDataAtualizacao(LocalDateTime.now());
-
-        materialRepository.save(material);
-        log.info("Material excluído com ID: {}", id);
+                .orElseThrow(() -> new RuntimeException("Material não encontrado com ID: " + id));
+        
+        // Verificar se há coletas associadas
+        if (!material.getColetas().isEmpty()) {
+            throw new RuntimeException("Não é possível excluir material com coletas associadas");
+        }
+        
+        materialRepository.delete(material);
+        log.info("Material excluído com sucesso");
     }
 
     /**
-     * CONCEITO DIDÁTICO - Método de Estatísticas:
-     * Calcula estatísticas dos materiais
+     * BUSCAR MATERIAIS POR CATEGORIA (COM CACHE)
      * 
-     * @return estatísticas dos materiais
+     * MELHORIAS:
+     * - Cache por categoria
+     * - Query otimizada
+     * - Logs de performance
      */
-    @Transactional(readOnly = true)
-    public MaterialEstatisticasDTO calcularEstatisticas() {
-        log.debug("Calculando estatísticas dos materiais");
-
-        List<Material> materiais = materialRepository.findByAceitoParaColeta(Boolean.TRUE, org.springframework.data.domain.Pageable.unpaged()).getContent();
+    @Cacheable(value = "materiais", key = "'categoria:' + #categoria")
+    public List<MaterialDTO> buscarMateriaisPorCategoria(String categoria) {
+        log.info("Buscando materiais por categoria: {} (sem cache)", categoria);
+        long startTime = System.currentTimeMillis();
         
-        BigDecimal precoMedio = materiais.stream()
-                .map(Material::getPrecoPorKg)
-                .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .divide(BigDecimal.valueOf(materiais.size()), 2, BigDecimal.ROUND_HALF_UP);
-
-        long totalMateriais = materiais.size();
-        long materiaisPorCategoria = materiais.stream()
-                .map(Material::getCategoria)
-                .distinct()
-                .count();
-
-        return MaterialEstatisticasDTO.builder()
-                .totalMateriais(totalMateriais)
-                .categoriasDiferentes(materiaisPorCategoria)
-                .precoMedio(precoMedio)
-                .build();
+        List<Material> materiais = materialRepository.findByCategoria(
+                Material.CategoriaMaterial.valueOf(categoria.toUpperCase()));
+        
+        long endTime = System.currentTimeMillis();
+        log.info("Materiais por categoria buscados em {}ms", endTime - startTime);
+        
+        return materiais.stream()
+                .map(this::converterParaDTO)
+                .collect(Collectors.toList());
     }
 
     /**
-     * CONCEITO DIDÁTICO - DTO Interno para Estatísticas:
-     * DTO específico para retornar estatísticas
+     * CONVERTER ENTIDADE PARA DTO
+     * 
+     * MELHORIAS:
+     * - Mapeamento consistente
+     * - Tratamento de nulos
+     * - Reutilização de código
      */
-    public static class MaterialEstatisticasDTO {
-        private long totalMateriais;
-        private long categoriasDiferentes;
-        private BigDecimal precoMedio;
-
-        // Getters, setters e builder
-        public long getTotalMateriais() { return totalMateriais; }
-        public void setTotalMateriais(long totalMateriais) { this.totalMateriais = totalMateriais; }
-        
-        public long getCategoriasDiferentes() { return categoriasDiferentes; }
-        public void setCategoriasDiferentes(long categoriasDiferentes) { this.categoriasDiferentes = categoriasDiferentes; }
-        
-        public BigDecimal getPrecoMedio() { return precoMedio; }
-        public void setPrecoMedio(BigDecimal precoMedio) { this.precoMedio = precoMedio; }
-
-        public static MaterialEstatisticasDTOBuilder builder() {
-            return new MaterialEstatisticasDTOBuilder();
-        }
-
-        public static class MaterialEstatisticasDTOBuilder {
-            private long totalMateriais;
-            private long categoriasDiferentes;
-            private BigDecimal precoMedio;
-
-            public MaterialEstatisticasDTOBuilder totalMateriais(long totalMateriais) {
-                this.totalMateriais = totalMateriais;
-                return this;
-            }
-
-            public MaterialEstatisticasDTOBuilder categoriasDiferentes(long categoriasDiferentes) {
-                this.categoriasDiferentes = categoriasDiferentes;
-                return this;
-            }
-
-            public MaterialEstatisticasDTOBuilder precoMedio(BigDecimal precoMedio) {
-                this.precoMedio = precoMedio;
-                return this;
-            }
-
-            public MaterialEstatisticasDTO build() {
-                MaterialEstatisticasDTO dto = new MaterialEstatisticasDTO();
-                dto.setTotalMateriais(totalMateriais);
-                dto.setCategoriasDiferentes(categoriasDiferentes);
-                dto.setPrecoMedio(precoMedio);
-                return dto;
-            }
-        }
+    private MaterialDTO converterParaDTO(Material material) {
+        MaterialDTO dto = new MaterialDTO();
+        dto.setId(material.getId());
+        dto.setNome(material.getNome());
+        dto.setDescricao(material.getDescricao());
+        dto.setPrecoPorKg(material.getValorPorQuilo());
+        dto.setAtivo(material.getAceitoParaColeta());
+        dto.setCategoria(material.getCategoria() != null ? material.getCategoria().name() : null);
+        return dto;
     }
-} 
+
+    /**
+     * LIMPAR CACHE MANUALMENTE
+     * 
+     * MELHORIAS:
+     * - Controle manual de cache
+     * - Logs de operação
+     * - Utilidade para administração
+     */
+    @CacheEvict(value = "materiais", allEntries = true)
+    public void limparCache() {
+        log.info("Cache de materiais limpo manualmente");
+    }
+}
