@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 /**
  * CONTROLLER ROTA - Classe que expõe endpoints REST para rotas
@@ -165,7 +164,7 @@ public class RotaController {
      * @return ResponseEntity com lista de rotas do coletor
      */
     @GetMapping("/coletor")
-    public ResponseEntity<List<RotaDTO>> buscarRotasPorColetor(@RequestParam("coletorId") Long coletorId) {
+    public ResponseEntity<List<RotaDTO>> buscarRotasPorColetor(@RequestParam Long coletorId) {
         log.info("Recebida requisição para buscar rotas do coletor: {}", coletorId);
 
         try {
@@ -188,7 +187,7 @@ public class RotaController {
      * @return ResponseEntity com lista de rotas com o status
      */
     @GetMapping("/status")
-    public ResponseEntity<List<RotaDTO>> buscarRotasPorStatus(@RequestParam("status") Rota.StatusRota status) {
+    public ResponseEntity<List<RotaDTO>> buscarRotasPorStatus(@RequestParam Rota.StatusRota status) {
         log.info("Recebida requisição para buscar rotas com status: {}", status);
 
         try {
@@ -235,8 +234,8 @@ public class RotaController {
      */
     @GetMapping("/coletor-status")
     public ResponseEntity<List<RotaDTO>> buscarRotasPorColetorEStatus(
-                        @RequestParam("coletorId") Long coletorId,
-            @RequestParam("status") Rota.StatusRota status) {
+                        @RequestParam Long coletorId,
+            @RequestParam Rota.StatusRota status) {
         log.info("Recebida requisição para buscar rotas do coletor {} com status: {}", coletorId, status);
 
         try {
@@ -392,7 +391,7 @@ public class RotaController {
      * @return ResponseEntity com a contagem
      */
     @GetMapping("/contar/status")
-    public ResponseEntity<Long> contarRotasPorStatus(@RequestParam("status") Rota.StatusRota status) {
+    public ResponseEntity<Long> contarRotasPorStatus(@RequestParam Rota.StatusRota status) {
         log.info("Recebida requisição para contar rotas com status: {}", status);
 
         try {
@@ -539,7 +538,7 @@ public class RotaController {
      * @return ResponseEntity com lista de rotas do coletor
      */
     @GetMapping("/coletor/{coletorId}/minhas-rotas")
-    public ResponseEntity<List<RotaDTO>> listarMinhasRotas(@PathVariable("coletorId") Long coletorId) {
+    public ResponseEntity<List<RotaDTO>> listarMinhasRotas(@PathVariable Long coletorId) {
         log.info("Recebida requisição para listar rotas do coletor. Coletor: {}", coletorId);
 
         try {

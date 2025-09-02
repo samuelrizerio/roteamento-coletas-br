@@ -2,7 +2,7 @@ package br.com.roteamento.dto;
 
 import br.com.roteamento.model.Usuario;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -159,7 +159,7 @@ public class UsuarioDTO {
      * 
      * CONCEITOS:
      * - @JsonFormat: Define formato de data/hora
-     * - LocalDateTime: Tipo moderno para datas e horas
+     * - LocalDateTime: Tipo para datas e horas
      * - Pode ser nulo em operações de criação
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -170,7 +170,7 @@ public class UsuarioDTO {
      * 
      * CONCEITOS:
      * - @JsonFormat: Define formato de data/hora
-     * - LocalDateTime: Tipo moderno para datas e horas
+     * - LocalDateTime: Tipo para datas e horas
      * - Pode ser nulo em operações de criação
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -310,7 +310,7 @@ public class UsuarioDTO {
      */
     @Override
     public String toString() {
-        return String.format("UsuarioDTO{id=%d, nome='%s', email='%s', tipoUsuario=%s, status=%s}",
+        return "UsuarioDTO{id=%d, nome='%s', email='%s', tipoUsuario=%s, status=%s}".formatted(
                 id, nome, email, tipoUsuario, status);
     }
 } 

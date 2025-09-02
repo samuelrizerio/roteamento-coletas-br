@@ -4,8 +4,7 @@ import br.com.roteamento.dto.RotaDTO;
 import br.com.roteamento.service.RoteamentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
+
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -159,9 +158,9 @@ public class RoteamentoController {
     })
     public ResponseEntity<Map<String, Object>> obterInformacoesRota(
             @Parameter(description = "Coordenadas de origem (lat,lng)", required = true, example = "-19.9167,-43.9345")
-            @RequestParam("origem") String origem,
+            @RequestParam String origem,
             @Parameter(description = "Coordenadas de destino (lat,lng)", required = true, example = "-19.9208,-43.9376")
-            @RequestParam("destino") String destino) {
+            @RequestParam String destino) {
         
         log.debug("Recebida requisição para obter informações de rota: {} -> {}", origem, destino);
 

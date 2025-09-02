@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -187,7 +187,7 @@ public class Coleta {
      * Data e hora solicitada para a coleta
      * 
      * CONCEITOS:
-     * - LocalDateTime: Tipo moderno para datas e horas
+     * - LocalDateTime: Tipo para datas e horas
      * - nullable = true: Pode ser agendada para depois
      */
     @Column(name = "data_solicitada")
@@ -400,9 +400,9 @@ public class Coleta {
      */
     @Override
     public String toString() {
-        return String.format("Coleta{id=%d, usuario=%s, material=%s, status=%s, quantidade=%s}",
-                id, usuario != null ? usuario.getNome() : "null", 
-                material != null ? material.getNome() : "null", 
+        return "Coleta{id=%d, usuario=%s, material=%s, status=%s, quantidade=%s}".formatted(
+                id, usuario != null ? usuario.getNome() : "null",
+                material != null ? material.getNome() : "null",
                 status, quantidade);
     }
     

@@ -164,7 +164,7 @@ public class ColetaController {
      * @return ResponseEntity com lista de coletas do usuário
      */
     @GetMapping("/usuario")
-    public ResponseEntity<List<ColetaDTO>> buscarColetasPorUsuario(@RequestParam("usuarioId") Long usuarioId) {
+    public ResponseEntity<List<ColetaDTO>> buscarColetasPorUsuario(@RequestParam Long usuarioId) {
         log.info("Recebida requisição para buscar coletas do usuário: {}", usuarioId);
 
         try {
@@ -187,7 +187,7 @@ public class ColetaController {
      * @return ResponseEntity com lista de coletas com o status
      */
     @GetMapping("/status")
-    public ResponseEntity<List<ColetaDTO>> buscarColetasPorStatus(@RequestParam("status") Coleta.StatusColeta status) {
+    public ResponseEntity<List<ColetaDTO>> buscarColetasPorStatus(@RequestParam Coleta.StatusColeta status) {
         log.info("Recebida requisição para buscar coletas com status: {}", status);
 
         try {
@@ -288,7 +288,7 @@ public class ColetaController {
      * @return ResponseEntity com a coleta aceita
      */
     @PostMapping("/{coletaId}/aceitar")
-    public ResponseEntity<ColetaDTO> aceitarColeta(@PathVariable Long coletaId, @RequestParam("coletorId") Long coletorId) {
+    public ResponseEntity<ColetaDTO> aceitarColeta(@PathVariable Long coletaId, @RequestParam Long coletorId) {
         log.info("Recebida requisição para aceitar coleta. Coleta ID: {}, Coletor ID: {}", coletaId, coletorId);
 
         try {
@@ -322,7 +322,7 @@ public class ColetaController {
      * @return ResponseEntity com a coleta finalizada
      */
     @PostMapping("/{coletaId}/finalizar")
-    public ResponseEntity<ColetaDTO> finalizarColeta(@PathVariable Long coletaId, @RequestParam("valorFinal") BigDecimal valorFinal) {
+    public ResponseEntity<ColetaDTO> finalizarColeta(@PathVariable Long coletaId, @RequestParam BigDecimal valorFinal) {
         log.info("Recebida requisição para finalizar coleta. Coleta ID: {}, Valor Final: {}", coletaId, valorFinal);
 
         try {
@@ -375,7 +375,7 @@ public class ColetaController {
      * @return ResponseEntity com a contagem
      */
     @GetMapping("/contar/status")
-    public ResponseEntity<Long> contarColetasPorStatus(@RequestParam("status") Coleta.StatusColeta status) {
+    public ResponseEntity<Long> contarColetasPorStatus(@RequestParam Coleta.StatusColeta status) {
         log.info("Recebida requisição para contar coletas com status: {}", status);
 
         try {

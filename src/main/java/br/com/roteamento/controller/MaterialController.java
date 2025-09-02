@@ -1,6 +1,7 @@
 package br.com.roteamento.controller;
 
 import br.com.roteamento.dto.MaterialDTO;
+import br.com.roteamento.dto.MaterialEstatisticasDTO;
 import br.com.roteamento.exception.MaterialNaoEncontradoException;
 import br.com.roteamento.exception.NomeMaterialJaExisteException;
 import br.com.roteamento.model.Material.CategoriaMaterial;
@@ -28,7 +29,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import br.com.roteamento.model.Material;
 import br.com.roteamento.repository.MaterialRepository;
 
 /**
@@ -188,7 +188,7 @@ public class MaterialController {
     })
     public ResponseEntity<List<MaterialDTO>> buscarPorCategoria(
             @Parameter(description = "Categoria do material", required = true)
-            @PathVariable("categoria") CategoriaMaterial categoria) {
+            @PathVariable CategoriaMaterial categoria) {
         
         log.debug("Recebida requisição para buscar materiais por categoria: {}", categoria);
         
@@ -211,7 +211,7 @@ public class MaterialController {
     })
     public ResponseEntity<List<MaterialDTO>> buscarPorNome(
             @Parameter(description = "Parte do nome do material", required = true)
-            @RequestParam("nome") String nome) {
+            @RequestParam String nome) {
         
         log.debug("Recebida requisição para buscar materiais por nome: {}", nome);
         
@@ -235,9 +235,9 @@ public class MaterialController {
     })
     public ResponseEntity<List<MaterialDTO>> buscarPorFaixaPreco(
             @Parameter(description = "Preço mínimo por kg", required = true)
-            @RequestParam("precoMin") BigDecimal precoMin,
+            @RequestParam BigDecimal precoMin,
             @Parameter(description = "Preço máximo por kg", required = true)
-            @RequestParam("precoMax") BigDecimal precoMax) {
+            @RequestParam BigDecimal precoMax) {
         
         log.debug("Recebida requisição para buscar materiais por faixa de preço: {} - {}", precoMin, precoMax);
         
@@ -295,7 +295,7 @@ public class MaterialController {
             @Parameter(description = "ID do material", required = true)
             @PathVariable Long id,
             @Parameter(description = "Status de ativação", required = true)
-            @RequestParam("ativo") Boolean ativo) {
+            @RequestParam Boolean ativo) {
         
         log.info("Recebida requisição para alterar status do material com ID: {} para: {}", id, ativo);
         
@@ -339,10 +339,10 @@ public class MaterialController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Estatísticas retornadas com sucesso")
     })
-    public ResponseEntity<MaterialService.MaterialEstatisticasDTO> obterEstatisticas() {
+    public ResponseEntity<MaterialEstatisticasDTO> obterEstatisticas() {
         log.debug("Recebida requisição para obter estatísticas dos materiais");
         
-        MaterialService.MaterialEstatisticasDTO estatisticas = materialService.calcularEstatisticas();
+        MaterialEstatisticasDTO estatisticas = materialService.calcularEstatisticas();
         
         return ResponseEntity.ok(estatisticas);
     }

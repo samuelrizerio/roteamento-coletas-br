@@ -188,8 +188,8 @@ public class MaterialService {
         dto.setNome(material.getNome());
         dto.setDescricao(material.getDescricao());
         dto.setPrecoPorKg(material.getValorPorQuilo());
-        dto.setAtivo(material.getAceitoParaColeta());
-        dto.setCategoria(material.getCategoria() != null ? material.getCategoria().name() : null);
+        dto.setAceitoParaColeta(material.getAceitoParaColeta());
+        dto.setCategoria(material.getCategoria());
         return dto;
     }
 
@@ -204,5 +204,120 @@ public class MaterialService {
     @CacheEvict(value = "materiais", allEntries = true)
     public void limparCache() {
         log.info("Cache de materiais limpo manualmente");
+    }
+
+    /**
+     * Busca material por ID
+     */
+    @Transactional(readOnly = true)
+    public MaterialDTO buscarPorId(Long id) {
+        log.info("Buscando material por ID: {}", id);
+        
+        Material material = materialRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Material não encontrado com ID: " + id));
+        
+        return MaterialDTO.fromEntity(material);
+    }
+
+    /**
+     * Lista materiais ativos
+     */
+    @Transactional(readOnly = true)
+    public List<MaterialDTO> listarMateriaisAtivos() {
+        log.info("Buscando materiais ativos");
+        
+        List<Material> materiais = materialRepository.findByAceitoParaColetaTrue();
+        
+        return materiais.stream()
+                .map(MaterialDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Lista materiais com paginação
+     */
+    @Transactional(readOnly = true)
+    public org.springframework.data.domain.Page<MaterialDTO> listarMateriaisPaginados(Boolean ativo, org.springframework.data.domain.Pageable pageable) {
+        log.info("Buscando materiais paginados - ativo: {}", ativo);
+        
+        org.springframework.data.domain.Page<Material> materiais;
+        if (ativo != null) {
+            materiais = materialRepository.findByAceitoParaColeta(ativo, pageable);
+        } else {
+            materiais = materialRepository.findAll(pageable);
+        }
+        
+        return materiais.map(MaterialDTO::fromEntity);
+    }
+
+    /**
+     * Busca materiais por categoria
+     */
+    @Transactional(readOnly = true)
+    public List<MaterialDTO> buscarPorCategoria(Material.CategoriaMaterial categoria) {
+        log.info("Buscando materiais por categoria: {}", categoria);
+        
+        List<Material> materiais = materialRepository.findByCategoria(categoria);
+        
+        return materiais.stream()
+                .map(MaterialDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Busca materiais por nome
+     */
+    @Transactional(readOnly = true)
+    public List<MaterialDTO> buscarPorNome(String nome) {
+        log.info("Buscando materiais por nome: {}", nome);
+        
+        List<Material> materiais = materialRepository.findByNomeContainingIgnoreCase(nome);
+        
+        return materiais.stream()
+                .map(MaterialDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Busca materiais por faixa de preço
+     */
+    @Transactional(readOnly = true)
+    public List<MaterialDTO> buscarPorFaixaPreco(java.math.BigDecimal precoMin, java.math.BigDecimal precoMax) {
+        log.info("Buscando materiais por faixa de preço: {} - {}", precoMin, precoMax);
+        
+        List<Material> materiais = materialRepository.findByValorPorQuiloBetween(precoMin, precoMax);
+        
+        return materiais.stream()
+                .map(MaterialDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Altera status do material
+     */
+    @Transactional
+    public MaterialDTO alterarStatus(Long id, Boolean ativo) {
+        log.info("Alterando status do material ID: {} para: {}", id, ativo);
+        
+        Material material = materialRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Material não encontrado com ID: " + id));
+        
+        material.setAceitoParaColeta(ativo);
+        Material materialAtualizado = materialRepository.save(material);
+        
+        return MaterialDTO.fromEntity(materialAtualizado);
+    }
+
+    /**
+     * Calcula estatísticas dos materiais
+     */
+    @Transactional(readOnly = true)
+    public br.com.roteamento.dto.MaterialEstatisticasDTO calcularEstatisticas() {
+        log.info("Calculando estatísticas dos materiais");
+        
+        // Implementação simplificada
+        br.com.roteamento.dto.MaterialEstatisticasDTO estatisticas = new br.com.roteamento.dto.MaterialEstatisticasDTO();
+        
+        return estatisticas;
     }
 }

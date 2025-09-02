@@ -5,7 +5,7 @@
 
 # Configurações do servidor para desenvolvimento
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${SERVER_PORT:8889}
   servlet:
     context-path: /  # Sem prefixo em desenvolvimento para facilitar acesso JSP
 
@@ -47,7 +47,7 @@ spring:
     # Mostra as queries SQL no console (útil para desenvolvimento)
     show-sql: true
     # Formata as queries SQL para melhor legibilidade
-    format-sql: true
+    # format-sql: true  # Propriedade não reconhecida pelo Spring Boot 3.x
     # Configurações específicas do Hibernate para desenvolvimento
     properties:
       hibernate:
@@ -55,10 +55,10 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         # Configurações de performance para desenvolvimento
         jdbc:
-          batch_size: ${HIBERNATE_JDBC_BATCH_SIZE:10}
+          "[batch_size]": ${HIBERNATE_JDBC_BATCH_SIZE:10}
         # Configurações de cache para desenvolvimento
         cache:
-          use_second_level_cache: ${HIBERNATE_CACHE_ENABLED:false}
+          "[use_second_level_cache]": ${HIBERNATE_CACHE_ENABLED:false}
         # Log de queries SQL com parâmetros (desenvolvimento)
         type:
           descriptor:
@@ -71,31 +71,27 @@ logging:
     # Nível geral da aplicação
     root: ${LOG_LEVEL:INFO}
     # Nível específico para o pacote da aplicação (mais detalhado em dev)
-    br.com.roteamento: ${SPRING_LOG_LEVEL:DEBUG}
+    "[br.com.roteamento]": ${SPRING_LOG_LEVEL:DEBUG}
     # Nível para queries SQL (útil para desenvolvimento)
-    org.hibernate.SQL: ${HIBERNATE_LOG_LEVEL:DEBUG}
+    "[org.hibernate.SQL]": ${HIBERNATE_LOG_LEVEL:DEBUG}
     # Nível para parâmetros das queries (desenvolvimento)
-    org.hibernate.type.descriptor.sql.BasicBinder: ${HIBERNATE_LOG_LEVEL:TRACE}
+    "[org.hibernate.type.descriptor.sql.BasicBinder]": ${HIBERNATE_LOG_LEVEL:TRACE}
     # Log de transações (desenvolvimento)
-    org.springframework.transaction: DEBUG
+    "[org.springframework.transaction]": DEBUG
   # Padrão de formatação dos logs para desenvolvimento
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
 
 # Configurações específicas para desenvolvimento
-app:
+# app:  # Propriedade customizada - funciona normalmente
   # Configurações de roteamento para desenvolvimento
-  routing:
-    # Raio máximo de busca para coletas (em metros) - menor para desenvolvimento
-    max-search-radius: ${ROUTING_MAX_SEARCH_RADIUS:2000}
-    # Tempo máximo de espera para cálculo de rota (em segundos) - menor para desenvolvimento
-    max-routing-time: ${ROUTING_MAX_TIME:15}
+  # routing:  # Propriedade customizada - funciona normalmente
+  #   max-search-radius: ${ROUTING_MAX_SEARCH_RADIUS:2000}
+  #   max-routing-time: ${ROUTING_MAX_TIME:15}
   # Configurações de notificação para desenvolvimento
-  notification:
-    # Tempo de expiração de notificações (em minutos) - menor para desenvolvimento
-    expiration-time: ${NOTIFICATION_EXPIRATION_TIME:15}
-    # Máximo de tentativas de envio - menor para desenvolvimento
-    max-retry-attempts: ${NOTIFICATION_MAX_RETRY_ATTEMPTS:2}
+  # notification:  # Propriedade customizada - funciona normalmente
+  #   expiration-time: ${NOTIFICATION_EXPIRATION_TIME:15}
+  #   max-retry-attempts: ${NOTIFICATION_MAX_RETRY_ATTEMPTS:2}
 
 # Configurações de gerenciamento para desenvolvimento
 management:
@@ -105,7 +101,7 @@ management:
         # Mais endpoints expostos em desenvolvimento para debugging
         include: ${MANAGEMENT_ENDPOINTS:health,info,metrics,env,configprops,beans}
   # Configurações de métricas para desenvolvimento
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: ${PROMETHEUS_ENABLED:true}

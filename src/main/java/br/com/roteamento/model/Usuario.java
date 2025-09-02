@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,42 +16,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * ENTIDADE USUÁRIO - Representa um usuário do sistema
- * 
- * CONCEITOS DIDÁTICOS EXPLICADOS:
- * 
- * 1. PROGRAMACAO ORIENTADA A OBJETOS (POO):
- *    - CLASSE: É um modelo/template que define as características e comportamentos
- *    - ENCAPSULAMENTO: Os dados (atributos) são protegidos e acessados através de métodos
- *    - HERANÇA: Esta classe pode ser estendida por outras classes (ex: UsuarioAdmin)
- *    - POLIMORFISMO: Pode ser tratada como um tipo mais genérico
- * 
- * 2. ANOTAÇÕES JPA (Java Persistence API):
- *    - @Entity: Indica que esta classe é uma entidade que será persistida no banco
- *    - @Table: Define o nome da tabela no banco de dados
- *    - @Id: Marca o campo como chave primária
- *    - @GeneratedValue: Define como a chave primária será gerada automaticamente
- *    - @Column: Define propriedades específicas da coluna no banco
- *    - @OneToMany: Define relacionamento 1:N (um usuário pode ter várias coletas)
- * 
- * 3. VALIDAÇÃO DE DADOS:
- *    - @NotBlank: Valida que o campo não pode ser nulo ou vazio
- *    - @Email: Valida se o campo contém um email válido
- *    - @Size: Define o tamanho mínimo e máximo do campo
- * 
- * 4. LOMBOK:
- *    - @Data: Gera automaticamente getters, setters, equals, hashCode e toString
- *    - @NoArgsConstructor: Gera construtor sem parâmetros
- *    - @AllArgsConstructor: Gera construtor com todos os parâmetros
- * 
- * 5. MODELAGEM DE DADOS:
- *    - CHAVE PRIMÁRIA: Campo único que identifica cada registro
- *    - CHAVE ESTRANGEIRA: Campo que referencia outra tabela
- *    - RELACIONAMENTOS: Como as entidades se relacionam entre si
- *    - NORMALIZAÇÃO: Evita redundância de dados
+ * Entidade Usuário - Representa um usuário do sistema
+
  */
 @Entity
 @Table(name = "usuarios")
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Usuario {
@@ -164,6 +136,7 @@ public class Usuario {
      */
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
+    @Builder.Default
     private StatusUsuario status = StatusUsuario.ATIVO;
 
     /**
@@ -171,7 +144,7 @@ public class Usuario {
      * 
      * CONCEITOS:
      * - @CreationTimestamp: Preenche automaticamente na criação
-     * - LocalDateTime: Tipo moderno para datas e horas
+     * - LocalDateTime: Tipo para datas e horas
      */
     @CreationTimestamp
     @Column(name = "data_criacao", nullable = false, updatable = false)
@@ -198,6 +171,7 @@ public class Usuario {
      * - fetch: Define como os dados serão carregados
      */
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Builder.Default
     private Set<Coleta> coletas = new HashSet<>();
 
     /**

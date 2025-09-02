@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -309,6 +309,9 @@ public class Material {
     public Boolean getAtivo() { return aceitoParaColeta; }
     public void setAtivo(Boolean ativo) { this.aceitoParaColeta = ativo; }
     
+    public Boolean getAceitoParaColeta() { return aceitoParaColeta; }
+    public void setAceitoParaColeta(Boolean aceitoParaColeta) { this.aceitoParaColeta = aceitoParaColeta; }
+    
     public CorIdentificacao getCorIdentificacao() { return corIdentificacao; }
     public void setCorIdentificacao(CorIdentificacao corIdentificacao) { this.corIdentificacao = corIdentificacao; }
     
@@ -320,6 +323,9 @@ public class Material {
     
     public LocalDateTime getDataAtualizacao() { return dataAtualizacao; }
     public void setDataAtualizacao(LocalDateTime dataAtualizacao) { this.dataAtualizacao = dataAtualizacao; }
+    
+    public Set<Coleta> getColetas() { return coletas; }
+    public void setColetas(Set<Coleta> coletas) { this.coletas = coletas; }
 
     /**
      * MÉTODO TO STRING PERSONALIZADO
@@ -330,7 +336,7 @@ public class Material {
      */
     @Override
     public String toString() {
-        return String.format("Material{id=%d, nome='%s', categoria=%s, valorPorQuilo=%s}",
+        return "Material{id=%d, nome='%s', categoria=%s, valorPorQuilo=%s}".formatted(
                 id, nome, categoria, valorPorQuilo);
     }
 } 

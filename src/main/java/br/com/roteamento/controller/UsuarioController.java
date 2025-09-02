@@ -205,7 +205,7 @@ public class UsuarioController {
     })
     public ResponseEntity<List<UsuarioDTO>> buscarUsuariosPorTipo(
             @Parameter(description = "Tipo de usuário", required = true)
-            @RequestParam("tipo") Usuario.TipoUsuario tipo) {
+            @RequestParam Usuario.TipoUsuario tipo) {
         
         log.debug("Recebida requisição para buscar usuários por tipo: {}", tipo);
         
@@ -396,7 +396,7 @@ public class UsuarioController {
     })
     public ResponseEntity<List<UsuarioDTO>> buscarUsuariosPorNome(
             @Parameter(description = "Nome ou parte do nome", required = true)
-            @RequestParam("nome") String nome) {
+            @RequestParam String nome) {
         
         log.debug("Recebida requisição para buscar usuários por nome: {}", nome);
         
@@ -430,7 +430,7 @@ public class UsuarioController {
     })
     public ResponseEntity<Boolean> verificarEmail(
             @Parameter(description = "Email a ser verificado", required = true)
-            @RequestParam("email") String email) {
+            @RequestParam String email) {
         
         log.debug("Recebida requisição para verificar email: {}", email);
         

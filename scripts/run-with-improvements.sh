@@ -147,9 +147,9 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 print_message "Aplicação iniciada com sucesso!"
-print_message "Acesse: http://localhost:8081"
-print_message "Swagger: http://localhost:8081/swagger-ui.html"
-print_message "Health: http://localhost:8081/actuator/health"
-print_message "Métricas: http://localhost:8081/actuator/metrics"
+print_message "Acesse: http://localhost:8888"
+print_message "Swagger: http://localhost:8888/swagger-ui.html"
+print_message "Health: http://localhost:8888/actuator/health"
+print_message "Métricas: http://localhost:8888/actuator/metrics"
 print_message ""
 print_message "Pressione Ctrl+C para parar a aplicação"

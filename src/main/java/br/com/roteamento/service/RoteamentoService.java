@@ -1,6 +1,6 @@
 package br.com.roteamento.service;
 
-import br.com.roteamento.dto.ColetaDTO;
+
 import br.com.roteamento.dto.RotaDTO;
 import br.com.roteamento.model.Coleta;
 import br.com.roteamento.model.Rota;
@@ -17,9 +17,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+
 import java.util.*;
-import java.util.stream.Collectors;
+
 import br.com.roteamento.model.Usuario;
 import br.com.roteamento.repository.UsuarioRepository;
 import br.com.roteamento.repository.MaterialRepository;
@@ -347,11 +347,12 @@ public class RoteamentoService {
         }
 
         try {
-            String url = String.format("%s/directions/json?origin=%s&destination=%s&key=%s",
+            String url = "%s/directions/json?origin=%s&destination=%s&key=%s".formatted(
                     mapsApiUrl, origem, destino, mapsApiKey);
 
             // CONCEITO DIDÁTICO - RestTemplate:
             // Cliente HTTP para consumir APIs REST
+            @SuppressWarnings("unchecked")
             Map<String, Object> response = restTemplate.getForObject(url, Map.class);
             
             log.debug("Informações de rota obtidas da API externa");
@@ -608,6 +609,7 @@ public class RoteamentoService {
      * @param endereco endereço completo
      * @return região extraída
      */
+    @SuppressWarnings("unused")
     private String extrairRegiao(String endereco) {
         if (endereco == null || endereco.trim().isEmpty()) {
             return "Região Desconhecida";

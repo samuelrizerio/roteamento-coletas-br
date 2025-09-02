@@ -36,7 +36,7 @@ public class CacheConfig {
      * - Configuração de eviction
      */
     @Bean
-    public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+    CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(30)) // TTL padrão de 30 minutos
                 .serializeKeysWith(RedisSerializationContext.SerializationPair
@@ -60,7 +60,7 @@ public class CacheConfig {
      * - Cache para usuários (dados semi-estáticos)
      */
     @Bean
-    public RedisCacheConfiguration materiaisCacheConfig() {
+    RedisCacheConfiguration materiaisCacheConfig() {
         return RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofHours(2)) // Materiais mudam pouco
                 .serializeKeysWith(RedisSerializationContext.SerializationPair
@@ -71,7 +71,7 @@ public class CacheConfig {
     }
 
     @Bean
-    public RedisCacheConfiguration usuariosCacheConfig() {
+    RedisCacheConfiguration usuariosCacheConfig() {
         return RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(15)) // Usuários mudam mais frequentemente
                 .serializeKeysWith(RedisSerializationContext.SerializationPair
@@ -82,7 +82,7 @@ public class CacheConfig {
     }
 
     @Bean
-    public RedisCacheConfiguration rotasCacheConfig() {
+    RedisCacheConfiguration rotasCacheConfig() {
         return RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(5)) // Rotas mudam frequentemente
                 .serializeKeysWith(RedisSerializationContext.SerializationPair

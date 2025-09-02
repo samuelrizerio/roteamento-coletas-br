@@ -366,4 +366,19 @@ public class UsuarioService {
     public Long contarUsuariosPorTipo(Usuario.TipoUsuario tipoUsuario) {
         return usuarioRepository.countByTipoUsuario(tipoUsuario);
     }
+
+    /**
+     * MÉTODO PARA CARREGAR USUÁRIO POR NOME DE USUÁRIO (para autenticação)
+     * 
+     * @param username Nome de usuário (email)
+     * @return Usuario encontrado
+     * @throws UsuarioNaoEncontradoException Se o usuário não for encontrado
+     */
+    @Transactional(readOnly = true)
+    public Usuario loadUserByUsername(String username) {
+        log.debug("Carregando usuário por username: {}", username);
+        
+        return usuarioRepository.findByEmail(username)
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Usuário não encontrado: " + username));
+    }
 } 

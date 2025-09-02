@@ -25,27 +25,7 @@ import br.com.roteamento.repository.RotaRepository;
 import br.com.roteamento.repository.UsuarioRepository;
 
 /**
- * SERVIÇO DE INICIALIZAÇÃO DE DADOS
- * =================================
- * 
- * CONCEITOS DIDÁTICOS EXPLICADOS:
- * 
- * 1. COMMAND LINE RUNNER:
- *    - Interface do Spring Boot para execução após inicialização
- *    - Executa código após o contexto da aplicação estar pronto
- *    - Útil para inicialização de dados, validações, etc.
- *    - @Order: Define ordem de execução quando há múltiplos runners
- * 
- * 2. PROFILES DO SPRING:
- *    - @Profile: Define em qual perfil a configuração é ativa
- *    - "dev": Apenas ambiente de desenvolvimento
- *    - "!test": Todos os perfis exceto teste
- * 
- * 3. INICIALIZAÇÃO CONDICIONAL:
- *    - Materiais: Criados em ambos os ambientes (dev e prod)
- *    - Usuários: Criados apenas em desenvolvimento
- *    - Rotas: Criadas apenas em desenvolvimento
- *    - Coletas: Criadas apenas em desenvolvimento
+ * Serviço de inicialização de dados para o sistema
  */
 @Configuration
 public class DataInitializationService {
@@ -54,7 +34,7 @@ public class DataInitializationService {
     
     private final MaterialRepository materialRepository;
     private final UsuarioRepository usuarioRepository;
-    private final RotaRepository rotaRepository;
+    // private final RotaRepository rotaRepository; // Campo não utilizado no momento
     private final ColetaRepository coletaRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -65,7 +45,7 @@ public class DataInitializationService {
                                    PasswordEncoder passwordEncoder) {
         this.materialRepository = materialRepository;
         this.usuarioRepository = usuarioRepository;
-        this.rotaRepository = rotaRepository;
+        // this.rotaRepository = rotaRepository; // Campo não utilizado no momento
         this.coletaRepository = coletaRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -82,7 +62,7 @@ public class DataInitializationService {
     @Bean
     @Profile("!test")
     @Order(1)
-    public CommandLineRunner inicializarMateriais() {
+    CommandLineRunner inicializarMateriais() {
         return args -> {
             log.info("🚀 INICIANDO CARREGAMENTO DE MATERIAIS PADRÃO...");
             
@@ -240,7 +220,7 @@ public class DataInitializationService {
     @Bean
     @Profile({"dev", "local"})
     @Order(2)
-    public CommandLineRunner inicializarDadosCompletos() {
+    CommandLineRunner inicializarDadosCompletos() {
         return args -> {
             log.info("🚀 INICIANDO CARREGAMENTO DE DADOS COMPLETOS PARA DESENVOLVIMENTO...");
             
@@ -286,7 +266,7 @@ public class DataInitializationService {
     @Bean
     @Profile("homo")
     @Order(2)
-    public CommandLineRunner inicializarDadosHomologacao() {
+    CommandLineRunner inicializarDadosHomologacao() {
         return args -> {
             log.info("🚀 INICIANDO CARREGAMENTO DE DADOS PARA HOMOLOGAÇÃO - BELO HORIZONTE...");
             
@@ -350,6 +330,7 @@ public class DataInitializationService {
     /**
      * MÉTODO PARA CRIAR USUÁRIO INDIVIDUAL
      */
+    @SuppressWarnings("unused")
     private Usuario criarUsuario(String username, String email, String nome, String tipo, String senha) {
         Usuario usuario = new Usuario(nome, email, passwordEncoder.encode(senha), Usuario.TipoUsuario.valueOf(tipo));
         usuario.setStatus(Usuario.StatusUsuario.ATIVO);
@@ -401,6 +382,7 @@ public class DataInitializationService {
     /**
      * MÉTODO PARA CRIAR COLETA INDIVIDUAL
      */
+    @SuppressWarnings("unused")
     private Coleta criarColeta(String nome, String descricao, Usuario coletor, Material material, double peso, String status) {
         Coleta coleta = new Coleta(coletor, material, new BigDecimal(peso));
         coleta.setEndereco(descricao);

@@ -102,8 +102,8 @@ class ColetaControllerIntegrationTest {
         novaColeta.setMaterialId(materialTeste.getId());
         novaColeta.setPesoEstimado(new BigDecimal("15.0"));
         novaColeta.setEndereco("Rua Nova, 456");
-        novaColeta.setLatitude(-19.9267);
-        novaColeta.setLongitude(-43.9445);
+        novaColeta.setLatitude(new BigDecimal("-19.9267"));
+        novaColeta.setLongitude(new BigDecimal("-43.9445"));
 
         // When & Then
         mockMvc.perform(post("/api/v1/coletas")

@@ -10,7 +10,7 @@
 
 # Configurações do servidor
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${SERVER_PORT:8888}
   servlet:
     context-path: ${SERVER_CONTEXT_PATH:/}
 
@@ -19,6 +19,10 @@ spring:
   # Configurações da aplicação
   application:
     name: sistema-roteamento-programado-coletas
+  
+  # Permitir referências circulares (temporário)
+  main:
+    allow-circular-references: true
   
   # PERFIL ATIVO - Define qual configuração específica será carregada
   # Opções: local (desenvolvimento local), dev (desenvolvimento), homo (homologação), prod (produção), test (testes)
@@ -37,20 +41,23 @@ spring:
       hibernate:
         # Configurações de performance comuns
         jdbc:
-          batch_size: ${HIBERNATE_JDBC_BATCH_SIZE:20}
+          "[batch_size]": ${HIBERNATE_JDBC_BATCH_SIZE:20}
         # Configurações de cache comuns
         cache:
-          use_second_level_cache: ${HIBERNATE_CACHE_ENABLED:false}
+          "[use_second_level_cache]": ${HIBERNATE_CACHE_ENABLED:false}
           
   # Configurações de segurança
-  security:
+  # security:  # Propriedade customizada - funciona normalmente
     # Configurações do JWT
-    jwt:
-      # Chave secreta para assinar os tokens JWT (OBRIGATÓRIO em produção)
-      # Deve ser uma variável de ambiente em produção
-      secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
-      # Tempo de expiração do token (24 horas em milissegundos)
-      expiration: ${JWT_EXPIRATION:86400000}
+    # jwt:  # Propriedade customizada - funciona normalmente
+    # Chave secreta para assinar os tokens JWT (OBRIGATÓRIO em produção)
+    # Deve ser uma variável de ambiente em produção
+    # secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+    # Tempo de expiração do token (24 horas em milissegundos)
+    # expiration: ${JWT_EXPIRATION:86400000}
+    # Tempo de expiração do refresh token (7 dias em milissegundos)
+    # refresh-token:  # Propriedade customizada - funciona normalmente
+    #   expiration: ${JWT_REFRESH_EXPIRATION:604800000}
       
   # Configurações do Spring MVC para JSP
   mvc:
@@ -81,11 +88,11 @@ logging:
     # Nível geral da aplicação
     root: ${LOG_LEVEL:INFO}
     # Nível específico para o pacote da aplicação
-    br.com.roteamento: ${SPRING_LOG_LEVEL:DEBUG}
+    "[br.com.roteamento]": ${SPRING_LOG_LEVEL:DEBUG}
     # Nível para queries SQL
-    org.hibernate.SQL: ${HIBERNATE_LOG_LEVEL:DEBUG}
+    "[org.hibernate.SQL]": ${HIBERNATE_LOG_LEVEL:DEBUG}
     # Nível para parâmetros das queries
-    org.hibernate.type.descriptor.sql.BasicBinder: ${HIBERNATE_LOG_LEVEL:TRACE}
+    "[org.hibernate.type.descriptor.sql.BasicBinder]": ${HIBERNATE_LOG_LEVEL:TRACE}
   # Padrão de formatação dos logs
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
@@ -98,22 +105,18 @@ management:
       exposure:
         include: ${MANAGEMENT_ENDPOINTS:health,info,metrics}
   # Configurações de métricas
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: ${PROMETHEUS_ENABLED:true}
 
 # Configurações customizadas da aplicação
-app:
+# app:  # Propriedade customizada - funciona normalmente
   # Configurações de roteamento
-  routing:
-    # Raio máximo de busca para coletas (em metros)
-    max-search-radius: ${ROUTING_MAX_SEARCH_RADIUS:5000}
-    # Tempo máximo de espera para cálculo de rota (em segundos)
-    max-routing-time: ${ROUTING_MAX_TIME:30}
+  # routing:  # Propriedade customizada - funciona normalmente
+  #   max-search-radius: ${ROUTING_MAX_SEARCH_RADIUS:5000}
+  #   max-routing-time: ${ROUTING_MAX_TIME:30}
   # Configurações de notificação
-  notification:
-    # Tempo de expiração de notificações (em minutos)
-    expiration-time: ${NOTIFICATION_EXPIRATION_TIME:30}
-    # Máximo de tentativas de envio
-    max-retry-attempts: ${NOTIFICATION_MAX_RETRY_ATTEMPTS:3} 
+  # notification:  # Propriedade customizada - funciona normalmente
+  #   expiration-time: ${NOTIFICATION_EXPIRATION_TIME:30}
+  #   max-retry-attempts: ${NOTIFICATION_MAX_RETRY_ATTEMPTS:3} 

@@ -104,9 +104,9 @@ public class MapaController {
      */
     @GetMapping("/coletas/regiao")
     public ResponseEntity<List<ColetaDTO>> buscarColetasPorRegiao(
-            @RequestParam("latitude") Double latitude,
-            @RequestParam("longitude") Double longitude,
-            @RequestParam(value = "raioKm", defaultValue = "10.0") Double raioKm) {
+            @RequestParam Double latitude,
+            @RequestParam Double longitude,
+            @RequestParam(defaultValue = "10.0") Double raioKm) {
         
         log.info("📍 Buscando coletas na região: lat={}, lng={}, raio={}km", latitude, longitude, raioKm);
 
@@ -194,9 +194,9 @@ public class MapaController {
      */
     @GetMapping("/rotas/regiao")
     public ResponseEntity<List<RotaDTO>> buscarRotasPorRegiao(
-            @RequestParam("latitude") Double latitude,
-            @RequestParam("longitude") Double longitude,
-            @RequestParam(value = "raioKm", defaultValue = "10.0") Double raioKm) {
+            @RequestParam Double latitude,
+            @RequestParam Double longitude,
+            @RequestParam(defaultValue = "10.0") Double raioKm) {
         
         log.info("Buscando rotas na região: lat={}, lng={}, raio={}km", latitude, longitude, raioKm);
 
@@ -223,8 +223,8 @@ public class MapaController {
      */
     @GetMapping("/clusters")
     public ResponseEntity<List<Map<String, Object>>> obterClustersColetas(
-            @RequestParam("zoom") Integer zoom,
-            @RequestParam("bounds") String bounds) {
+            @RequestParam Integer zoom,
+            @RequestParam String bounds) {
         
         log.info("🔗 Obtendo clusters para zoom={}, bounds={}", zoom, bounds);
 
@@ -249,7 +249,7 @@ public class MapaController {
      * @return ResponseEntity com coordenadas
      */
     @GetMapping("/geocoding")
-    public ResponseEntity<Map<String, Object>> geolocalizarEndereco(@RequestParam("endereco") String endereco) {
+    public ResponseEntity<Map<String, Object>> geolocalizarEndereco(@RequestParam String endereco) {
         log.info("📍 Geolocalizando endereço: {}", endereco);
 
         try {
@@ -278,8 +278,8 @@ public class MapaController {
      */
     @GetMapping("/reverse-geocoding")
     public ResponseEntity<Map<String, Object>> obterEnderecoPorCoordenadas(
-            @RequestParam("latitude") Double latitude,
-            @RequestParam("longitude") Double longitude) {
+            @RequestParam Double latitude,
+            @RequestParam Double longitude) {
         
         log.info("📍 Obtendo endereço para coordenadas: lat={}, lng={}", latitude, longitude);
 

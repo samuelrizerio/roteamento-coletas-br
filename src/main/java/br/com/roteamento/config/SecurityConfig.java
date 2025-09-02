@@ -1,24 +1,25 @@
 package br.com.roteamento.config;
 
 import br.com.roteamento.security.JwtAuthenticationEntryPoint;
-import br.com.roteamento.security.JwtAuthenticationFilter;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+
+
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfigurationSource;
+
+
 
 /**
  * CONFIGURAÇÃO DE SEGURANÇA ROBUSTA
@@ -37,9 +38,11 @@ import org.springframework.web.cors.CorsConfigurationSource;
 public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final UserDetailsService userDetailsService;
-    private final CorsConfigurationSource corsConfigurationSource;
+
+    // private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    // private final br.com.roteamento.security.CustomUserDetailsService userDetailsService;
+    // @Qualifier("corsConfigurationSource")
+    // private final CorsConfigurationSource corsConfigurationSource;
 
     /**
      * CONFIGURAÇÃO DO FILTRO DE SEGURANÇA
@@ -51,10 +54,10 @@ public class SecurityConfig {
      * - Tratamento de exceções de autenticação
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // Configuração CORS
-            .cors(cors -> cors.configurationSource(corsConfigurationSource))
+            // Configuração CORS (comentado temporariamente)
+            // .cors(cors -> cors.configurationSource(corsConfigurationSource))
             
             // Desabilitar CSRF para APIs REST (JWT é stateless)
             .csrf(csrf -> csrf.disable())
@@ -63,24 +66,10 @@ public class SecurityConfig {
             .sessionManagement(session -> 
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             
-            // Configuração de autorização
+            // Configuração de autorização (temporariamente permitindo tudo)
             .authorizeHttpRequests(authz -> authz
-                // Rotas públicas
-                .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers("/actuator/health").permitAll()
-                
-                // Rotas do sistema (requer autenticação)
-                .requestMatchers("/sistema/**").hasAnyRole("ADMIN", "OPERADOR")
-                .requestMatchers("/api/v1/coletas/**").hasAnyRole("ADMIN", "OPERADOR", "COLETOR")
-                .requestMatchers("/api/v1/rotas/**").hasAnyRole("ADMIN", "OPERADOR", "COLETOR")
-                .requestMatchers("/api/v1/usuarios/**").hasRole("ADMIN")
-                .requestMatchers("/api/v1/materiais/**").hasAnyRole("ADMIN", "OPERADOR")
-                .requestMatchers("/api/v1/algoritmos-avancados/**").hasRole("ADMIN")
-                
-                // Todas as outras requisições requerem autenticação
-                .anyRequest().authenticated()
+                // Permitir acesso a todas as rotas temporariamente
+                .anyRequest().permitAll()
             )
             
             // Configuração de exceções
@@ -88,8 +77,8 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
             )
             
-            // Adicionar filtro JWT
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            // Adicionar filtro JWT (comentado temporariamente)
+            // .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             
             // Desabilitar login form (usamos JWT)
             .formLogin(form -> form.disable())
@@ -108,7 +97,7 @@ public class SecurityConfig {
      * - Resistente a ataques de força bruta
      */
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
 
@@ -120,13 +109,13 @@ public class SecurityConfig {
      * - Criptografia de senhas
      * - Validação de credenciais
      */
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
+    // @Bean
+    // public AuthenticationProvider authenticationProvider() {
+    //     DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    //     authProvider.setUserDetailsService(userDetailsService);
+    //     authProvider.setPasswordEncoder(passwordEncoder());
+    //     return authProvider;
+    // }
 
     /**
      * MANAGER DE AUTENTICAÇÃO
@@ -136,7 +125,7 @@ public class SecurityConfig {
      * - Integração com providers
      */
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 }

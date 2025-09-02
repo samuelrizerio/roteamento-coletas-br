@@ -29,7 +29,7 @@ public class MetricsConfig {
      * - Monitoramento de latência
      */
     @Bean
-    public TimedAspect timedAspect(MeterRegistry registry) {
+    TimedAspect timedAspect(MeterRegistry registry) {
         return new TimedAspect(registry);
     }
 
@@ -42,7 +42,7 @@ public class MetricsConfig {
      * - Alertas de latência
      */
     @Bean
-    public Timer roteamentoTimer(MeterRegistry registry) {
+    Timer roteamentoTimer(MeterRegistry registry) {
         return Timer.builder("roteamento.algoritmo.tempo")
                 .description("Tempo de execução dos algoritmos de roteamento")
                 .register(registry);
@@ -57,7 +57,7 @@ public class MetricsConfig {
      * - Detecção de lentidão
      */
     @Bean
-    public Timer databaseTimer(MeterRegistry registry) {
+    Timer databaseTimer(MeterRegistry registry) {
         return Timer.builder("database.operacao.tempo")
                 .description("Tempo de operações de banco de dados")
                 .register(registry);
@@ -72,7 +72,7 @@ public class MetricsConfig {
      * - Performance de cache
      */
     @Bean
-    public Timer cacheTimer(MeterRegistry registry) {
+    Timer cacheTimer(MeterRegistry registry) {
         return Timer.builder("cache.operacao.tempo")
                 .description("Tempo de operações de cache")
                 .register(registry);

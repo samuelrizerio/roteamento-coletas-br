@@ -79,7 +79,7 @@ public class StaticResourceController {
      */
     @GetMapping(value = "/css/{filename:.+}", produces = "text/css")
     @ResponseBody
-    public ResponseEntity<String> serveCss(@PathVariable("filename") String filename) {
+    public ResponseEntity<String> serveCss(@PathVariable String filename) {
         try {
             // Tenta carregar o arquivo da pasta static/css
             Resource resource = new ClassPathResource("static/css/" + filename);

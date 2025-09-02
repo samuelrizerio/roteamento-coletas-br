@@ -13,7 +13,7 @@
 echo "🚀 INICIANDO BACKEND (DESENVOLVIMENTO LOCAL)..."
 echo "📊 Perfil: local (H2 em memória)"
 echo "🗄️  Banco: H2 (memória)"
-echo "🌐 Porta: 8081"
+echo "🌐 Porta: 8889"
 echo "📁 Diretório: $(pwd)"
 echo ""
 
@@ -46,8 +46,8 @@ echo ""
 # Executar o backend
 echo "🔄 Executando: mvn spring-boot:run -Dspring.profiles.active=local"
 echo "⏳ Aguarde a inicialização..."
-echo "🌐 Backend será aberto em: http://localhost:8081"
-echo "🗄️  H2 Console: http://localhost:8081/h2-console"
+echo "🌐 Backend será aberto em: http://localhost:8889"
+echo "🗄️  H2 Console: http://localhost:8889/h2-console"
 echo ""
 
 mvn spring-boot:run -Dspring.profiles.active=local

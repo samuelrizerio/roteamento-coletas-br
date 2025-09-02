@@ -151,7 +151,7 @@ public class AlgoritmosAvancadosController {
      * @return grupos de coletas otimizados
      */
     @PostMapping("/clustering-kmeans")
-    public ResponseEntity<Map<String, Object>> clusteringKMeans(@RequestParam("k") Integer k) {
+    public ResponseEntity<Map<String, Object>> clusteringKMeans(@RequestParam Integer k) {
         log.info("Recebida requisição para clustering K-means com {} clusters", k);
 
         try {

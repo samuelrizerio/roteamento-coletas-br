@@ -41,7 +41,7 @@ spring:
     # Mostrar queries SQL para debugging de homologação
     show-sql: true
     # Formatar queries SQL para melhor legibilidade
-    format-sql: true
+    # format-sql: true  # Propriedade não reconhecida pelo Spring Boot 3.x
     # Configurações específicas do Hibernate para homologação
     properties:
       hibernate:
@@ -49,15 +49,15 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         # Configurações de performance para homologação
         jdbc:
-          batch_size: ${HIBERNATE_JDBC_BATCH_SIZE:30}
+          "[batch_size]": ${HIBERNATE_JDBC_BATCH_SIZE:30}
         # Configurações de cache para homologação
         cache:
-          use_second_level_cache: ${HIBERNATE_CACHE_ENABLED:true}
-          use_query_cache: true
+          "[use_second_level_cache]": ${HIBERNATE_CACHE_ENABLED:true}
+          "[use_query_cache]": true
           region:
-            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+            "[factory_class]": org.hibernate.cache.jcache.JCacheRegionFactory
         # Configurações de estatísticas para homologação
-        generate_statistics: true
+        "[generate_statistics]": true
         # Configurações de sessão para homologação
         session:
           events:
@@ -69,13 +69,13 @@ logging:
     # Nível geral da aplicação (mais verboso para homologação)
     root: ${LOG_LEVEL:INFO}
     # Nível específico para o pacote da aplicação
-    br.com.roteamento: ${SPRING_LOG_LEVEL:DEBUG}
+    "[br.com.roteamento]": ${SPRING_LOG_LEVEL:DEBUG}
     # Logar queries SQL para homologação
-    org.hibernate.SQL: ${HIBERNATE_LOG_LEVEL:DEBUG}
+    "[org.hibernate.SQL]": ${HIBERNATE_LOG_LEVEL:DEBUG}
     # Logar parâmetros das queries para homologação
-    org.hibernate.type.descriptor.sql.BasicBinder: ${HIBERNATE_LOG_LEVEL:DEBUG}
+    "[org.hibernate.type.descriptor.sql.BasicBinder]": ${HIBERNATE_LOG_LEVEL:DEBUG}
     # Log de transações para homologação
-    org.springframework.transaction: DEBUG
+    "[org.springframework.transaction]": DEBUG
   # Padrão de formatação dos logs para homologação
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
@@ -84,26 +84,20 @@ logging:
   # Configuração de arquivo de log para homologação
   file:
     name: logs/srpc-homo.log
-    max-size: 100MB
-    max-history: 30
 
-# Configurações específicas para homologação
-app:
-  # Configurações de roteamento para homologação
-  routing:
-    # Raio máximo de busca para coletas (em metros) - similar à produção
-    max-search-radius: ${ROUTING_MAX_SEARCH_RADIUS:8000}
-    # Tempo máximo de espera para cálculo de rota (em segundos) - similar à produção
-    max-routing-time: ${ROUTING_MAX_TIME:45}
-  # Configurações de notificação para homologação
-  notification:
-    # Tempo de expiração de notificações (em minutos) - similar à produção
-    expiration-time: ${NOTIFICATION_EXPIRATION_TIME:45}
-    # Máximo de tentativas de envio - similar à produção
-    max-retry-attempts: ${NOTIFICATION_MAX_RETRY_ATTEMPTS:4}
-  
-  # CONFIGURAÇÕES DE LOCALIZAÇÃO PARA HOMOLOGAÇÃO - BELO HORIZONTE
-  location:
+    # Configurações específicas para homologação
+    # app:  # Propriedade customizada - funciona normalmente
+    # Configurações de roteamento para homologação
+    # routing:  # Propriedade customizada - funciona normalmente
+    #   max-search-radius: ${ROUTING_MAX_SEARCH_RADIUS:8000}
+    #   max-routing-time: ${ROUTING_MAX_TIME:45}
+    # Configurações de notificação para homologação
+    # notification:  # Propriedade customizada - funciona normalmente
+    #   expiration-time: ${NOTIFICATION_EXPIRATION_TIME:45}
+    #   max-retry-attempts: ${NOTIFICATION_MAX_RETRY_ATTEMPTS:4}
+
+    # CONFIGURAÇÕES DE LOCALIZAÇÃO PARA HOMOLOGAÇÃO - BELO HORIZONTE
+    # location:  # Propriedade customizada - funciona normalmente
     # Coordenadas padrão para testes de homologação (Belo Horizonte)
     default:
       latitude: -19.9167
@@ -111,7 +105,7 @@ app:
       cidade: "Belo Horizonte"
       estado: "MG"
       regiao: "Grande Belo Horizonte"
-    
+
     # Pontos de referência para testes de roteamento
     pontos-teste:
       centro:
@@ -161,6 +155,10 @@ app:
         latitude: -20.0167
         longitude: -44.0667
         endereco: "Centro de Ibirité, Ibirité - MG"
+  # Configuração de arquivo de log para homologação
+  logback.rollingpolicy.max-history: 30
+  # Configuração de arquivo de log para homologação
+  logback.rollingpolicy.max-file-size: 100MB
 
 # Configurações de gerenciamento para homologação
 management:
@@ -172,22 +170,20 @@ management:
         # Endpoints sensíveis NÃO expostos em homologação
         exclude: beans,shutdown
   # Configurações de métricas para homologação
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: ${PROMETHEUS_ENABLED:true}
     # Configurações de coleta de métricas
-    distribution:
-      percentiles-histogram:
-        http.server.requests: true
-      percentiles:
-        http.server.requests: 0.5, 0.95, 0.99
+    # distribution:  # Propriedade customizada - funciona normalmente
+    #   percentiles-histogram:
+    #     http.server.requests: true
+    #   percentiles:
+    #     http.server.requests: 0.5, 0.95, 0.99
 
   # Configurações de segurança para homologação
-  security:
+  # security:  # Propriedade customizada - funciona normalmente
     # Configurações do JWT para homologação
-    jwt:
-      # Chave secreta para assinar os tokens JWT (deve ser uma variável de ambiente)
-      secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
-      # Tempo de expiração do token (24 horas em milissegundos)
-      expiration: ${JWT_EXPIRATION:86400000}
+    # jwt:  # Propriedade customizada - funciona normalmente
+    #   secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+    #   expiration: ${JWT_EXPIRATION:86400000}

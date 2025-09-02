@@ -6,11 +6,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -253,7 +253,7 @@ public class RotaDTO {
         
         return this.capacidadeUtilizada
                 .multiply(BigDecimal.valueOf(100))
-                .divide(this.capacidadeMaxima, 2, BigDecimal.ROUND_HALF_UP);
+                .divide(this.capacidadeMaxima, 2, RoundingMode.HALF_UP);
     }
 
     /**
@@ -293,15 +293,15 @@ public class RotaDTO {
         
         // Fórmula: (coletas / tempo) * (1 / distância) * 1000
         BigDecimal coletasPorTempo = BigDecimal.valueOf(this.quantidadeColetas)
-                .divide(BigDecimal.valueOf(this.tempoEstimado), 4, BigDecimal.ROUND_HALF_UP);
+                .divide(BigDecimal.valueOf(this.tempoEstimado), 4, RoundingMode.HALF_UP);
         
         BigDecimal eficienciaDistancia = BigDecimal.ONE
-                .divide(this.distanciaTotal, 4, BigDecimal.ROUND_HALF_UP);
+                .divide(this.distanciaTotal, 4, RoundingMode.HALF_UP);
         
         return coletasPorTempo
                 .multiply(eficienciaDistancia)
                 .multiply(BigDecimal.valueOf(1000))
-                .setScale(2, BigDecimal.ROUND_HALF_UP);
+                .setScale(2, RoundingMode.HALF_UP);
     }
     
     // Getters e Setters

@@ -189,4 +189,14 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
            "END as classificacao " +
            "FROM Material m WHERE m.aceitoParaColeta = true")
     List<Object[]> findMateriaisComClassificacaoPreco();
+
+    /**
+     * Busca materiais ativos
+     */
+    List<Material> findByAceitoParaColetaTrue();
+
+    /**
+     * Busca materiais inativos
+     */
+    List<Material> findByAceitoParaColetaFalse();
 } 

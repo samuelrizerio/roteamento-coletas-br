@@ -33,9 +33,9 @@ echo Maven encontrado!
 echo.
 echo [3/3] Iniciando o Backend Java...
 echo.
-echo O backend sera iniciado em: http://localhost:8081
-echo Console H2: http://localhost:8081/h2-console
-echo Swagger UI: http://localhost:8081/api/v1/swagger-ui.html
+echo O backend sera iniciado em: http://localhost:8888
+echo Console H2: http://localhost:8888/h2-console
+echo Swagger UI: http://localhost:8888/api/v1/swagger-ui.html
 echo.
 echo Para parar o servidor, pressione Ctrl+C
 echo.

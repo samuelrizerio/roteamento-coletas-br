@@ -7,6 +7,7 @@ import br.com.roteamento.model.Usuario;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -22,11 +23,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class EnumConverterConfig implements WebMvcConfigurer {
 
     @Override
-    public void addFormatters(FormatterRegistry registry) {
+    public void addFormatters(@NonNull FormatterRegistry registry) {
         // Conversor para StatusColeta
         registry.addConverter(new Converter<String, Coleta.StatusColeta>() {
             @Override
-            public Coleta.StatusColeta convert(String source) {
+            public Coleta.StatusColeta convert(@NonNull String source) {
                 if (source == null || source.trim().isEmpty()) {
                     return null;
                 }
@@ -41,7 +42,7 @@ public class EnumConverterConfig implements WebMvcConfigurer {
         // Conversor para StatusRota
         registry.addConverter(new Converter<String, Rota.StatusRota>() {
             @Override
-            public Rota.StatusRota convert(String source) {
+            public Rota.StatusRota convert(@NonNull String source) {
                 if (source == null || source.trim().isEmpty()) {
                     return null;
                 }
@@ -56,7 +57,7 @@ public class EnumConverterConfig implements WebMvcConfigurer {
         // Conversor para TipoUsuario
         registry.addConverter(new Converter<String, Usuario.TipoUsuario>() {
             @Override
-            public Usuario.TipoUsuario convert(String source) {
+            public Usuario.TipoUsuario convert(@NonNull String source) {
                 if (source == null || source.trim().isEmpty()) {
                     return null;
                 }
@@ -71,7 +72,7 @@ public class EnumConverterConfig implements WebMvcConfigurer {
         // Conversor para CategoriaMaterial
         registry.addConverter(new Converter<String, Material.CategoriaMaterial>() {
             @Override
-            public Material.CategoriaMaterial convert(String source) {
+            public Material.CategoriaMaterial convert(@NonNull String source) {
                 if (source == null || source.trim().isEmpty()) {
                     return null;
                 }

@@ -42,7 +42,7 @@ spring:
     # Mostra as queries SQL no console (útil para teste)
     show-sql: true
     # Formata as queries SQL para melhor legibilidade
-    format-sql: true
+    # format-sql: true  # Propriedade não reconhecida pelo Spring Boot 3.x
     # Configurações específicas do Hibernate para teste
     properties:
       hibernate:
@@ -50,10 +50,10 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
         # Configurações de performance para teste
         jdbc:
-          batch_size: 5
+          "[batch_size]": 5
         # Configurações de cache para teste
         cache:
-          use_second_level_cache: false
+          "[use_second_level_cache]": false
         # Log de queries SQL com parâmetros (teste)
         type:
           descriptor:
@@ -61,9 +61,9 @@ spring:
               trace: true
 
   # Configurações de segurança para teste
-  security:
+  # security:  # Propriedade customizada - funciona normalmente
     # Configurações do JWT para teste
-    jwt:
+    # jwt:  # Propriedade customizada - funciona normalmente
       # Chave secreta para teste (NÃO usar em produção)
       secret: test-secret-key-for-testing-only-not-for-production-use
       # Tempo de expiração do token (1 hora em milissegundos)
@@ -78,31 +78,27 @@ logging:
     # Nível geral da aplicação
     root: ${LOG_LEVEL:WARN}
     # Nível específico para o pacote da aplicação
-    br.com.roteamento: ${SPRING_LOG_LEVEL:INFO}
+    "[br.com.roteamento]": ${SPRING_LOG_LEVEL:INFO}
     # Nível para queries SQL (teste)
-    org.hibernate.SQL: ${HIBERNATE_LOG_LEVEL:WARN}
+    "[org.hibernate.SQL]": ${HIBERNATE_LOG_LEVEL:WARN}
     # Nível para parâmetros das queries (teste)
-    org.hibernate.type.descriptor.sql.BasicBinder: ${HIBERNATE_LOG_LEVEL:WARN}
+    "[org.hibernate.type.descriptor.sql.BasicBinder]": ${HIBERNATE_LOG_LEVEL:WARN}
     # Log de transações (teste)
-    org.springframework.transaction: WARN
+    "[org.springframework.transaction]": WARN
   # Padrão de formatação dos logs para teste
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
 
 # Configurações específicas para teste
-app:
+# app:  # Propriedade customizada - funciona normalmente
   # Configurações de roteamento para teste
-  routing:
-    # Raio máximo de busca para coletas (em metros) - menor para teste
-    max-search-radius: ${ROUTING_MAX_SEARCH_RADIUS:1000}
-    # Tempo máximo de espera para cálculo de rota (em segundos) - menor para teste
-    max-routing-time: ${ROUTING_MAX_TIME:10}
+  # routing:  # Propriedade customizada - funciona normalmente
+  #   max-search-radius: ${ROUTING_MAX_SEARCH_RADIUS:1000}
+  #   max-routing-time: ${ROUTING_MAX_TIME:10}
   # Configurações de notificação para teste
-  notification:
-    # Tempo de expiração de notificações (em minutos) - menor para teste
-    expiration-time: ${NOTIFICATION_EXPIRATION_TIME:5}
-    # Máximo de tentativas de envio - menor para teste
-    max-retry-attempts: ${NOTIFICATION_MAX_RETRY_ATTEMPTS:1}
+  # notification:  # Propriedade customizada - funciona normalmente
+  #   expiration-time: ${NOTIFICATION_EXPIRATION_TIME:5}
+  #   max-retry-attempts: ${NOTIFICATION_MAX_RETRY_ATTEMPTS:1}
 
 # Configurações de gerenciamento para teste
 management:
@@ -112,16 +108,15 @@ management:
         # Endpoints expostos para teste
         include: ${MANAGEMENT_ENDPOINTS:health,info,metrics}
   # Configurações de métricas para teste
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: ${PROMETHEUS_ENABLED:false}
 
 # Configurações de cache para teste
-spring:
-  cache:
-    type: simple
-    cache-names:
-      - materiais
-      - usuarios
-      - rotas
+  # cache:  # Propriedade customizada - funciona normalmente
+  #   type: simple
+  #   cache-names:
+  #     - materiais
+  #     - usuarios
+  #     - rotas

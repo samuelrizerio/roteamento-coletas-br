@@ -43,7 +43,7 @@ spring:
     # NÃO mostrar queries SQL em produção (segurança e performance)
     show-sql: false
     # NÃO formatar queries SQL em produção
-    format-sql: false
+    # format-sql: false  # Propriedade não reconhecida pelo Spring Boot 3.x
     # Configurações específicas do Hibernate para produção
     properties:
       hibernate:
@@ -51,15 +51,15 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         # Configurações de performance para produção
         jdbc:
-          batch_size: ${HIBERNATE_JDBC_BATCH_SIZE:50}
+          "[batch_size]": ${HIBERNATE_JDBC_BATCH_SIZE:50}
         # Configurações de cache para produção
         cache:
-          use_second_level_cache: ${HIBERNATE_CACHE_ENABLED:true}
-          use_query_cache: true
+          "[use_second_level_cache]": ${HIBERNATE_CACHE_ENABLED:true}
+          "[use_query_cache]": true
           region:
-            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+            "[factory_class]": org.hibernate.cache.jcache.JCacheRegionFactory
         # Configurações de estatísticas (apenas se necessário)
-        generate_statistics: false
+        "[generate_statistics]": false
         # Configurações de sessão
         session:
           events:
@@ -71,13 +71,13 @@ logging:
     # Nível geral da aplicação (menos verboso em produção)
     root: ${LOG_LEVEL:WARN}
     # Nível específico para o pacote da aplicação
-    br.com.roteamento: ${SPRING_LOG_LEVEL:INFO}
+    "[br.com.roteamento]": ${SPRING_LOG_LEVEL:INFO}
     # NÃO logar queries SQL em produção
-    org.hibernate.SQL: ${HIBERNATE_LOG_LEVEL:WARN}
+    "[org.hibernate.SQL]": ${HIBERNATE_LOG_LEVEL:WARN}
     # NÃO logar parâmetros das queries em produção
-    org.hibernate.type.descriptor.sql.BasicBinder: ${HIBERNATE_LOG_LEVEL:WARN}
+    "[org.hibernate.type.descriptor.sql.BasicBinder]": ${HIBERNATE_LOG_LEVEL:WARN}
     # Log de transações apenas em caso de erro
-    org.springframework.transaction: WARN
+    "[org.springframework.transaction]": WARN
   # Padrão de formatação dos logs para produção (mais simples)
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
@@ -86,23 +86,21 @@ logging:
   # Configuração de arquivo de log para produção
   file:
     name: logs/srpc-application.log
-    max-size: 100MB
-    max-history: 30
+  # Configuração de arquivo de log para produção
+  logback.rollingpolicy.max-history: 30
+  # Configuração de arquivo de log para produção
+  logback.rollingpolicy.max-file-size: 100MB
 
 # Configurações específicas para produção
-app:
+# app:  # Propriedade customizada - funciona normalmente
   # Configurações de roteamento para produção
-  routing:
-    # Raio máximo de busca para coletas (em metros) - maior para produção
-    max-search-radius: ${ROUTING_MAX_SEARCH_RADIUS:10000}
-    # Tempo máximo de espera para cálculo de rota (em segundos) - maior para produção
-    max-routing-time: ${ROUTING_MAX_TIME:60}
+  # routing:  # Propriedade customizada - funciona normalmente
+  #   max-search-radius: ${ROUTING_MAX_SEARCH_RADIUS:10000}
+  #   max-routing-time: ${ROUTING_MAX_TIME:60}
   # Configurações de notificação para produção
-  notification:
-    # Tempo de expiração de notificações (em minutos) - maior para produção
-    expiration-time: ${NOTIFICATION_EXPIRATION_TIME:60}
-    # Máximo de tentativas de envio - maior para produção
-    max-retry-attempts: ${NOTIFICATION_MAX_RETRY_ATTEMPTS:5}
+  # notification:  # Propriedade customizada - funciona normalmente
+  #   expiration-time: ${NOTIFICATION_EXPIRATION_TIME:60}
+  #   max-retry-attempts: ${NOTIFICATION_MAX_RETRY_ATTEMPTS:5}
 
 # Configurações de gerenciamento para produção
 management:
@@ -114,23 +112,23 @@ management:
         # Endpoints sensíveis NÃO expostos em produção
         exclude: env,configprops,beans,shutdown
   # Configurações de métricas para produção
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: ${PROMETHEUS_ENABLED:true}
     # Configurações de coleta de métricas
-    distribution:
-      percentiles-histogram:
-        http.server.requests: true
-      percentiles:
-        http.server.requests: 0.5, 0.95, 0.99
+    # distribution:  # Propriedade customizada - funciona normalmente
+    #   percentiles-histogram:
+    #     http.server.requests: true
+    #   percentiles:
+    #     http.server.requests: 0.5, 0.95, 0.99
 
 # Configurações de segurança para produção
-  security:
+  # security:  # Propriedade customizada - funciona normalmente
     # Configurações do JWT para produção
-    jwt:
+    # jwt:  # Propriedade customizada - funciona normalmente
       # Chave secreta para assinar os tokens JWT (OBRIGATÓRIO em produção)
       # Deve ser uma variável de ambiente em produção
-      secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+      # secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
       # Tempo de expiração do token (24 horas em milissegundos)
-      expiration: ${JWT_EXPIRATION:86400000}
+      # expiration: ${JWT_EXPIRATION:86400000}

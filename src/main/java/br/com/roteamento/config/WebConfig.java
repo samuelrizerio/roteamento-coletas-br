@@ -1,6 +1,7 @@
 package br.com.roteamento.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -30,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
      * @param registry registro de view resolvers
      */
     @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
+    public void configureViewResolvers(@NonNull ViewResolverRegistry registry) {
         // Configuração específica para JSP
         registry.jsp("/WEB-INF/views/", ".jsp");
     }
@@ -43,7 +44,7 @@ public class WebConfig implements WebMvcConfigurer {
      * @param registry registro de recursos
      */
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
         // Favicon específico - prioridade alta
         registry.addResourceHandler("/favicon.ico")
                 .addResourceLocations("classpath:/static/")

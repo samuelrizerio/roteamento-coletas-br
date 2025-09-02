@@ -44,9 +44,9 @@ try {
 Write-Host ""
 Write-Host "[3/3] Iniciando o Backend Java..." -ForegroundColor Blue
 Write-Host ""
-Write-Host "O backend será iniciado em: http://localhost:8081" -ForegroundColor Green
-Write-Host "Console H2: http://localhost:8081/h2-console" -ForegroundColor Green
-Write-Host "Swagger UI: http://localhost:8081/api/v1/swagger-ui.html" -ForegroundColor Green
+Write-Host "O backend será iniciado em: http://localhost:8888" -ForegroundColor Green
+Write-Host "Console H2: http://localhost:8888/h2-console" -ForegroundColor Green
+Write-Host "Swagger UI: http://localhost:8888/api/v1/swagger-ui.html" -ForegroundColor Green
 Write-Host ""
 Write-Host "Para parar o servidor, pressione Ctrl+C" -ForegroundColor Yellow
 Write-Host ""

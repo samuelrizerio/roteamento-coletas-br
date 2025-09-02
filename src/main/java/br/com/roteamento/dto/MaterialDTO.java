@@ -15,6 +15,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
@@ -35,6 +36,7 @@ import lombok.NoArgsConstructor;
  * - @Pattern: validação com expressão regular
  * - @Email: validação de formato de email
  */
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "DTO para transferência de dados de Material")
@@ -62,6 +64,9 @@ public class MaterialDTO {
     @DecimalMax(value = "1000.0", message = "Preço por kg não pode exceder 1000kg")
     @Schema(description = "Preço por kg em reais", example = "0.80")
     private BigDecimal valorPorQuilo;
+
+    @Schema(description = "Preço por kg em reais (alias)", example = "0.80")
+    private BigDecimal precoPorKg;
 
     @Schema(description = "Indica se o material é aceito para coleta", example = "true")
     private Boolean aceitoParaColeta;

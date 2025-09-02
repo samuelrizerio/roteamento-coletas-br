@@ -28,13 +28,15 @@ import java.util.Arrays;
 public class CorsConfig {
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
         // Permitir origens específicas
         configuration.setAllowedOriginPatterns(Arrays.asList(
-            "http://localhost:8081",
-            "http://127.0.0.1:8081"
+            "http://localhost:8888",
+            "http://127.0.0.1:8888",
+            "http://localhost:8889",
+            "http://127.0.0.1:8889"
         ));
         
         // Permitir métodos HTTP

@@ -3,22 +3,21 @@ package br.com.roteamento.controller;
 import br.com.roteamento.dto.EstatisticasSistemaDTO;
 import br.com.roteamento.model.Coleta;
 import br.com.roteamento.model.Rota;
-import br.com.roteamento.model.Usuario;
 import br.com.roteamento.model.Material;
 import br.com.roteamento.repository.ColetaRepository;
 import br.com.roteamento.repository.RotaRepository;
 import br.com.roteamento.repository.UsuarioRepository;
 import br.com.roteamento.repository.MaterialRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
 
 /**
  * CONTROLLER DE ESTATÍSTICAS - EstatisticasController
@@ -47,19 +46,14 @@ import java.util.ArrayList;
  */
 @RestController
 @RequestMapping("/estatisticas")
+@RequiredArgsConstructor
+@Slf4j
 public class EstatisticasController {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private MaterialRepository materialRepository;
-
-    @Autowired
-    private ColetaRepository coletaRepository;
-
-    @Autowired
-    private RotaRepository rotaRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final MaterialRepository materialRepository;
+    private final ColetaRepository coletaRepository;
+    private final RotaRepository rotaRepository;
 
     /**
      * Endpoint de health check global
@@ -82,7 +76,7 @@ public class EstatisticasController {
      */
     @GetMapping("/gerais")
     public ResponseEntity<EstatisticasSistemaDTO> obterEstatisticas() {
-        System.out.println("Recebida requisição para obter estatísticas do sistema");
+        log.info("Recebida requisição para obter estatísticas do sistema");
         
         try {
             // Contadores básicos
@@ -125,10 +119,10 @@ public class EstatisticasController {
                 materiaisPorCategoria, coletasPorStatus
             );
             
-            System.out.println("Estatísticas calculadas com sucesso");
+            log.info("Estatísticas calculadas com sucesso");
             return ResponseEntity.ok(estatisticas);
         } catch (Exception e) {
-            System.err.println("Erro ao calcular estatísticas: " + e.getMessage());
+            log.error("Erro ao calcular estatísticas: {}", e.getMessage(), e);
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -138,7 +132,7 @@ public class EstatisticasController {
      */
     @GetMapping("/coletas-recentes")
     public ResponseEntity<List<Coleta>> obterColetasRecentes() {
-        System.out.println("Recebida requisição para obter coletas recentes");
+        log.info("Recebida requisição para obter coletas recentes");
         
         try {
             // Buscar coletas dos últimos 7 dias
@@ -149,10 +143,10 @@ public class EstatisticasController {
                     .limit(10)
                     .collect(Collectors.toList());
             
-            System.out.println("Coletas recentes encontradas: " + coletas.size());
+            log.info("Coletas recentes encontradas: {}", coletas.size());
             return ResponseEntity.ok(coletas);
         } catch (Exception e) {
-            System.err.println("Erro ao buscar coletas recentes: " + e.getMessage());
+            log.error("Erro ao buscar coletas recentes: {}", e.getMessage(), e);
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -162,7 +156,7 @@ public class EstatisticasController {
      */
     @GetMapping("/rotas-ativas")
     public ResponseEntity<List<Rota>> obterRotasAtivas() {
-        System.out.println("Recebida requisição para obter rotas ativas");
+        log.info("Recebida requisição para obter rotas ativas");
         
         try {
             List<Rota> rotas = rotaRepository.findAll().stream()
@@ -170,10 +164,10 @@ public class EstatisticasController {
                     .limit(10)
                     .collect(Collectors.toList());
             
-            System.out.println("Rotas ativas encontradas: " + rotas.size());
+            log.info("Rotas ativas encontradas: {}", rotas.size());
             return ResponseEntity.ok(rotas);
         } catch (Exception e) {
-            System.err.println("Erro ao buscar rotas ativas: " + e.getMessage());
+            log.error("Erro ao buscar rotas ativas: {}", e.getMessage(), e);
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -183,7 +177,7 @@ public class EstatisticasController {
      */
     @GetMapping("/materiais-populares")
     public ResponseEntity<List<Material>> obterMateriaisPopulares() {
-        System.out.println("Recebida requisição para obter materiais populares");
+        log.info("Recebida requisição para obter materiais populares");
         
         try {
             List<Material> materiais = materialRepository.findAll().stream()
@@ -191,10 +185,10 @@ public class EstatisticasController {
                     .limit(10)
                     .collect(Collectors.toList());
             
-            System.out.println("Materiais populares encontrados: " + materiais.size());
+            log.info("Materiais populares encontrados: {}", materiais.size());
             return ResponseEntity.ok(materiais);
         } catch (Exception e) {
-            System.err.println("Erro ao buscar materiais populares: " + e.getMessage());
+            log.error("Erro ao buscar materiais populares: {}", e.getMessage(), e);
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -204,7 +198,7 @@ public class EstatisticasController {
      */
     @GetMapping("/mapa-pontos")
     public ResponseEntity<Map<String, Object>> obterMapaPontos() {
-        System.out.println("Recebida requisição para obter pontos do mapa");
+        log.info("Recebida requisição para obter pontos do mapa");
         
         try {
             Map<String, Object> dados = new HashMap<>();
@@ -262,13 +256,12 @@ public class EstatisticasController {
             dados.put("coletas", coletas);
             dados.put("rotas", rotas);
             
-            System.out.println("Pontos do mapa encontrados - Usuários: " + usuarios.size() + 
-                             ", Coletas: " + coletas.size() + ", Rotas: " + rotas.size());
+            log.info("Pontos do mapa encontrados - Usuários: {}, Coletas: {}, Rotas: {}", 
+                     usuarios.size(), coletas.size(), rotas.size());
             
             return ResponseEntity.ok(dados);
         } catch (Exception e) {
-            System.err.println("Erro ao buscar pontos do mapa: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Erro ao buscar pontos do mapa: {}", e.getMessage(), e);
             return ResponseEntity.internalServerError().build();
         }
     }

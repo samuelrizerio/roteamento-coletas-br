@@ -3,7 +3,6 @@ package br.com.roteamento.controller;
 import br.com.roteamento.dto.AuthRequest;
 import br.com.roteamento.dto.AuthResponse;
 import br.com.roteamento.dto.RegisterRequest;
-import br.com.roteamento.model.Usuario;
 import br.com.roteamento.service.AuthService;
 import br.com.roteamento.service.JwtService;
 import jakarta.validation.Valid;
@@ -11,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * CONTROLLER DE AUTENTICAÇÃO
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
  * - Logs de segurança
  */
 @Slf4j
-@RestController
+// @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
@@ -45,16 +47,14 @@ public class AuthController {
         log.info("Tentativa de registro para email: {}", request.getEmail());
         
         try {
-            Usuario usuario = authService.register(request);
-            String jwtToken = jwtService.generateToken(usuario);
-            String refreshToken = jwtService.generateRefreshToken(usuario);
+            AuthResponse authResponse = authService.register(request);
             
             AuthResponse response = AuthResponse.builder()
-                    .accessToken(jwtToken)
-                    .refreshToken(refreshToken)
+                    .accessToken(authResponse.getAccessToken())
+                    .refreshToken(authResponse.getRefreshToken())
                     .tokenType("Bearer")
-                    .expiresIn(3600) // 1 hora
-                    .usuario(usuario)
+                    .expiresIn(3600L) // 1 hora
+                    .usuario(authResponse.getUsuario())
                     .build();
             
             log.info("Registro realizado com sucesso para: {}", request.getEmail());
@@ -80,16 +80,14 @@ public class AuthController {
         log.info("Tentativa de login para email: {}", request.getEmail());
         
         try {
-            Usuario usuario = authService.authenticate(request);
-            String jwtToken = jwtService.generateToken(usuario);
-            String refreshToken = jwtService.generateRefreshToken(usuario);
+            AuthResponse authResponse = authService.authenticate(request);
             
             AuthResponse response = AuthResponse.builder()
-                    .accessToken(jwtToken)
-                    .refreshToken(refreshToken)
+                    .accessToken(authResponse.getAccessToken())
+                    .refreshToken(authResponse.getRefreshToken())
                     .tokenType("Bearer")
-                    .expiresIn(3600) // 1 hora
-                    .usuario(usuario)
+                    .expiresIn(3600L) // 1 hora
+                    .usuario(authResponse.getUsuario())
                     .build();
             
             log.info("Login realizado com sucesso para: {}", request.getEmail());

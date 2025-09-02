@@ -1,7 +1,7 @@
 package br.com.roteamento.service;
 
-import br.com.roteamento.dto.ColetaDTO;
-import br.com.roteamento.dto.RotaDTO;
+
+
 import br.com.roteamento.model.Coleta;
 import br.com.roteamento.model.Rota;
 import br.com.roteamento.model.Usuario;
@@ -37,7 +37,7 @@ public class RoteamentoAutomaticoService {
     private final ColetaRepository coletaRepository;
     private final RotaRepository rotaRepository;
     private final UsuarioRepository usuarioRepository;
-    private final RoteamentoService roteamentoService;
+    // private final RoteamentoService roteamentoService; // Campo não utilizado no momento
     private final AlgoritmosAvancadosService algoritmosAvancadosService;
 
     // Configurações de roteamento
@@ -227,6 +227,7 @@ public class RoteamentoAutomaticoService {
      * @param coletas lista de coletas
      * @return grupos de coletas por proximidade
      */
+    @SuppressWarnings("unused")
     private List<GrupoColetas> agruparColetasPorProximidade(List<Coleta> coletas) {
         List<GrupoColetas> grupos = new ArrayList<>();
         Set<Coleta> coletasProcessadas = new HashSet<>();
@@ -304,6 +305,7 @@ public class RoteamentoAutomaticoService {
      * @param grupo grupo de coletas
      * @return coletor selecionado
      */
+    @SuppressWarnings("unused")
     private Usuario selecionarColetorParaGrupo(List<Usuario> coletores, GrupoColetas grupo) {
         if (coletores.isEmpty()) {
             return null;
@@ -580,7 +582,9 @@ public class RoteamentoAutomaticoService {
             this.longitude = longitude;
         }
 
+        @SuppressWarnings("unused")
         public double getLatitude() { return latitude; }
+        @SuppressWarnings("unused")
         public double getLongitude() { return longitude; }
     }
 

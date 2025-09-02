@@ -19,8 +19,10 @@ import br.com.roteamento.model.Rota;
 import br.com.roteamento.service.ColetaService;
 import br.com.roteamento.service.MaterialService;
 import br.com.roteamento.service.RotaService;
-import br.com.roteamento.service.RoteamentoAutomaticoService;
+
 import br.com.roteamento.service.UsuarioService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * CONTROLLER PRINCIPAL DO SISTEMA - Frontend 100% Java
@@ -45,23 +47,14 @@ import br.com.roteamento.service.UsuarioService;
  */
 @Controller
 @RequestMapping("/sistema")
+@RequiredArgsConstructor
+@Slf4j
 public class SistemaController {
 
     private final ColetaService coletaService;
     private final RotaService rotaService;
     private final UsuarioService usuarioService;
     private final MaterialService materialService;
-    private final RoteamentoAutomaticoService roteamentoService;
-
-    public SistemaController(ColetaService coletaService, RotaService rotaService, 
-                           UsuarioService usuarioService, MaterialService materialService, 
-                           RoteamentoAutomaticoService roteamentoService) {
-        this.coletaService = coletaService;
-        this.rotaService = rotaService;
-        this.usuarioService = usuarioService;
-        this.materialService = materialService;
-        this.roteamentoService = roteamentoService;
-    }
 
     /**
      * PÁGINA INICIAL DO SISTEMA (DASHBOARD)
@@ -71,7 +64,7 @@ public class SistemaController {
      */
     @GetMapping("/inicial")
     public String paginaInicial(Model model) {
-        System.out.println("Acessando página inicial do sistema");
+        log.info("Acessando página inicial do sistema");
         
         // Estatísticas para a página inicial
         List<ColetaDTO> coletas = coletaService.listarTodasColetas();
@@ -94,7 +87,7 @@ public class SistemaController {
      */
     @GetMapping("")
     public String sistema() {
-        System.out.println("Acessando rota principal do sistema");
+        log.info("Acessando rota principal do sistema");
         return "redirect:/sistema/inicial";
     }
 
@@ -106,8 +99,8 @@ public class SistemaController {
      * @return nome da view de coletas
      */
     @GetMapping("/coletas")
-    public String coletas(Model model, @RequestParam(value = "status", required = false) String status) {
-        System.out.println("Acessando página de coletas, status: " + status);
+    public String coletas(Model model, @RequestParam(required = false) String status) {
+        log.info("Acessando página de coletas, status: {}", status);
         
         List<ColetaDTO> coletas;
         if (status != null && !status.isEmpty()) {
@@ -136,8 +129,8 @@ public class SistemaController {
      * @return nome da view de rotas
      */
     @GetMapping("/rotas")
-    public String rotas(Model model, @RequestParam(value = "status", required = false) String status) {
-        System.out.println("Acessando página de rotas, status: " + status);
+    public String rotas(Model model, @RequestParam(required = false) String status) {
+        log.info("Acessando página de rotas, status: {}", status);
         
         List<RotaDTO> rotas;
         if (status != null && !status.isEmpty()) {
@@ -166,7 +159,7 @@ public class SistemaController {
      */
     @GetMapping("/usuarios")
     public String usuarios(Model model) {
-        System.out.println("Acessando página de usuários");
+        log.info("Acessando página de usuários");
         
         List<UsuarioDTO> usuarios = usuarioService.listarTodosUsuarios();
         model.addAttribute("usuarios", usuarios);
@@ -183,7 +176,7 @@ public class SistemaController {
      */
     @GetMapping("/materiais")
     public String materiais(Model model) {
-        System.out.println("Acessando página de materiais");
+        log.info("Acessando página de materiais");
         
         List<MaterialDTO> materiais = materialService.listarMateriaisAtivos();
         model.addAttribute("materiais", materiais);
@@ -200,7 +193,7 @@ public class SistemaController {
      */
     @GetMapping("/mapa")
     public String mapa(Model model) {
-        System.out.println("Acessando página do mapa");
+        log.info("Acessando página do mapa");
         
         // Dados para o mapa (coletas e rotas)
         List<ColetaDTO> coletas = coletaService.listarTodasColetas();
@@ -221,7 +214,7 @@ public class SistemaController {
      */
     @GetMapping("/configuracoes")
     public String configuracoes(Model model) {
-        System.out.println("Acessando página de configurações");
+        log.info("Acessando página de configurações");
         
         // Configurações do sistema
         model.addAttribute("configuracoes", Map.of(
@@ -246,7 +239,7 @@ public class SistemaController {
     @GetMapping("/html")
     @ResponseBody
     public String paginaInicialHtml() {
-        System.out.println("Acessando página inicial do sistema (HTML direto)");
+        log.info("Acessando página inicial do sistema (HTML direto)");
         
         return """
             <!DOCTYPE html>

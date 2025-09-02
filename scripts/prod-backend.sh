@@ -8,12 +8,12 @@
 # - Executa o Spring Boot com perfil de produção
 # - Usa banco MySQL configurado
 # - Cria apenas materiais (sem usuários, rotas, coletas)
-# - Porta padrão: 8081
+# - Porta padrão: 8889
 
 echo "🚀 INICIANDO BACKEND EM PRODUÇÃO..."
 echo "📊 Perfil: prod"
 echo "🗄️  Banco: MySQL"
-echo "🌐 Porta: 8081"
+echo "🌐 Porta: 8889"
 echo "📁 Diretório: $(pwd)"
 echo ""
 

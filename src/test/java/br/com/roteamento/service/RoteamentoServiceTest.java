@@ -119,7 +119,7 @@ class RoteamentoServiceTest {
         
         // Verificar se as coletas foram agrupadas corretamente
         var rota = rotasOtimizadas.get(0);
-        assertThat(rota.getColetas()).isNotEmpty();
+        assertThat(rota.getColetaIds()).isNotEmpty();
     }
 
     /**
@@ -162,7 +162,7 @@ class RoteamentoServiceTest {
 
         // Then
         assertThat(rotasOtimizadas).hasSize(1);
-        assertThat(rotasOtimizadas.get(0).getColetas()).hasSize(1);
+        assertThat(rotasOtimizadas.get(0).getColetaIds()).hasSize(1);
     }
 
     /**

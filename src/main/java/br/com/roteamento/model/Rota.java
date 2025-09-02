@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -167,7 +167,7 @@ public class Rota {
      * Data e hora de início da rota
      * 
      * CONCEITOS:
-     * - LocalDateTime: Tipo moderno para datas e horas
+     * - LocalDateTime: Tipo para datas e horas
      * - nullable = true: Pode ser agendada para depois
      */
     @Column(name = "data_inicio")
@@ -177,7 +177,7 @@ public class Rota {
      * Data e hora de fim da rota
      * 
      * CONCEITOS:
-     * - LocalDateTime: Tipo moderno para datas e horas
+     * - LocalDateTime: Tipo para datas e horas
      * - Preenchido quando a rota é finalizada
      */
     @Column(name = "data_fim")
@@ -465,8 +465,8 @@ public class Rota {
      */
     @Override
     public String toString() {
-        return String.format("Rota{id=%d, nome='%s', coletor=%s, status=%s, coletas=%d}",
-                id, nome, coletor != null ? coletor.getNome() : "null", 
+        return "Rota{id=%d, nome='%s', coletor=%s, status=%s, coletas=%d}".formatted(
+                id, nome, coletor != null ? coletor.getNome() : "null",
                 status, coletasRota.size());
     }
     

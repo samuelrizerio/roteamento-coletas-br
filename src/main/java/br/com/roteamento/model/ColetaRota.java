@@ -139,7 +139,7 @@ public class ColetaRota {
      * 
      * CONCEITOS:
      * - @CreationTimestamp: Preenche automaticamente na criação
-     * - LocalDateTime: Tipo moderno para datas e horas
+     * - LocalDateTime: Tipo para datas e horas
      * - updatable = false: Impede atualização manual
      */
     @CreationTimestamp
@@ -234,7 +234,7 @@ public class ColetaRota {
      */
     @Override
     public String toString() {
-        return String.format("ColetaRota{rota=%s, coleta=%s, ordem=%d}",
+        return "ColetaRota{rota=%s, coleta=%s, ordem=%d}".formatted(
                 rota != null ? rota.getNome() : "null",
                 coleta != null ? coleta.getId() : "null",
                 ordem);

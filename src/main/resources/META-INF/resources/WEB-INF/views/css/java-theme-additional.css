@@ -45,34 +45,7 @@
     border-left-color: var(--java-orange);
 }
 
-/* Estilos específicos para cards educativos */
-.tech-card {
-    border-left: 4px solid var(--java-blue);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-}
 
-.tech-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 115, 150, 0.2);
-    border-left-color: var(--java-orange);
-}
-
-.jsp-card { 
-    border-left-color: var(--java-orange); 
-}
-
-.jsf-card { 
-    border-left-color: var(--java-blue); 
-}
-
-.rest-card { 
-    border-left-color: var(--metallic-steel); 
-}
-
-.react-card { 
-    border-left-color: var(--metallic-gold); 
-}
 
 /* Estilos para elementos de código */
 .code-example {
@@ -260,21 +233,4 @@
     border: 2px solid var(--metallic-chrome);
 }
 
-/* Estilos para navegação educativa */
-.navbar-educativo {
-    background: var(--metallic-silver) !important;
-    border: 1px solid var(--metallic-chrome);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
 
-/* Estilos para badges educativos */
-.badge-educativo {
-    background: var(--java-orange);
-    color: var(--text-light);
-    border: none;
-}
-
-.badge-educativo:hover {
-    transform: scale(1.05);
-    transition: all 0.3s ease;
-}

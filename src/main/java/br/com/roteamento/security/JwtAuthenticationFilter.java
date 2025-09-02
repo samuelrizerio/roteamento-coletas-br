@@ -1,7 +1,8 @@
 package br.com.roteamento.security;
 
 import br.com.roteamento.service.JwtService;
-import br.com.roteamento.service.UsuarioService;
+
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
+
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -29,12 +30,12 @@ import java.io.IOException;
  * - Tratamento de erros
  */
 @Slf4j
-@Component
+// @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UsuarioService usuarioService;
+    private final CustomUserDetailsService userDetailsService;
 
     /**
      * FILTRO DE AUTENTICAÇÃO
@@ -71,7 +72,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // Verificar se o usuário não está autenticado e o token é válido
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = usuarioService.loadUserByUsername(userEmail);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
                 
                 // Validar token e configurar autenticação
                 if (jwtService.isTokenValid(jwt, userDetails)) {

@@ -53,7 +53,7 @@ public class JacksonConfig {
      */
     @Bean
     @Primary
-    public ObjectMapper objectMapper() {
+    ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         
         // Configurações básicas de serialização
@@ -79,7 +79,7 @@ public class JacksonConfig {
      * o Spring Boot use nossa configuração personalizada
      */
     @Bean
-    public Jackson2ObjectMapperBuilderCustomizer jacksonObjectMapperCustomizer() {
+    Jackson2ObjectMapperBuilderCustomizer jacksonObjectMapperCustomizer() {
         return builder -> {
             builder.modules(new JavaTimeModule(), new Jdk8Module());
             builder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
