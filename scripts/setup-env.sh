@@ -103,8 +103,8 @@ case ${PROFILE} in
         export DB_HOST=localhost
         export DB_PORT=3306
         export DB_NAME=srpc_prod
-        export DB_USERNAME=srpc_user
-        export DB_PASSWORD=srpc_password
+        export DB_USERNAME=
+        export DB_PASSWORD=
         export DB_MAX_POOL_SIZE=20
         export DB_MIN_POOL_SIZE=5
         export DB_MAX_LIFETIME=1800000
@@ -150,8 +150,12 @@ esac
 
 # Configurações de segurança
 if [ -z "$JWT_SECRET" ]; then
-    echo "⚠️  AVISO: JWT_SECRET não definido, usando valor padrão"
-    export JWT_SECRET=404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    if [ "$PROFILE" = "prod" ]; then
+        echo "❌ ERRO: JWT_SECRET não definido para PRODUÇÃO. Configure uma chave segura."
+        exit 1
+    else
+        echo "⚠️  AVISO: JWT_SECRET não definido (perfil ${PROFILE}). Defina para testes mais realistas."
+    fi
 fi
 
 export JWT_EXPIRATION=86400000

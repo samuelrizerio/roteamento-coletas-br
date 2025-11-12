@@ -1,6 +1,7 @@
 package br.com.roteamento.config;
 
 import br.com.roteamento.security.JwtAuthenticationEntryPoint;
+import br.com.roteamento.security.JwtAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 
@@ -38,11 +40,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-    // private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    // private final br.com.roteamento.security.CustomUserDetailsService userDetailsService;
-    // @Qualifier("corsConfigurationSource")
-    // private final CorsConfigurationSource corsConfigurationSource;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource;
 
     /**
      * CONFIGURAÇÃO DO FILTRO DE SEGURANÇA
@@ -56,35 +55,28 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // Configuração CORS (comentado temporariamente)
-            // .cors(cors -> cors.configurationSource(corsConfigurationSource))
-            
-            // Desabilitar CSRF para APIs REST (JWT é stateless)
+            .cors(cors -> cors.configurationSource(corsConfigurationSource))
             .csrf(csrf -> csrf.disable())
-            
-            // Configuração de sessão stateless
-            .sessionManagement(session -> 
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            
-            // Configuração de autorização (temporariamente permitindo tudo)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
-                // Permitir acesso a todas as rotas temporariamente
-                .anyRequest().permitAll()
+                .requestMatchers(
+                    "/api/v1/auth/**",
+                    "/swagger-ui.html",
+                    "/api-docs/**",
+                    "/favicon.ico",
+                    "/logo",
+                    "/css/**",
+                    "/static/**",
+                    "/actuator/health"
+                ).permitAll()
+                .anyRequest().authenticated()
             )
-            
-            // Configuração de exceções
-            .exceptionHandling(ex -> ex
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-            )
-            
-            // Adicionar filtro JWT (comentado temporariamente)
-            // .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            
-            // Desabilitar login form (usamos JWT)
+            .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .formLogin(form -> form.disable())
             .httpBasic(basic -> basic.disable())
             .logout(logout -> logout.disable());
-        
+
         return http.build();
     }
 

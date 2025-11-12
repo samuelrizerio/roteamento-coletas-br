@@ -3,6 +3,7 @@ package br.com.roteamento.security;
 import br.com.roteamento.model.Usuario;
 import br.com.roteamento.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +16,7 @@ import java.util.Collections;
 /**
  * Serviço personalizado para carregar detalhes do usuário
  */
-// @Service
+@Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 

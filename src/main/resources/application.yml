@@ -46,18 +46,13 @@ spring:
         cache:
           "[use_second_level_cache]": ${HIBERNATE_CACHE_ENABLED:false}
           
-  # Configurações de segurança
-  # security:  # Propriedade customizada - funciona normalmente
-    # Configurações do JWT
-    # jwt:  # Propriedade customizada - funciona normalmente
-    # Chave secreta para assinar os tokens JWT (OBRIGATÓRIO em produção)
-    # Deve ser uma variável de ambiente em produção
-    # secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
-    # Tempo de expiração do token (24 horas em milissegundos)
-    # expiration: ${JWT_EXPIRATION:86400000}
-    # Tempo de expiração do refresh token (7 dias em milissegundos)
-    # refresh-token:  # Propriedade customizada - funciona normalmente
-    #   expiration: ${JWT_REFRESH_EXPIRATION:604800000}
+  # Configurações de segurança JWT
+  security:
+    jwt:
+      secret: ${JWT_SECRET}
+      expiration: ${JWT_EXPIRATION:86400000}
+      refresh-token:
+        expiration: ${JWT_REFRESH_EXPIRATION:604800000}
       
   # Configurações do Spring MVC para JSP
   mvc:

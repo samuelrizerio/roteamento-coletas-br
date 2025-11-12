@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -27,7 +28,7 @@ import java.util.function.Function;
  * - Chave secreta configurável
  */
 @Slf4j
-// @Service
+@Service
 public class JwtService {
 
     @Value("${spring.security.jwt.secret}")

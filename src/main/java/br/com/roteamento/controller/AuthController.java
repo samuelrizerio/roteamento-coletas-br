@@ -25,7 +25,7 @@ import java.util.Map;
  * - Logs de segurança
  */
 @Slf4j
-// @RestController
+@RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
