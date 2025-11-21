@@ -8,7 +8,7 @@ spring:
   datasource:
     # URL de conexão com o MySQL
     # Formato: jdbc:mysql://host:porta/nome_banco?parametros
-    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:srpc_prod}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:srpc_prod}?useSSL=true&requireSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=false&useUnicode=true&characterEncoding=UTF-8&verifyServerCertificate=true
     # Nome do usuário do banco de dados (variável de ambiente)
     username: ${DB_USERNAME}
     # Senha do banco de dados (variável de ambiente)

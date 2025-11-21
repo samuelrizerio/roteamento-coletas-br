@@ -62,6 +62,7 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/api/v1/auth/**",
                     "/swagger-ui.html",
+                    "/swagger-ui/**",
                     "/api-docs/**",
                     "/favicon.ico",
                     "/logo",
@@ -69,6 +70,7 @@ public class SecurityConfig {
                     "/static/**",
                     "/actuator/health"
                 ).permitAll()
+                .requestMatchers("/sistema/**").authenticated()
                 .anyRequest().authenticated()
             )
             .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))

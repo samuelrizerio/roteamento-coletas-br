@@ -9,9 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import jakarta.annotation.PostConstruct;
 
-
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.security.MessageDigest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,14 +33,26 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    @Value("${spring.security.jwt.secret}")
+    @Value("${spring.security.jwt.secret:}")
     private String secretKey;
 
-    @Value("${spring.security.jwt.expiration}")
+    @Value("${spring.security.jwt.expiration:86400000}")
     private long jwtExpiration;
 
-    @Value("${spring.security.jwt.refresh-token.expiration}")
+    @Value("${spring.security.jwt.refresh-token.expiration:604800000}")
     private long refreshExpiration;
+
+    private Key signingKey;
+
+    @PostConstruct
+    public void init() {
+        if (secretKey == null || secretKey.trim().isEmpty()) {
+            log.error("JWT_SECRET não está configurado! A aplicação não funcionará corretamente.");
+            throw new IllegalStateException("JWT_SECRET deve ser configurado como variável de ambiente ou propriedade");
+        }
+        this.signingKey = getSignInKey();
+        log.info("JWT Service inicializado com sucesso");
+    }
 
     /**
      * EXTRAIR EMAIL DO TOKEN
@@ -117,7 +131,7 @@ public class JwtService {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .signWith(signingKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -168,7 +182,7 @@ public class JwtService {
         try {
             return Jwts
                     .parserBuilder()
-                    .setSigningKey(getSignInKey())
+                    .setSigningKey(signingKey)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
@@ -183,11 +197,35 @@ public class JwtService {
      * 
      * MELHORIAS:
      * - Chave segura
-     * - Decodificação base64
+     * - Suporta BASE64 e texto plano
+     * - Validação de tamanho mínimo
      * - Algoritmo HMAC-SHA256
      */
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes;
+        
+        try {
+            // Tentar decodificar como BASE64 primeiro
+            keyBytes = Decoders.BASE64.decode(secretKey);
+            log.debug("JWT secret decodificado como BASE64");
+        } catch (Exception e) {
+            // Se falhar, tratar como texto plano e converter para bytes
+            log.debug("JWT secret tratado como texto plano, convertendo para bytes");
+            keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
+        }
+        
+        // Validar tamanho mínimo (pelo menos 32 bytes para HS256)
+        if (keyBytes.length < 32) {
+            log.warn("JWT secret muito curto ({} bytes). Recomendado: pelo menos 32 bytes. Gerando hash SHA-256.", keyBytes.length);
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                keyBytes = digest.digest(keyBytes);
+            } catch (Exception e) {
+                log.error("Erro ao gerar hash SHA-256 para JWT secret", e);
+                throw new IllegalStateException("Não foi possível processar a chave JWT", e);
+            }
+        }
+        
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

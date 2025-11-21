@@ -131,14 +131,24 @@ public class AuthController {
      * - Limpeza de sessão
      */
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader) {
-        String token = authHeader.substring(7); // Remove "Bearer "
-        log.info("Logout realizado");
+    public ResponseEntity<Void> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            log.warn("Tentativa de logout sem token válido");
+            return ResponseEntity.badRequest().build();
+        }
         
-        // Em uma implementação mais robusta, adicionar token à blacklist
-        authService.logout(token);
-        
-        return ResponseEntity.ok().build();
+        try {
+            String token = authHeader.substring(7); // Remove "Bearer "
+            log.info("Logout realizado");
+            
+            // Em uma implementação mais robusta, adicionar token à blacklist
+            authService.logout(token);
+            
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Erro no logout", e);
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     /**
@@ -150,10 +160,16 @@ public class AuthController {
      * - Status de autenticação
      */
     @GetMapping("/validate")
-    public ResponseEntity<Map<String, Object>> validateToken(@RequestHeader("Authorization") String authHeader) {
-        String token = authHeader.substring(7); // Remove "Bearer "
+    public ResponseEntity<Map<String, Object>> validateToken(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("valid", false);
+            response.put("error", "Token não fornecido ou formato inválido");
+            return ResponseEntity.badRequest().body(response);
+        }
         
         try {
+            String token = authHeader.substring(7); // Remove "Bearer "
             boolean isValid = authService.validateToken(token);
             Map<String, Object> response = new HashMap<>();
             response.put("valid", isValid);
@@ -167,7 +183,10 @@ public class AuthController {
             
         } catch (Exception e) {
             log.error("Erro na validação do token", e);
-            return ResponseEntity.badRequest().build();
+            Map<String, Object> response = new HashMap<>();
+            response.put("valid", false);
+            response.put("error", "Erro ao validar token: " + e.getMessage());
+            return ResponseEntity.badRequest().body(response);
         }
     }
 }
