@@ -214,7 +214,7 @@
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>jakarta.faces</artifactId>
-            <version>4.0.2</version>
+            <version>4.1.4</version>
         </dependency>
 
         <!-- JSF Spring Integration - Comentado temporariamente para execução -->
